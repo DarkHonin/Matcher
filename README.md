@@ -28,4 +28,4 @@ This should start the python server
 
 ---
 ## Notes
-    At this point I dont have a configuration setup for the database as I would like to have an autimated setup for that too, maybe in the future.
+At this point I dont have a configuration setup for the database as I would like to have an autimated setup for that too, maybe in the future.
