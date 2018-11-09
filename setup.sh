@@ -1,3 +1,5 @@
+load_soft(){
+
 echo "----------Installing brew--------------"
 if ! type "brew" > /dev/null; then
     @sh -c "$(curl -fsSL https://raw.githubusercontent.com/Tolsadus/42homebrewfix/master/install.sh)"
@@ -14,8 +16,34 @@ echo "----------Installing python virtual env--------------"
 if ! type "virtualenv" > /dev/null; then
     @pip3 install virtualenv
 fi
-python3 -m virtualenv .
-source bin/activate
-while read i; do
-    pip3 install $i;
-done < packages.txt
+}
+
+load_pack(){
+    echo "Fetching packages"
+    source bin/activate &
+    while read i; do
+        pip3 install $i;
+    done < packages.txt
+}
+
+setup_env(){
+    echo "Setting up enviroment"
+    if [ ! -f bin/activate ]; then
+    python3 -m virtualenv .
+    fi
+    load_pack
+}
+
+case $1 in 
+    pack)
+        load_pack
+        break
+        ;;
+    enf)
+        setup_env
+        break
+        ;;
+    *)
+        load_soft
+        setup_env
+esac
