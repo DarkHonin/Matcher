@@ -16,6 +16,6 @@ if ! type "virtualenv" > /dev/null; then
 fi
 python3 -m virtualenv .
 source bin/activate
-for i in (packages.txt); do
+while read i; do
     pip3 install $i;
-done
+done < packages.txt
