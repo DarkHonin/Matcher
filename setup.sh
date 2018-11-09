@@ -14,3 +14,8 @@ echo "----------Installing python virtual env--------------"
 if ! type "virtualenv" > /dev/null; then
     @pip3 install virtualenv
 fi
+python3 -m virtualenv .
+source bin/activate
+for i in (packages.txt); do
+    pip3 install $i;
+done
