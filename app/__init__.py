@@ -7,4 +7,3 @@ app.config.from_pyfile("instance/config.py")
 for route in Routes:
     print("Loading route:", route)
     Page.bind_routes(app, route, Routes[route])
-    #app.add_url_rule(Routes[route].URL, route, Routes[route].route)

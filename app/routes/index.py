@@ -6,9 +6,3 @@ class Index(Page):
 
     def get(self):
         return "index get"
-
-    def post(self):
-        return "index post"
-
-    def all(self):
-        return "index all"

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Matcher::Index</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="css/style.css" />
+    </head>
+    <body id='root'>
+        <header class="color root">
+            <a href="/" class="banner">Matcher</a>
+            <label class='toggel' data-action="open" data-target='#navbar' data-state='{"window" : {"innerWidth" : {"close" : ">=900","open-s" : "<900"}}}'>
+                <hr>
+                <hr>
+                <hr>
+            </label>
+            <!--
+            <nav>
+            <a href="/login">Login</a>
+            </nav>
+            -->
+            <nav id='navbar' data-state='{"window" : {"innerWidth" : {"open-b" : ">=900","close" : "<900"}}}'>
+                <a href="/logout">Logout</a>
+                <label class='dropdown' >
+                    <span class='toggel' data-action="open" data-target='#user_dropdown'>{UserName}</span>
+                    <nav class="close" id='user_dropdown'>
+                        <a href="/settings">Settings</a>
+                        <a href="/history">History</a>
+                    </nav>
+                </label>
+                <a href="/match" class='special'>Match!</a>
+            </nav>
+        </header>
+        <div class="toggel content" data-target="#navbar" data-action="close_all">
+        </div>
+    </body>
+    <script src="../static/js/toggles.js"></script>
+</html>
