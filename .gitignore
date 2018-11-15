@@ -1,0 +1,11 @@
+bin
+include
+lib
+.Python
+__pycache__
+!app
+!setupt.sh
+!packages.txt
+!run.py
+!author
+!README.md
