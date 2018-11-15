@@ -6,31 +6,40 @@ body{
     max-width: 900px;
     margin: auto;
     background-color: RGBA(0, 0, 0, 0.1);
-    min-height: 100vh;
+    height: -moz-available;
     color: white;
+}
+
+footer{
+    position: sticky;
+    bottom: 0px;
 }
 
 header{
     background-color: RGBA(0, 0, 0, 0.5);
     border-bottom: black 1px solid;
     border-top: black 1px solid;
-    position: sticky;
     text-align: center;
     color: white;
+    position: sticky;
+    top: 0px;
 }
 
 header>h1{
-    
     font-size: 4em;
+    margin-bottom: 0px;
 }
 
-h1, h2{
+h1, h2, h3, .alert{
     display: flex;
     margin: 0.5em auto;
     background-color: RGBA(0, 0, 0, 0.5);
+    width: 100%;
+    border-bottom: black 1px solid;
+    border-top: black 1px solid;
 }
 
-h1:before, h1:after, h2:before, h2:after{
+h1:before, h1:after, h2:before, h2:after, h3:before, h3:after{
     display:block;
     content: "";
     background-image: URL(../img/endcap.svg);
@@ -40,7 +49,7 @@ h1:before, h1:after, h2:before, h2:after{
     background-position: center;
     flex: 1;
 }
-h1:after, h2:after{
+h1:after, h2:after, h3:after{
     -moz-transform: scaleX(-1);
     -o-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);
@@ -56,18 +65,63 @@ article{
 .content{font-family: 'Montserrat Alternates', sans-serif;}
 .context{font-family: 'Sansita', sans-serif;}
 
-nav>a{
+a{
     color: white;
     text-align: center;
-    display: block;
+    display: inline-block;
     text-decoration: none;
-    padding: 1em;
+    padding: 0.2em;
+    background-color: RGBA(0, 0, 0, 0.4);
+    transition: background-color 0.2s;
+}
+
+.alert{
+    text-align: center;
+    display: inline-block;
+}
+
+.alert.warning{
+    background-color: RGBA(255, 90, 90, 0.6);
+}
+
+a:hover{
+    background-color: RGBA(0, 0, 0, 0.9);
+}
+
+nav{
+    margin: 0.5em 0;
+}
+
+.pa{
+    background-image: URL("../img/parigan.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 0.2em;
+    background-blend-mode: difference;
+    background-color: RGBA(255, 255, 255, 0.5);
+}
+
+input[type="submit"]{
+    padding: 0.25em;
+    font-size: 2em;
+    font-weight: bold;
+    color: white;
+}
+
+input{
     background-color: RGBA(0, 0, 0, 0.1);
+    border: 2px solid RGBA(0, 0, 0, 0.5);
+    color: white;
+    font-size: 1em;
+    padding: 0.25em;
+}
+
+input:hover, input:focus{
+    border: 2px solid RGBA(0, 0, 0, 1);
 }
 
 .ul{
-    height: 1em;
-    content: "";
+    border: none !important;
     background-image: URL(../img/ul.svg);
     background-size: contain;
     background-repeat: no-repeat;
@@ -75,10 +129,39 @@ nav>a{
     background-color: #797878;
     background-blend-mode: exclusion;
     transition: background-color 0.2s;
+    color: white;
+    text-decoration: none;
 }
 
 .ul:hover{
     background-color: #b1b1b1;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: auto;
+    background-color: RGBA(0, 0, 0, 0.1);
+    position: relative;
+    box-shadow: 0px 0px 30px 5px RGBA(0, 0, 0, 0.2);
+    margin-bottom: 3em;
+}
+
+form:after{
+    min-height: 3em;
+    padding: 0.1em;
+    content: "SUBMIT";
+    font-family: "NordicSans";
+    position: absolute;
+    top: 100%;
+    width: -moz-available;
+    padding: 0.5em;
+    color: RGBA(0, 0, 0, 0.2);
+}
+
+form>input{
+    margin: 0.2em 0px;
 }
 
 @media screen and (max-width: 900px){
