@@ -1,6 +1,9 @@
 bin
 include
 lib
+Scripts
+tcl
+.vscode
 .Python
 __pycache__
 !app

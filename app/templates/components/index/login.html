@@ -1,0 +1,15 @@
+{% extends 'template.html' %}
+
+{% block content %}
+	<h2 class="context">Næmnæe félagi</h2>
+	<p class="content">To the first ever Viking matchmaking service</p>
+	<hr>
+	<p class="content">Please login or register to continue</p>
+	<form method="post" action="#" id="entryForm">
+		<h3 class="context">Login</h3>
+		<input type="email" placeholder="Email" required name="email">
+		<input type="password" placeholder="Password" required name="password">
+		<input type="submit" class="content ul" value='Login'>
+		<a href="#" class="content ul small" onclick="component_rp('#entryForm', 'register.form')">or Register</a>
+	</form>
+{% endblock %}

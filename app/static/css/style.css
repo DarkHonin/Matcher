@@ -1,0 +1,357 @@
+html{
+    background-color: rgb(105, 105, 105);
+}
+
+body{
+    max-width: 900px;
+    margin: auto;
+    background-color: RGBA(0, 0, 0, 0.1);
+    height: -moz-available;
+    color: white;
+    min-height: 100vh;    
+}
+
+footer{
+    bottom: 0px;
+}
+
+header{
+    background-color: RGBA(0, 0, 0, 0.5);
+    border-bottom: black 1px solid;
+    border-top: black 1px solid;
+    text-align: center;
+    color: white;
+    position: sticky;
+    top: 0px;
+}
+
+header>h1{
+    margin-bottom: 0px;
+}
+
+h1, h2, h3, .alert{
+    display: flex;
+    margin: 0.5em auto;
+    background-color: RGBA(0, 0, 0, 0.5);
+    width: -webkit-fill-available;
+    border-bottom: black 1px solid;
+    border-top: black 1px solid;
+    width: -moz-available;
+}
+
+h1:before, h1:after, h2:before, h2:after, h3:before, h3:after{
+    display:block;
+    content: "";
+    background-image: URL(../img/endcap.svg);
+    position: relative;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    flex: 1;
+}
+h1:after, h2:after, h3:after{
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+article{
+    text-align: center;
+}
+
+.content{font-family: 'Montserrat Alternates', sans-serif;}
+.context{font-family: 'Sansita', sans-serif;}
+
+a{
+    color: white;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.2em;
+    background-color: RGBA(0, 0, 0, 0.4);
+    transition: background-color 0.2s;
+}
+
+.alert{
+    text-align: center;
+    display: inline-block;
+}
+
+.alert.warning{
+    background-color: RGBA(255, 90, 90, 0.6);
+}
+
+a:hover{
+    background-color: RGBA(0, 0, 0, 0.9);
+}
+
+nav{
+    margin: 0.5em 0;
+}
+
+.pa{
+    background-image: URL("../img/parigan.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 0.2em;
+    background-blend-mode: difference;
+    background-color: RGBA(255, 255, 255, 0.5);
+}
+
+input[type="submit"]{
+    padding: 0.25em;
+    font-size: 2em;
+    font-weight: bold;
+    color: white;
+}
+
+input, select{
+    background-color: RGBA(0, 0, 0, 0.1);
+    border: 2px solid RGBA(0, 0, 0, 0.5);
+    color: white;
+    font-size: 1em;
+    padding: 0.25em;
+    flex: 0.25;
+}
+
+input:hover, input:focus{
+    border: 2px solid RGBA(0, 0, 0, 1);
+}
+
+.ul{
+    border: none !important;
+    background-image: URL(../img/ul.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #797878;
+    background-blend-mode: exclusion;
+    transition: background-color 0.2s;
+    color: white;
+    text-decoration: none;
+}
+
+.ul:hover{
+    background-color: #b1b1b1;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: auto;
+    background-color: RGBA(0, 0, 0, 0.1);
+    position: relative;
+    box-shadow: 0px 0px 30px 5px RGBA(0, 0, 0, 0.2);
+    margin-bottom: 3em;
+}
+
+form:after{
+    min-height: 3em;
+    padding: 0.1em;
+    content: "SUBMIT";
+    font-family: "NordicSans";
+    position: absolute;
+    top: 100%;
+    width: -moz-available;
+    width:  -webkit-fill-available;
+    padding: 0.5em;
+    color: RGBA(0, 0, 0, 0.2);
+}
+
+form>input{
+    margin: 0.2em 0px;
+}
+
+select>option{
+    background-color: #000000AF;
+}
+
+.tile-panel{
+    display: flex;
+    margin: auto;
+    padding: 1em;
+    background-color: #FFFFFF0F;
+    flex-wrap: wrap;
+}
+
+.tile-panel>.tile{
+    width: 7.5em;
+    height: 7.5em;
+    margin: 0.5em auto;
+    border-radius: 1em;
+
+}
+
+[class*="fs-"]:before{
+    font-family: NordicSans;
+    color: #0000005F;
+    position: absolute;
+    font-size: 5em;
+    left: 0.25em;
+    top: 0.25em;
+    transition: color;
+}
+
+[class*="fs-"]{
+    position: relative;
+}
+
+.fs-M:before{content: "M";}
+.fs-S:before{content: "S";}
+.fs-P:before{content: "P";}
+
+[class*="fs-"]:hover:before{color: white;}
+
+.counter{
+    position: absolute;
+    left: -1em;
+    top: -1em;;
+    background-color: #c73d3d;
+    padding: 0.25em 0.5em; 
+    border-radius: 100%;
+}
+
+.carosel img{
+    object-fit: cover;
+    overflow: hidden;
+}
+
+.carosel{
+
+}
+
+.carosel>.preview{
+    max-width: 30em;
+    width: 100%;
+    min-height: 1em;
+    width: 100%;
+    object-fit: contain;
+    background-image: linear-gradient(grey, white);
+}
+
+.carosel>.options{
+    display: flex;
+    max-height: 5em;
+    width: fit-content;
+    width: -moz-fit-content;
+    margin: auto;
+    overflow: hidden;
+}
+
+.carosel>.options>*{
+    max-width: 5em;
+    min-width: 5em;
+    margin: auto 1em;
+    padding: 1em;
+    background-image: linear-gradient(grey, white);
+}
+
+.carosel>.options>.placeholder{
+    border: 0.2em grey dashed;
+    padding: 1em;
+}
+
+.list{
+    background-color: #4e5154;
+}
+
+.list>.li{
+    border: none;
+    text-align: left;
+    width: 100%;
+    overflow: hidden;
+    margin: 0.2em 0em;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.list>.li>label{
+    display: block;
+    font-size: 0.8em;
+    width: 100%;
+}
+.list>.li>label:after{
+    content: "";
+    background: linear-gradient(to right, grey 0%,  transparent 90%);
+    display: block;
+    height: 1px;
+    width: -webkit-fill-available;
+}
+
+.list>.li>.data{
+    display: inline-block;
+    margin: 0.5em 0.4em;
+}
+
+.list>.li>.alter{
+    display: flex;
+    flex: 1;
+}
+
+.list>.li>.alter>*{
+    display: block;
+    margin: auto;
+}
+.list>.li>.alter>button{
+    margin-right: 1em;
+}
+
+button.ul{
+    font-size: 1em;
+    width: 8em;
+}
+
+.slider + label{
+    width: 3em;
+    display: block;
+    border-radius: 2em;
+    position: relative;
+    background-color: #c73d3d;
+    transition: background-color 0.5s;
+    height: 1.5em;
+    margin: 1em;
+    margin-left: 0px;
+}
+
+input[name*=":display"].slider + label:after{
+    content: "Publicly visible";
+    position: absolute;
+    width: fit-content;
+    top: 100%;
+
+    white-space: nowrap;
+    font-size: 0.5em;
+}
+
+input[name*=":display"].slider{
+    display: none;
+    position: absolute;
+}
+
+input[name*=":display"].slider:checked + label{
+    background-color: #3dc745;
+}
+
+.slider +label>div{
+    width: 50%;
+    right: 50%;
+    height: 100%;
+    position: absolute;
+    background-color: #4a4a4a;
+    transition: right 0.5s;
+    border-radius: 2em;
+}
+
+.slider:checked +label>div{
+    right: -0%;
+}
+
+@media screen and (max-width: 900px){
+    body{
+        width: 100vw;
+    }
+}

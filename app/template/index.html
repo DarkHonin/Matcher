@@ -19,16 +19,17 @@
             <p class="content">To the first ever Viking matchmaking service</p>
             <hr>
             <p class="content">Please login or register to continue</p>
-                <form method="post" action="#">
+                <form method="post" action="#" id="entryForm" onsubmit="component('submit')">
                     <h3 class="context">Login</h3>
                     <input type="email" placeholder="Email" required name="email">
                     <input type="password" placeholder="Password" required name="password">
                     <input type="submit" class="content ul" value='Login'>
-                    <a href="index.alt.html" class="content ul small">or Register</a>
+                    <a href="index.alt.html" class="content ul small" onclick="controller('#entryForm', '')">or Register</a>
                 </form>
         </article>
         <footer>
                 Designed and build by HoninWorx, aka wgourley
         </footer>
     </body>
+    <script src="js/jquery.js"></script>
 </html>
