@@ -14,7 +14,7 @@
             <h1 class="context">Matcha</h1>
             <!--Navbar only shows after logged in-->
         </header>
-        <article class='note'>
+        <article class='note' id="display">
             {% block content %}
                 <!--Data comes there-->
             {% endblock %}
@@ -23,6 +23,7 @@
                 Designed and build by HoninWorx, aka wgourley
         </footer>
     </body>
-    <script src="js/jquery.js"></script>
-    <script src="js/api.js"></script>
+    <input type='hidden' value='{{ page.state }}' id="page_state">
+    <script src=" {{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 </html>

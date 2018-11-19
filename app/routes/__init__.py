@@ -4,6 +4,7 @@ from app.routes.login import Login
 from app.routes.history import History
 from app.routes.settings import Settings
 from app.routes.match import Match
+from app.routes.componentProvider import ComponentProvider
 
 Routes = {
     "index" : Index(),
@@ -11,5 +12,6 @@ Routes = {
     "login" : Login(),
     "history" : History(),
     "settings" : Settings(),
-    "match" :   Match()
+    "match" :   Match(),
+    "components" : ComponentProvider()
 }
