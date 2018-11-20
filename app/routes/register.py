@@ -1,4 +1,4 @@
-from app.obj import Page, Validator
+from app.obj import Page, Validator, User
 import flask
 
 class Register(Page):
@@ -18,5 +18,16 @@ class Register(Page):
 
     def post(self):
         data = flask.request.json
-        return flask.jsonify(self.validator.validate(data))
+        validation = self.validator.validate(data)
+        if (validation['status'] is not Validator.VALID):
+            return flask.jsonify(validation)
+        usr = User()
+        usr.parse_dbo(data)
+        usr.log_fields()
+        userok = usr.isValid()# Returns false if it is valid
+        if(userok): 
+            return flask.jsonify(userok)    
+        
+        return flask.jsonify(validation)
+
 

@@ -19,11 +19,11 @@ class Validator:
 				for s in self.stages[i]:
 					if type(s) is list:
 						if(not s[0](data[i], *s[1])):
-							return {"state" : "NOJOY", "DIED" : s[0].__name__}
+							return {"status" : "NOJOY", "DIED" : s[0].__name__}
 					else:
 						if(not s(data[i])):
-							return {"state" : "NOJOY", "DIED" : s.__name__}
-		return {"state" : "JOY"}
+							return {"status" : "NOJOY", "DIED" : s.__name__}
+		return {"status" : "JOY"}
 
 	@staticmethod
 	def noSpaces(test):
