@@ -1,4 +1,4 @@
-const state = document.querySelector("#page_state").value
+
 const path = window.location.pathname;
 
 function transmit(url, data, method="post"){
@@ -27,6 +27,14 @@ function load(key, data){
 	})
 }
 
+function formSubmit(event){
+	event.preventDefault()
+	var fd = new FormData(event.target)
+	var o = {}
+	fd.forEach((v, k) => { o[k] = v})
+	transmit(this.action, o)
+}
+
 function translate(json){
 	if(json.status != "JOY")
 		return alert("There was a problem fetching the page");
@@ -42,4 +50,10 @@ function translate(json){
 	}
 }
 
-transmit(path, {"id" : state}).then(resp => {translate(resp)}).catch(error => console.error(error));
+document.querySelectorAll("[event]").forEach(f => {
+	var j = JSON.parse(f.getAttribute("event"))
+	for(var i in j){
+		console.log("Binding: "+i+" to "+j[i])
+		f.addEventListener(i, window[j[i]])
+	}
+})

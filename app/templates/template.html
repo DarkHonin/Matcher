@@ -8,6 +8,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates|Sansita:700" rel="stylesheet">
         <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/style.css') }} " />
         <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/NordicSans.css') }} " />
+
     </head>
     <body>
         <header>
@@ -23,7 +24,6 @@
                 Designed and build by HoninWorx, aka wgourley
         </footer>
     </body>
-    <input type='hidden' value='{{ page.state }}' id="page_state">
     <script src=" {{ url_for('static', filename='js/jquery.js') }}"></script>
     <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 </html>

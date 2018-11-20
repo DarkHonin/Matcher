@@ -1,9 +1,10 @@
-
+{% extends 'template.html' %}
+{%block content%}
 	<h2 class="context">Næmnæe félagi</h2>
 	<p class="content">To the first ever Viking matchmaking service</p>
 	<hr>
 	<p class="content">Please login or register to continue</p>
-	<form method="post" action="#">
+	<form method="post" action="{{url_for('register_POST')}}" event='{"submit":"formSubmit"}'>
 		<h3 class="context">Register</h3>
 		<input type="email" placeholder="Email" required name="email">
 		<input type="text" placeholder="Username" required name="uname">
@@ -11,5 +12,6 @@
 		<input type="text" placeholder="Last Name" required name="lname">
 		<input type="password" placeholder="Password" required name="password">
 		<input type="submit" class="content ul" value='Register'>
-		<a href="#" class="content ul small" onclick="component_rp('#entryForm', 'login.form')">or Login</a>
+		<a href="{{url_for('login_GET')}}" class="content ul small">or Login</a>
 	</form>
+{%endblock%}

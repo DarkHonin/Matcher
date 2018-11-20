@@ -1,11 +1,10 @@
 from app.obj import Page
+import flask
 
 class Login(Page):
     def __init__(self):
-        super(Login, self).__init__("/login", "Matcher::Welcome", methods=["POST", "GET"])
+        Page.__init__(self, ["/", "/login"], "Matcher::Welcome", methods=["GET"])
 
     def get(self):
-        return "login get"
+        return flask.render_template("pages/index/login.html")
 
-    def post(self):
-        return "login post"
