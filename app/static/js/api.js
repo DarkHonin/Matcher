@@ -16,38 +16,28 @@ function transmit(url, data, method="post"){
 		}).then(responce => responce.json());
 }
 
-function load(key, data){
-	var components = document.querySelectorAll(key)
-	transmit(data.url, data.params).then(resp => {
-		if(resp.status != "JOY")
-			return alert("There was a problem fetching the page");
-		components.forEach(c => {
-			c.innerHTML = resp.payload
-		})
-	})
-}
-
 function formSubmit(event){
 	event.preventDefault()
 	var fd = new FormData(event.target)
 	var o = {}
 	fd.forEach((v, k) => { o[k] = v})
-	transmit(this.action, o)
+	transmit(this.action, o).then(d => translate(d))
+}
+
+function display(message){
+	document.getElementById("message").innerHTML = message
+}
+
+function field_error(field){
+	document.querySelector("[name='"+field.item+"']").setCustomValidity(item.message);
 }
 
 function translate(json){
 	if(json.status != "JOY")
-		return alert("There was a problem fetching the page");
+		return display(json.message)
 
-	var payload = json.payload
-
-	for(var i in payload){
-		if (payload.hasOwnProperty(i)){
-			var q = payload[i];
-			if(window[q.action])
-				window[q.action](i, q)
-			}
-	}
+	if(window[json.action])
+		window[json.action](json.message)
 }
 
 document.querySelectorAll("[event]").forEach(f => {

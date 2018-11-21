@@ -8,13 +8,13 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates|Sansita:700" rel="stylesheet">
         <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/style.css') }} " />
         <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/NordicSans.css') }} " />
-
     </head>
     <body>
         <header>
             <h1 class="context">Matcha</h1>
             <!--Navbar only shows after logged in-->
         </header>
+        <a href="#" class="alert warning" id="message"></a>
         <article class='note' id="display">
             {% block content %}
                 <!--Data comes there-->

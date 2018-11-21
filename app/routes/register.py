@@ -6,9 +6,10 @@ class Register(Page):
         Page.__init__(self, [ "/register"], "Matcher::Welcome", methods=["GET", "POST"])
         self.validator = Validator(
             {
-                "fname" : [Validator.isValidName],
-                "lname" : [Validator.isValidName],
-                "uname" : [Validator.isAlphaNumeric, [Validator.isLonger, [6]]]
+                "fname" : {"Is not a valid name" : Validator.isValidName},
+                "lname" : {"Is not a valid name" : Validator.isValidName},
+                "uname" : {"Can only contain alpha numeric values" : Validator.isAlphaNumeric, 
+                            "Must be longer than 6 characters" : [Validator.isLonger, [6]]}
                 
                 }
         )
@@ -23,11 +24,10 @@ class Register(Page):
             return flask.jsonify(validation)
         usr = User()
         usr.parse_dbo(data)
-        usr.log_fields()
-        userok = usr.isValid()# Returns false if it is valid
-        if(userok): 
-            return flask.jsonify(userok)    
-        
+        usr.log_fields() 
+        exc = usr.save()
+        if (exc):
+            return flask.jsonify(exc)
         return flask.jsonify(validation)
 
 

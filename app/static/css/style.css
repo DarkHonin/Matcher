@@ -75,6 +75,10 @@ a{
     transition: background-color 0.2s;
 }
 
+.alert:empty{
+    display:none;
+}
+
 .alert{
     text-align: center;
     display: inline-block;

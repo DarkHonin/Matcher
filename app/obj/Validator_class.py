@@ -11,18 +11,20 @@ class Validator:
 	INVALID = "NOJOY"
 
 	def __init__(self, stages):
-		self.stages = stages
+		self.fields = stages
 
 	def validate(self, data : dict):
-		for i in data:
-			if i in self.stages:
-				for s in self.stages[i]:
-					if type(s) is list:
-						if(not s[0](data[i], *s[1])):
-							return {"status" : "NOJOY", "DIED" : s[0].__name__}
+		for field in data:
+			if field in self.fields:
+				_field = self.fields[field]
+				print(_field)
+				for k, stage in _field.items():
+					if type(stage) is list:
+						if(not stage[0](data[field], *stage[1])):
+							return {"status" : "NOJOY", "action":"field_error", "message" : k}
 					else:
-						if(not s(data[i])):
-							return {"status" : "NOJOY", "DIED" : s.__name__}
+						if(not stage(data[field])):
+							return {"status" : "NOJOY", "action":"field_error", "message" : k}
 		return {"status" : "JOY"}
 
 	@staticmethod

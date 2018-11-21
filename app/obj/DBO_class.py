@@ -31,7 +31,8 @@ class DataObject:
         return ret
 
     def parse_dbo(self, item:dict):
-        self.id = item.get('_id')
+        if("_id" in item):
+            self.id = item.get('_id')
         for i in self.field_names:
             if(i in item):
                 self.__getattribute__(i)['value'] = item[i]
@@ -64,11 +65,26 @@ class DataObject:
             ret.append(hold)
         return ret
 
+    def init_index(self, col):
+        pass
+
+    def key_error(self):
+        return "A key error occurd"
+
     def save(self):
         from app import Database
+        import pymongo
         col = Database.db[self.collection]
-        if(self.id is -1):
-            resp = col.insert_one(self.prepare_data())
-            self.id = resp.inserted_id
-        else:
-            resp = col.update_one({"_id":self.id}, self.prepare_data())
+        if(col.count() is 0):
+            self.init_index(col)
+            print("Index init complete")
+        try:
+            if(self.id is -1):
+                resp = col.insert_one(self.prepare_data())
+                self.id = resp.inserted_id
+                print("Item inserted :",self.id)
+            else:
+                resp = col.update({"_id":self.id}, self.prepare_data())
+                print("Item updated :",self.id)
+        except pymongo.errors.DuplicateKeyError:
+            return {"status" : "NOJOY", "message" :  self.key_error()}
