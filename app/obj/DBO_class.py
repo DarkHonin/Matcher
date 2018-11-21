@@ -2,10 +2,11 @@
 class DataObject:
     def __init__(self, fields : dict, collection : str):
         for i in fields:
-            self.__setattr__(i, {"default" : fields[i], "value": None})
+            self.__setattr__(i, {"default" : fields[i], "value": fields[i]})
         self.field_names = fields.keys()
         self.collection = collection
         self.id = -1
+        self.ERROR = False
 
     def log_fields(self):
         print("-"*((15*3)+3))
@@ -24,9 +25,7 @@ class DataObject:
         ret = {}
         for i in self.field_names:
             attr = self.__getattribute__(i)
-            if(attr['value'] is None):
-                ret[i] = attr['default']
-            else:
+            if(attr['value'] is not attr['default']):
                 ret[i] = attr['value']
         return ret
 
@@ -46,6 +45,8 @@ class DataObject:
             data = col.find_one(where, what)
         else:
             data = col.find_one(where)
+        if(not data):
+            return False
         spawn.parse_dbo(data)
         return spawn
     
@@ -87,4 +88,6 @@ class DataObject:
                 resp = col.update({"_id":self.id}, self.prepare_data())
                 print("Item updated :",self.id)
         except pymongo.errors.DuplicateKeyError:
-            return {"status" : "NOJOY", "message" :  self.key_error()}
+            self.ERROR =  {"status" : "NOJOY", "message" :  self.key_error()}
+            return False
+        return True

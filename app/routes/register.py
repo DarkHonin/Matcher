@@ -1,4 +1,5 @@
-from app.obj import Page, Validator, User
+from app.obj import Page, Validator
+from app.users import RegisterUser
 import flask
 
 class Register(Page):
@@ -9,8 +10,9 @@ class Register(Page):
                 "fname" : {"Is not a valid name" : Validator.isValidName},
                 "lname" : {"Is not a valid name" : Validator.isValidName},
                 "uname" : {"Can only contain alpha numeric values" : Validator.isAlphaNumeric, 
-                            "Must be longer than 6 characters" : [Validator.isLonger, [6]]}
-                
+                            "Must be longer than 6 characters" : [Validator.isLonger, [6]]},
+                "email" : {"Must be a valid email" : Validator.isEmail},
+                "g-recaptcha-response" : {"Recaptcha failed" : Validator.checkCaptcha}
                 }
         )
 
@@ -19,15 +21,13 @@ class Register(Page):
 
     def post(self):
         data = flask.request.json
-        validation = self.validator.validate(data)
-        if (validation['status'] is not Validator.VALID):
-            return flask.jsonify(validation)
-        usr = User()
-        usr.parse_dbo(data)
-        usr.log_fields() 
-        exc = usr.save()
-        if (exc):
-            return flask.jsonify(exc)
-        return flask.jsonify(validation)
+        resp = {}
+        if not self.validator.validate(data):
+            return  flask.jsonify(self.validator.STATUS)
+        print("Data logged")
+        if not RegisterUser(data, resp):
+            return flask.jsonify(resp['error'])
+        print("User registered")
+        return flask.jsonify({"status" : Validator.VALID})
 
 

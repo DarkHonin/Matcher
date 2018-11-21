@@ -11,6 +11,12 @@ body{
     min-height: 100vh;    
 }
 
+.g-recaptcha > div{
+ margin 10px auto !important;
+ text-align: center;
+ width: auto !important;
+ height: auto !important;
+}
 footer{
     bottom: 0px;
 }

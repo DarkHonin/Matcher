@@ -1,5 +1,7 @@
-from . import DataObject
+from app.obj import DataObject
 from flask_pymongo import PyMongo
+from app.token import Token
+
 class User(DataObject):
 
     GENDER = {
@@ -22,12 +24,14 @@ class User(DataObject):
                 "email_valid"   : False,
                 "lname"         : None,
                 "fname"         : None,
+                "password"      : None,
                 "active"        : False,
                 "gender"        : -1,
                 "Sexuality"     : -1,
                 "Biography"     : None,
                 "Images"        : [],
-                "Location"      : None
+                "Location"      : None,
+                "lastLogin"     : None
             }, "Users"
         )
 
@@ -38,3 +42,8 @@ class User(DataObject):
         col.create_index(("uname"), unique=True)
         col.create_index(("email"), unique=True)
         
+    def activate(t : Token):
+        self.active = True
+        self.email_valid = True
+        self.save()
+        pass
