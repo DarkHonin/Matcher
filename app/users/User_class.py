@@ -42,7 +42,7 @@ class User(DataObject):
         col.create_index(("uname"), unique=True)
         col.create_index(("email"), unique=True)
         
-    def activate(t : Token):
+    def activate(self, t : Token):
         self.active = True
         self.email_valid = True
         self.save()
