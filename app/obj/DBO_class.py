@@ -2,11 +2,18 @@
 class DataObject:
     def __init__(self, fields : dict, collection : str):
         for i in fields:
-            self.__setattr__(i, {"default" : fields[i], "value": fields[i]})
+            self.__setattr__(i, {"default" : fields[i], "value": fields[i], "changed" : False})
         self.field_names = fields.keys()
         self.collection = collection
         self.id = -1
         self.ERROR = False
+
+    def g(self, key):
+        return self.__getattribute__(key)['value']
+
+    def s(self, key, value):
+        self.__getattribute__(key)['value'] = value
+        self.__getattribute__(key)['changed'] = True
 
     def log_fields(self):
         print("-"*((15*3)+3))
@@ -25,7 +32,7 @@ class DataObject:
         ret = {}
         for i in self.field_names:
             attr = self.__getattribute__(i)
-            if(attr['value'] is not attr['default']):
+            if (attr['changed']):
                 ret[i] = attr['value']
         return ret
 
@@ -35,6 +42,13 @@ class DataObject:
         for i in self.field_names:
             if(i in item):
                 self.__getattribute__(i)['value'] = item[i]
+
+    def delete(self):
+        if not self.id:
+            return
+        from app import Database
+        col = Database.db[self.collection]
+        col.find_one_and_delete({"_id" : self.id})
 
     @staticmethod
     def get(obj, where : dict = {}, what : dict = None):

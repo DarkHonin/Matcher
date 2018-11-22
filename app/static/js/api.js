@@ -24,8 +24,13 @@ function formSubmit(event){
 	transmit(this.action, o).then(d => translate(d))
 }
 
-function display(message){
-	document.getElementById("message").innerHTML = message
+function display(message, state=true){
+	var elm = document.getElementById("message")
+	elm.classList.remove("ok")
+	elm.classList.remove("error")
+	if(state) 	elm.classList.add("ok")
+	else		elm.classList.remove("error")
+	elm.innerHTML = message
 }
 
 function field_error(field){
@@ -34,7 +39,7 @@ function field_error(field){
 
 function translate(json){
 	if(json.status != "JOY")
-		return display(json.message)
+		return display(json.message, false)
 
 	if(window[json.action])
 		window[json.action](json.message)

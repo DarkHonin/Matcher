@@ -28,6 +28,6 @@ class Register(Page):
         if not RegisterUser(data, resp):
             return flask.jsonify(resp['error'])
         print("User registered")
-        return flask.jsonify({"status" : Validator.VALID})
+        return flask.jsonify({"status" : Validator.VALID, "message" : "Your account has been registered, please verify your email", "action" : "display"})
 
 

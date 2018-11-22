@@ -4,6 +4,7 @@ from app.routes.login import Login
 from app.routes.history import History
 from app.routes.settings import Settings
 from app.routes.match import Match
+from app.routes.tokenRedeem import TokenRedeem
 
 Routes = {
     "login" : Login(),
@@ -12,4 +13,5 @@ Routes = {
     "history" : History(),
     "settings" : Settings(),
     "match" :   Match(),
+    "redeem" : TokenRedeem()
 }

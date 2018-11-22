@@ -31,7 +31,8 @@ class User(DataObject):
                 "Biography"     : None,
                 "Images"        : [],
                 "Location"      : None,
-                "lastLogin"     : None
+                "lastLogin"     : None,
+                "sessionID"     : None
             }, "Users"
         )
 
@@ -43,7 +44,8 @@ class User(DataObject):
         col.create_index(("email"), unique=True)
         
     def activate(self, t : Token):
-        self.active = True
-        self.email_valid = True
+        print("Activating user: %s" % self.uname['value'])
+        self.active['value'] = True
+        self.email_valid['value'] = True
         self.save()
         pass

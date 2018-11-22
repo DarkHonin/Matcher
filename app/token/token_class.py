@@ -6,13 +6,15 @@ class Token(DataObject):
 
 	EXPIRE = 5
 
-	def __init__(self, key : dict, callback):
+	def __init__(self):
 		DataObject.__init__(self,{
-			"date"	: datetime.now(),
-			"key"	: key,
-			"token" : uuid.uuid1().hex,
-			"callback" : callback
+			"date"	: None,
+			"key"	: None,
+			"token" : None,
+			"callback" : None
 		}, "Tokens")
+		self.date["value"] = datetime.now()
+		self.token['value'] = uuid.uuid1().hex
 
 	def isValid(self):
 		now = datetime.now()
@@ -20,10 +22,12 @@ class Token(DataObject):
 		return age.days < self.EXPIRE
 
 	def getKey(self):
-		return self.key['value'].keys()[0]
+		return list(self.key['value'].keys())[0]
 
 	def resolve(self):
 		from app.token import KEY_CLASSES
 		cl = KEY_CLASSES[self.getKey()]
-		id = key['value'][self.getKey()]
-		print(cl, id)
+		id = self.key['value'][self.getKey()]
+		cl = cl.get(cl, {"_id" : id}, {"password" : 0})
+		cl.__getattribute__(self.callback['value'])(self)
+		self.delete()

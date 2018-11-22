@@ -6,7 +6,7 @@ class Validator:
 	ONLY_ALPHANUMERIC = re.compile(r"^[a-zA-Z0-9]+\Z")
 	STARTS_UPPERCASE = re.compile(r"^[A-Z]")
 	HAS_SPACES = re.compile(r"\s+")
-	IS_EMAIL   = re.compile(r"^[a-zA-Z0-9_\-]+@[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+$")
+	IS_EMAIL   = re.compile(r"^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+$")
 
 	VALID = "JOY"
 	INVALID = "NOJOY"
@@ -57,6 +57,8 @@ class Validator:
 	@staticmethod
 	def checkCaptcha(test):
 		from app import app
+		if app.config.get("CAPTCHA_DISABLE"):
+			return True
 		import requests
 		import json
 		secret = app.config.get("CAPTCHA_SECRET")

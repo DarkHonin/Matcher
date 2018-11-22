@@ -1,10 +1,11 @@
 from app.obj import Page, Validator
+from app.token import Token
 from app.users import LoginUser
 import flask
 
-class Login(Page):
+class TokenRedeem(Page):
     def __init__(self):
-        Page.__init__(self, ["/", "/login"], "Matcher::Welcome", methods=["GET", "POST"])
+        Page.__init__(self, ["/token/<token>"], "Matcher::Welcome", methods=["GET", "POST"])
         self.validator = Validator(
             {
                 "uname" : {"Can only contain alpha numeric values" : Validator.isAlphaNumeric, 
@@ -13,19 +14,20 @@ class Login(Page):
                 }
         )
 
-    def get(self):
-        return flask.render_template("pages/index/login.html")
+    def get(self, token):
+        return flask.render_template("pages/index/redeem.html", token=token)
 
-    def post(self):
+    def post(self, token):
         data = flask.request.json
         resp = {}
         if not self.validator.validate(data):
             return  flask.jsonify(self.validator.STATUS)
         print("Data logged")
-        flask.Response().set_cookie("hey", "you")
-        if not LoginUser(data, resp) or resp['error']:
+        if not LoginUser(data, resp) or 'error' in resp:
             return flask.jsonify(resp['error'])
-        if(not resp['user'].active['value']):
-            resp['error'] = {"status" : "NOJOY", "message" : "Please activate your acount first"}
         print("User Logged in")
-        return (flask.jsonify({"status" : Validator.VALID}))
+        token = Token.get(Token, {"token" : token})
+        if(not token):
+            return flask.jsonify({"status" : Validator.INVALID, "message" : "Your token is invalid"})
+        token.resolve()
+        return flask.jsonify({"status" : Validator.VALID})
