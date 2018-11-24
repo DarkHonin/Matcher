@@ -1,7 +1,7 @@
 import re
 
 class Field:
-	def __init__(self, key : str, stack, required=False, label = None, Type="text", args=None):
+	def __init__(self, key : str, stack, required=False, label = None, Type="text", args=()):
 		self.required = required
 		self.stack = stack
 		self.fault = None
@@ -28,6 +28,11 @@ class Field:
 				return "Unset"
 			return self.args[value]
 
+	def template(self):
+		if self.type is ("text" or "password" or "email"):
+			return "fields/text_style.html"
+		if self.type is "enum":
+			return "fields/enum_style.html"
 
 class Validator:
 

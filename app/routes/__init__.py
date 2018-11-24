@@ -1,5 +1,6 @@
 from app.routes.register import Register
-from app.routes.user import User
+from app.routes.user.profile import Profile
+from app.routes.user.home import Home
 from app.routes.login import Login
 from app.routes.history import History
 from app.routes.settings import Settings
@@ -8,7 +9,8 @@ from app.routes.tokenRedeem import TokenRedeem
 
 Routes = {
     "login" : Login(),
-    "user" : User(),
+    "home" : Home(),
+    "profile" : Profile(),
     "register" : Register(),
     "history" : History(),
     "settings" : Settings(),

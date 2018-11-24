@@ -90,6 +90,6 @@ class DataObject:
                 resp = col.update({"_id":self.id}, data)
                 print("Item updated :",self.id)
         except pymongo.errors.DuplicateKeyError:
-            self.ERROR =  {"status" : "NOJOY", "message" :  self.key_error()}
+            self.ERROR = self.key_error()
             return False
         return True

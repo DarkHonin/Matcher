@@ -9,7 +9,7 @@ class Page:
     @staticmethod
     def bind_routes(app : Flask, pn : str, p):
         for i in p.METHODS:
-            print("Binding method:",i,"in",p, type(p.URL))
+            print("Binding method:",i,"in",p, type(p.URL), "[%s]" % (pn+"_"+i))
             if(type(p.URL) is list):
                 for e in p.URL:
                     app.add_url_rule(e, pn+"_"+i, getattr(p, i.lower()), methods=[i])    

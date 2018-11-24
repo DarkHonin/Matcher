@@ -1,6 +1,7 @@
 from app.obj import Page
 from app.validator import *
 from app.users import LoginUser, LookupUser
+from app.JSON_responce import JsonResponce
 import flask
 
 class Login(Page):
@@ -15,6 +16,8 @@ class Login(Page):
         )
 
     def get(self):
+        if("user" in flask.session):
+            return flask.redirect(flask.url_for("home_GET"))
         return flask.render_template("pages/index/login.html")
 
     def post(self):
@@ -23,11 +26,11 @@ class Login(Page):
             return  flask.jsonify({"status" : "NOJOY", "message" : self.validator.ERROR})
         print("Data logged")
         user = LookupUser(data["uname"])
-        if not user:
-            return flask.jsonify({"status" : "NOJOY", "message" : "Email/Password invalid"})
-        if not LoginUser(user, data["password"]):
-            return flask.jsonify({"status" : "NOJOY", "message" : "Email/Password invalid"})
-        if(not user.active):
-            return flask.jsonify({"status" : "NOJOY", "message" : "Please activate your acount first"})
-        print("User Logged in")
-        return flask.jsonify({"status" : Validator.VALID, "action" : "redirect", "message" : "/user"})
+        responce = JsonResponce()
+        if not LoginUser(user, data["password"]) or not user.active:
+            responce.action("displayMessage" , "Email/Password invalid", "NOJOY")
+        else:
+            responce.action("displayMessage" , ("Welcome back %s" % (user.uname)))
+            responce.action("redirect" , "/home")
+            print("User Logged in")
+        return responce.render()

@@ -13,18 +13,23 @@ class User(DataObject):
     }
 
     SEXUALITY = {
-        "Straight"          : 0,
-        "Bisexual"          : 1,
-        "Homosexual"        : 2,
-        "Prefer not to say" : 1
+        "Men"               : 0,
+        "Women"             : 1,
+        "Both"              : 2,
+        "Prefer not to say" : 3
     }
 
-    VALIDATOR = Validator([
-	    EMAIL_FIELD,
+    PUBLIC_FIELDS = [
 	    UNAME_FIELD,
+        Field("fname", {"Not a valid first name" : Validator.isValidName}, True, "First name"),
+        Field("lname", {"Not a valid first name" : Validator.isValidName}, True, "Last name"),
         Field("gender", Validator.oneOf, False, "Gender", "enum", GENDER),
         Field("Sexuality", Validator.oneOf, False, "Interested in", "enum", SEXUALITY),
-    ])
+    ]
+
+    PRIVATE_FIELDS = [
+        EMAIL_FIELD
+    ]
 
     def __init__(self):
         DataObject.__init__(self, "Users")
@@ -34,8 +39,8 @@ class User(DataObject):
         self.lname         = None
         self.fname         = None
         self.active        = False
-        self.gender        = -1
-        self.Sexuality     = -1
+        self.gender        = None
+        self.Sexuality     = None
         self.Biography     = None
         self.Images        = []
         self.Location      = None
@@ -71,3 +76,9 @@ class User(DataObject):
         self.active = True
         self.email_valid = True
         pass
+
+    def isComplete(self):
+        for i in self.fieldKeys():
+            if(not self.__getattribute__(i)):
+                return False
+        return True

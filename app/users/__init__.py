@@ -10,8 +10,6 @@ from app.token import AddKeyClass
 
 AddKeyClass("Users", User)
 
-
-
 def RegisterUser(user, password):
 	user.log_fields()
 	if not user.save():
@@ -45,6 +43,8 @@ def verifyLogin(user : User, password, resp={}):
 	return True
 
 def LoginUser(user : User, password):
+	if not user:
+		return False
 	stored_password = Password.get(Password, {'user' : user.id})
 	if not check_password_hash(stored_password.hash, password): 
 		return False
@@ -54,7 +54,6 @@ def LoginUser(user : User, password):
 	return True
 
 def logout():
-	token = flask.session['user']
-	if token in Users:
-		del Users[token]
-	flask.redirect("/")
+	if "user" in flask.session:
+		del flask.session['user']
+	return flask.redirect("/")

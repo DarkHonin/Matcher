@@ -8,6 +8,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates|Sansita:700" rel="stylesheet">
         <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/style.css', _external=True) }} " />
         <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/NordicSans.css', _external=True) }} " />
+        <script src="{{ url_for('static', filename='js/api.js') }}"></script>
     </head>
     <body>
         <header>
@@ -26,6 +27,13 @@
                 Designed and build by HoninWorx, aka wgourley
         </footer>
     </body>
-    <script src=" {{ url_for('static', filename='js/jquery.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script>
+        document.querySelectorAll("[event]").forEach(f => {
+            var j = JSON.parse(f.getAttribute("event"))
+            for(var i in j){
+                console.log("Binding: "+i+" to "+j[i])
+                f.addEventListener(i, window[j[i]])
+            }
+        })
+    </script>
 </html>

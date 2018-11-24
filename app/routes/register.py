@@ -2,6 +2,7 @@ from app.obj import Page
 from app.users import RegisterUser, User
 from app.validator import *
 import flask
+from app.JSON_responce import JsonResponce
 
 class Register(Page):
     def __init__(self):
@@ -27,12 +28,11 @@ class Register(Page):
         print("Data logged")
         user = User()
         user.parse_dbo(data)
+        resp = JsonResponce()
         if not RegisterUser(user, data['password']):
-            return flask.jsonify(user.ERROR)
-        """
-        print("User registered")
-        return flask.jsonify({"status" : Validator.VALID, "message" : "Your account has been registered, please verify your email", "action" : "display"})
-        """
-        return flask.jsonify({"status" : "JOY"})
+            resp.action("displayMessage", user.ERROR, "NOJOY")
+        else:
+            resp.action("displayMessage" , "An activation email has been sent!")
+        return resp.render()
 
 

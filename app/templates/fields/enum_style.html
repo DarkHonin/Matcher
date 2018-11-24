@@ -1,0 +1,9 @@
+<select>
+	{% for val, key in field.args.items() %}
+		{% if key|int() == value|int() %}
+		<option value="{{key}}" selected>{{val}}</option>
+		{% else %}
+		<option value="{{key}}">{{val}}</option>
+		{%endif%}
+	{%endfor%}
+</select>

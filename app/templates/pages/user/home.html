@@ -1,0 +1,15 @@
+{% extends 'template.html' %}
+{%block content%}
+	<p class="content">Your home page</p>
+	<article class="tile-panel">
+		<a href="#" class="content fs-P tile">My Profile</a>
+		<a href="#" class="content fs-M tile" id="messages"><span class="counter">6</span>Messages</a>
+		<a href="#" class="content fs-S tile">Search</a>
+	</article>
+	<script src="{{url_for('static', filename='js/user.js')}}"></script>
+{% endblock %}
+
+
+{% block navbar %}
+	 {%include "pages/navbar.html" %}
+{% endblock %}

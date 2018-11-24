@@ -24,12 +24,12 @@ function formSubmit(event){
 	transmit(this.action, o).then(d => translate(d))
 }
 
-function display(message, state=true){
+function displayMessage(message, state=true){
 	var elm = document.getElementById("message")
 	elm.classList.remove("ok")
-	elm.classList.remove("error")
+	elm.classList.remove("warning")
 	if(state) 	elm.classList.add("ok")
-	else		elm.classList.remove("error")
+	else		elm.classList.add("warning")
 	elm.innerHTML = message
 }
 
@@ -38,21 +38,16 @@ function field_error(field){
 }
 
 function redirect(message){
-	window.location.pathname = message
+	setTimeout(function(){
+		window.location.pathname = message
+	}, 1000)
 }
 
 function translate(json){
-	if(json.status != "JOY")
-		return display(json.message, false)
-
-	if(window[json.action])
-		window[json.action](json.message)
+	for(var a in json.actions){
+		if(window[a])
+			window[a](json.actions[a], json.state == "JOY")
+	}
 }
 
-document.querySelectorAll("[event]").forEach(f => {
-	var j = JSON.parse(f.getAttribute("event"))
-	for(var i in j){
-		console.log("Binding: "+i+" to "+j[i])
-		f.addEventListener(i, window[j[i]])
-	}
-})
+
