@@ -12,7 +12,9 @@
     <body>
         <header>
             <h1 class="context">Matcha</h1>
+            {% block navbar %}
             <!--Navbar only shows after logged in-->
+            {% endblock %}
         </header>
         <a href="#" class="alert warning" id="message"></a>
         <article class='note' id="display">

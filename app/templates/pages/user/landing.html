@@ -1,0 +1,48 @@
+{% extends 'template.html' %}
+{%block content%}
+<article class='note'>
+<p class="content">Your profile</p>
+<article class="carosel">
+	<img class="preview" src="static/12018-11-05 06:50:40.png">
+	<div class="options">
+		<img src="static/12018-11-05 06:50:40.png">
+		<img src="static/22018-11-05 08:05:26.png">
+		<img src="static/32018-11-05 09:12:39.png">
+		<img src="static/42018-11-05 09:36:39.png">
+		<span class="placeholder">+<br>Add</span>
+	</div>
+</article>
+
+<article class="list">
+	<h3 class="context">Details</h3>
+	<button class="ul">Edit</button>
+	{% for field in user.VALIDATOR.fields %}
+	<div class="li content">
+		<label>{{field.label}}</label>
+		<span class="data">{{field.getHTMLValue(user.__getattribute__(field.key))}}</span>
+	</div>
+	{% endfor %}
+	<div class="li content">
+		<label>Location:</label>
+		<input type="text" class="data" placeholder="Location" name="alter:location:set">
+		<div class="alter">
+			<button class="ul">Save</button>
+		</div>
+	</div>
+	<div class="li content">
+		<label>Interesetd in: </label>
+		<select class="data">
+			<option value="men">Men</option>
+			<option value="women">Women</option>
+			<option value="both">Both</option>
+		</select>
+		<div class="alter">
+			<button class="ul">Save</button>
+		</div>
+	</div>
+</article>
+{%endblock%}
+
+{% block navbar %}
+	 {%include "pages/navbar.html" %}
+{% endblock %}

@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "68f118e9-7845-49d6-a5d1-b4de18db5028",
+		"name": "Matcher",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TestRegistration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6414ccaf-9cd3-402a-a826-0782d8380a36",
+						"exec": [
+							"// example using pm.response.to.be*\r",
+							"pm.test(\"response must be valid and have a json body\", function () {\r",
+							"     // assert that the status code is 200\r",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants\r",
+							"     // assert that the response has a valid JSON body\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User should be able to register\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"JOY\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"dgmon.mail@gmail.com\",\"uname\":\"Username\",\"fname\":\"First\",\"lname\":\"Last\",\"password\":\"password\",\"g-recaptcha-response\":\"\"}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TestReRegistration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6414ccaf-9cd3-402a-a826-0782d8380a36",
+						"exec": [
+							"// example using pm.response.to.be*\r",
+							"pm.test(\"response must be valid and have a json body\", function () {\r",
+							"     // assert that the status code is 200\r",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants\r",
+							"     // assert that the response has a valid JSON body\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User should not be able to register\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"NOJOY\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"dgmon.mail@gmail.com\",\"uname\":\"Username\",\"fname\":\"First\",\"lname\":\"Last\",\"password\":\"password\",\"g-recaptcha-response\":\"\"}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activate bad key",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6414ccaf-9cd3-402a-a826-0782d8380a36",
+						"exec": [
+							"// example using pm.response.to.be*\r",
+							"pm.test(\"response must be valid and have a json body\", function () {\r",
+							"     // assert that the status code is 200\r",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants\r",
+							"     // assert that the response has a valid JSON body\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User should not be able to login\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"NOJOY\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"uname\":\"Username\",\"password\":\"password\",\"g-recaptcha-response\":\"\"}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/token/this_is_a_wrong_token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"token",
+						"this_is_a_wrong_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6414ccaf-9cd3-402a-a826-0782d8380a36",
+						"exec": [
+							"// example using pm.response.to.be*\r",
+							"pm.test(\"response must be valid and have a json body\", function () {\r",
+							"     // assert that the status code is 200\r",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants\r",
+							"     // assert that the response has a valid JSON body\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User should not be able to login\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"JOY\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"uname\":\"Username\",\"password\":\"password\",\"g-recaptcha-response\":\"\"}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/token/this_is_a_testing_token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"token",
+						"this_is_a_testing_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TestLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6414ccaf-9cd3-402a-a826-0782d8380a36",
+						"exec": [
+							"// example using pm.response.to.be*\r",
+							"pm.test(\"response must be valid and have a json body\", function () {\r",
+							"     // assert that the status code is 200\r",
+							"     pm.response.to.be.ok; // info, success, redirection, clientError,  serverError, are other variants\r",
+							"     // assert that the response has a valid JSON body\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json; // this assertion also checks if a body  exists, so the above check is not needed\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User should not be able to login\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(\"JOY\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"uname\":\"Username\",\"password\":\"password\",\"g-recaptcha-response\":\"\"}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

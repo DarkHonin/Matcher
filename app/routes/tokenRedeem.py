@@ -1,4 +1,5 @@
-from app.obj import Page, Validator
+from app.obj import Page
+from app.validator import *
 from app.token import Token
 from app.users import LoginUser
 import flask
@@ -7,11 +8,12 @@ class TokenRedeem(Page):
     def __init__(self):
         Page.__init__(self, ["/token/<token>"], "Matcher::Welcome", methods=["GET", "POST"])
         self.validator = Validator(
-            {
-                "uname" : {"Can only contain alpha numeric values" : Validator.isAlphaNumeric, 
-                            "Must be longer than 6 characters" : [Validator.isLonger, [6]]},
-                "g-recaptcha-response" : {"Recaptcha failed" : Validator.checkCaptcha}
-                }
+            [
+                PASSWORD_FIELD,
+                UNAME_FIELD,
+                Field("g-recaptcha-response", {"Captvha failed" : Validator.checkCaptcha}, True, "Captcha"),
+
+            ]  
         )
 
     def get(self, token):
@@ -19,15 +21,14 @@ class TokenRedeem(Page):
 
     def post(self, token):
         data = flask.request.json
-        resp = {}
         if not self.validator.validate(data):
-            return  flask.jsonify(self.validator.STATUS)
+            return  flask.jsonify({"status" : "NOJOY", "message" : self.validator.ERROR})
         print("Data logged")
-        if not LoginUser(data, resp) or 'error' in resp:
-            return flask.jsonify(resp['error'])
-        print("User Logged in")
         token = Token.get(Token, {"token" : token})
         if(not token):
             return flask.jsonify({"status" : Validator.INVALID, "message" : "Your token is invalid"})
-        token.resolve()
-        return flask.jsonify({"status" : Validator.VALID})
+        user = token.resolve()
+        if not LoginUser(user, data['password']):
+            return flask.jsonify({"status" : "NOJOY", "message" : "Email/Password invalid"})
+        token.delete()
+        return flask.jsonify({"status" : Validator.VALID, "action" : "redirect", "message" : "/user"})

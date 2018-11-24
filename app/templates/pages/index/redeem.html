@@ -5,7 +5,7 @@
 	<p class="content">Please login to continue</p>
 	<form method="post" action="{{url_for('redeem_POST', token=token)}}" event='{"submit":"formSubmit"}'>
 		<h3 class="context">Login</h3>
-		<input type="email" placeholder="Email" required name="email">
+		<input type="text" placeholder="Username" required name="uname">
 		<input type="password" placeholder="Password" required name="password">
 		<script src="https://www.google.com/recaptcha/api.js"></script>
 		<div class="g-recaptcha" data-sitekey="6Le6R3wUAAAAALlzLt7dqWTxfsf3NQ2NI4rRpkR_"></div>

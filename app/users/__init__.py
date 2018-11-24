@@ -1,6 +1,8 @@
 from app.users.User_class import User
+from app.users.password import Password
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+
 import flask
 import uuid
 
@@ -8,27 +10,29 @@ from app.token import AddKeyClass
 
 AddKeyClass("Users", User)
 
-Users = {}
 
-def RegisterUser(data, resp={}):
-	user = User()
-	user.parse_dbo(data)
+
+def RegisterUser(user, password):
 	user.log_fields()
-	user.s("password", generate_password_hash(data['password']))
 	if not user.save():
-		resp["error"] = user.ERROR
 		return False
+	print("user created")
+	password = Password(generate_password_hash(password), user.id)
+	password.save()
+	print("password created")
 	from flask_mail import Message
 	from app import Mailer
 	from app.token import Token
 
-	token = Token()
-	token.s('key', {"Users" : user.id})
-	token.s("callback", "activate")
+	token = Token({"Users" : user.id}, "activate")
 	token.save()
-	msg = Message("Activate the shrines",recipients=[data['email']], html=flask.render_template("pages/email/activateEmail.html", token=token.g('token')))
+	msg = Message("Activate the shrines",recipients=[user.email], html=flask.render_template("pages/email/activateEmail.html", token=token.token))
 	Mailer.send(msg)
 	return True
+
+def LookupUser(uname):
+	user = User.get(User, {"uname" : uname})
+	return user
 
 def verifyLogin(user : User, password, resp={}):
 	if not user:
@@ -40,11 +44,17 @@ def verifyLogin(user : User, password, resp={}):
 		return False
 	return True
 
-def LoginUser(data, resp={}):
-	user = User.get(User, {"email" : data['email']})
-	verifyLogin(user,data['password'], resp)
-	sesh = uuid.uuid4().hex
-	Users[sesh] = user
-	user.sessionID['value'] = sesh
+def LoginUser(user : User, password):
+	stored_password = Password.get(Password, {'user' : user.id})
+	if not check_password_hash(stored_password.hash, password): 
+		return False
+	user.lastLogin = datetime.now()
+	flask.session['user'] = user.uid
 	user.save()
 	return True
+
+def logout():
+	token = flask.session['user']
+	if token in Users:
+		del Users[token]
+	flask.redirect("/")

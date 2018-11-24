@@ -1,5 +1,34 @@
 import re
 
+class Field:
+	def __init__(self, key : str, stack, required=False, label = None, Type="text", args=None):
+		self.required = required
+		self.stack = stack
+		self.fault = None
+		self.args = args
+		self.key = key
+		self.type = Type
+		if not label:
+			self.label = key
+		else:
+			self.label = label
+
+	def validate(self, param):
+		for m, f in self.stack.items():
+			if(not f(param, *self.args)):
+				self.fault = m
+				return False
+		return True
+
+	def getHTMLValue(self, value):
+		if self.type is "text":
+			return value
+		elif self.type is "enum":
+			if (value is -1 or None):
+				return "Unset"
+			return self.args[value]
+
+
 class Validator:
 
 	ONLY_CHARS = re.compile(r"^[a-zA-Z]+\Z")
@@ -11,23 +40,19 @@ class Validator:
 	VALID = "JOY"
 	INVALID = "NOJOY"
 
-	def __init__(self, stages):
-		self.fields = stages
-		self.STATUS = {"status" : "JOY"}
+	def __init__(self, fields):
+		self.fields = fields
+		self.ERROR = None
 
 	def validate(self, data : dict):
-		for field in data:
-			if field in self.fields:
-				_field = self.fields[field]
-				for k, stage in _field.items():
-					if type(stage) is list:
-						if(not stage[0](data[field], *stage[1])):
-							self.STATUS = {"status" : "NOJOY", "action":"field_error", "message" : k}
-							return False
-					else:
-						if(not stage(data[field])):
-							self.STATUS = {"status" : "NOJOY", "action":"field_error", "message" : k}
-							return False
+		for field in self.fields:
+			if field.key in data:
+				if not field.validate(data[field.key]):
+					self.ERROR = field.fault
+					return False
+			elif field.required:
+				self.ERROR = ("'%s' is a required field" % field.label)
+				return False
 		return True
 
 	@staticmethod
@@ -37,6 +62,10 @@ class Validator:
 	@staticmethod
 	def isLonger(test, length):
 		return len( test) > length
+
+	@staticmethod
+	def oneOf(test, arr):
+		return test in arr
 
 	@staticmethod
 	def hasSpaces(test):

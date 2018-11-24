@@ -37,6 +37,10 @@ function field_error(field){
 	document.querySelector("[name='"+field.item+"']").setCustomValidity(item.message);
 }
 
+function redirect(message){
+	window.location.pathname = message
+}
+
 function translate(json){
 	if(json.status != "JOY")
 		return display(json.message, false)

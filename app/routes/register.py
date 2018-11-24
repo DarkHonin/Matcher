@@ -1,19 +1,20 @@
-from app.obj import Page, Validator
-from app.users import RegisterUser
+from app.obj import Page
+from app.users import RegisterUser, User
+from app.validator import *
 import flask
 
 class Register(Page):
     def __init__(self):
         Page.__init__(self, [ "/register"], "Matcher::Welcome", methods=["GET", "POST"])
         self.validator = Validator(
-            {
-                "fname" : {"Is not a valid name" : Validator.isValidName},
-                "lname" : {"Is not a valid name" : Validator.isValidName},
-                "uname" : {"Can only contain alpha numeric values" : Validator.isAlphaNumeric, 
-                            "Must be longer than 6 characters" : [Validator.isLonger, [6]]},
-                "email" : {"Must be a valid email" : Validator.isEmail},
-                "g-recaptcha-response" : {"Recaptcha failed" : Validator.checkCaptcha}
-                }
+            [
+                EMAIL_FIELD,
+                PASSWORD_FIELD,
+                Field("fname", {"Not a valid first name" : Validator.isValidName}, True, "First name"),
+                Field("lname", {"Not a valid last name" : Validator.isValidName}, True, "Lirst name"),
+                UNAME_FIELD,
+                Field("g-recaptcha-response", {"Captvha failed" : Validator.checkCaptcha}, True, "Captcha")
+            ]  
         )
 
     def get(self):
@@ -21,13 +22,17 @@ class Register(Page):
 
     def post(self):
         data = flask.request.json
-        resp = {}
         if not self.validator.validate(data):
-            return  flask.jsonify(self.validator.STATUS)
+            return  flask.jsonify({"status" : "NOJOY", "message" : self.validator.ERROR})
         print("Data logged")
-        if not RegisterUser(data, resp):
-            return flask.jsonify(resp['error'])
+        user = User()
+        user.parse_dbo(data)
+        if not RegisterUser(user, data['password']):
+            return flask.jsonify(user.ERROR)
+        """
         print("User registered")
         return flask.jsonify({"status" : Validator.VALID, "message" : "Your account has been registered, please verify your email", "action" : "display"})
+        """
+        return flask.jsonify({"status" : "JOY"})
 
 
