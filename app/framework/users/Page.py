@@ -2,6 +2,7 @@ from app.framework import Page
 from app.framework.users import User
 from app.framework import Token, Page, JsonResponce
 from app.framework.validator import *
+import uuid
 import flask
 
 class UserPage(Page):
@@ -25,14 +26,16 @@ class UserPage(Page):
             ]  
         )
 
+	LOGGED_USERS = {}
 
 	def __init__(self):
 		 Page.__init__(self, {
-            "/:INDEX:GET" : self.showLoginPage,
-            "/login:LOGIN:GET" : self.showLoginPage,
-            "/login:LOGIN_ACTION:POST" : self.loginUser,
-            "/register:REGISTER:GET" : self.showRegisterPage,
-            "/register:REGISTER_ACTION:POST" : self.registerUser,
+            "/:INDEX:GET" 						: self.showLoginPage,
+            "/login:LOGIN:GET" 					: self.showLoginPage,
+            "/login:LOGIN_ACTION:POST" 			: self.loginUser,
+            "/register:REGISTER:GET" 			: self.showRegisterPage,
+            "/register:REGISTER_ACTION:POST" 	: self.registerUser,
+			"/home:HOME_VIEW:GET" 				: self.showHomePage,
         })
 
 	def showRegisterPage(self):
@@ -40,6 +43,19 @@ class UserPage(Page):
 
 	def showLoginPage(self):
 		return flask.render_template("pages/index/login.html")
+	
+	def isUserLoggedIn(self):
+		if "user" not in flask.session:
+			return False
+		id = flask.session['user']
+		if id not in self.LOGGED_USERS:
+			return False
+		return True
+
+	def showHomePage(self):
+		if not self.isUserLoggedIn():
+			return flask.redirect(flask.url_for("LOGIN"))
+		return flask.render_template("pages/user/landing.html", SessionToken = self.LOGGED_USERS[flask.session['user']]["SessionID"])
 
 	def loginUser(self):
 		data = flask.request.json
@@ -54,6 +70,7 @@ class UserPage(Page):
 		else:
 			responce.action("displayMessage" , ("Welcome back %s" % (user.uname)))
 			responce.action("redirect" , "/home")
+			self.LOGGED_USERS[user.uid] = {"SessionID" : uuid.uuid1().hex, "User" : user}
 			print("User Logged in")
 		return responce.render()
 
@@ -71,3 +88,5 @@ class UserPage(Page):
 		else:
 			resp.action("displayMessage" , "An activation email has been sent!")
 		return resp.render()
+
+INSTANCE = UserPage()

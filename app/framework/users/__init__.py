@@ -4,6 +4,7 @@ from app.framework.users.password import Password
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from geventwebsocket.websocket import WebSocket
+from app.framework.users import SocketDispatch
 
 import flask
 import uuid
@@ -11,11 +12,6 @@ import uuid
 from app.framework import AddKeyClass
 
 AddKeyClass("Users", User)
-
-UserSockets = {}
-
-def SocketHandle(ws : WebSocket):
-	print(ws)
 
 def RegisterUser(user, password):
 	user.log_fields()

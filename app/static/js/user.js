@@ -1,18 +1,19 @@
-function edit_profile(event){
 
-}
+const page_display = document.querySelector("#pageDisplay")
 
-function update_telemetry(){
-	console.log("Starting state update")
-	transmit("/home", {}, "INFO").then( data => {translate(data)})
-	console.log("Update ended")
-}
+var socket = io.connect('http://' + document.domain + ':' + location.port+"/home");
+socket.on('connect', function() {
+	socket.emit("getPage", {token: SessionToken, page:"home"});
+});
 
-var socket = new WebSocket("ws://localhost:5000/home");
-socket.onopen = function(){
-	console.log("Connection open")
-	socket.send(JSON.stringify({"connect":"Special token"}));
-}
-socket.onmessage = function(data){
-	console.log(data.data)
-}
+socket.on('show_page', function(data){
+	console.log(data)
+	page_display.innerHTML = data
+})
+
+socket.on("error", function(error){
+	var elm = document.getElementById("message")
+	elm.classList.remove("ok")
+	elm.classList.add("warning")
+	elm.innerHTML = error
+})

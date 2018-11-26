@@ -31,9 +31,9 @@ class Page:
         }
         print("Route registered: %s" %(self._routes[parts[1]]))
     
-    def bind(self, app:Flask):
+    def bind(self, app : Flask):
         for n, r in self._routes.items():
-            print("Binding route %s::%s" % (n, r["METHODS"]))
+            print("Binding passive route %s::%s" % (n, r["METHODS"]))
             app.add_url_rule(r['URL'], n, r["FUNCTION"], methods=(r["METHODS"] if r["METHODS"] else None))
 
 
