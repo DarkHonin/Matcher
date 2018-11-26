@@ -3,7 +3,7 @@
 	<h2 class="context">Reddem your token</h2>
 	<hr>
 	<p class="content">Please login to continue</p>
-	<form method="post" action="{{url_for('redeem_POST', token=token)}}" event='{"submit":"formSubmit"}'>
+	<form method="post" action="{{url_for('REDEEM_ACTION', token=token)}}" event='{"submit":"formSubmit"}'>
 		<h3 class="context">Login</h3>
 		<input type="text" placeholder="Username" required name="uname">
 		<input type="password" placeholder="Password" required name="password">

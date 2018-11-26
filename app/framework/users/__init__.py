@@ -1,14 +1,21 @@
-from app.users.User_class import User
-from app.users.password import Password
+from app.framework.users.User_class import User
+from app.framework.users.Page import UserPage
+from app.framework.users.password import Password
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from geventwebsocket.websocket import WebSocket
 
 import flask
 import uuid
 
-from app.token import AddKeyClass
+from app.framework import AddKeyClass
 
 AddKeyClass("Users", User)
+
+UserSockets = {}
+
+def SocketHandle(ws : WebSocket):
+	print(ws)
 
 def RegisterUser(user, password):
 	user.log_fields()
@@ -20,7 +27,7 @@ def RegisterUser(user, password):
 	print("password created")
 	from flask_mail import Message
 	from app import Mailer
-	from app.token import Token
+	from app.framework import Token
 
 	token = Token({"Users" : user.id}, "activate")
 	token.save()
@@ -31,6 +38,11 @@ def RegisterUser(user, password):
 def LookupUser(uname):
 	user = User.get(User, {"uname" : uname})
 	return user
+
+def GetCurrentUser():
+	if not 'user' in flask.session:
+		return False
+	return User.get(User, {"uid" : flask.session['user']})
 
 def verifyLogin(user : User, password, resp={}):
 	if not user:

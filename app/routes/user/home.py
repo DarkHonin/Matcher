@@ -1,9 +1,12 @@
-from app.obj import Page
+from app.obj import Page, SocketInterface
 import flask
 
-class Home(Page):
+class Home(SocketInterface):
     def __init__(self):
-        Page.__init__(self, "/home", "Matcher::Home", methods=["GET", "INFO"])
+        SocketInterface.__init__(self, "/home", "Matcher::Home", methods=["GET", "INFO"])
+
+    def getAllowedFunctions(self):
+        return ["info"]
 
     def get(self):
         if("user" not in flask.session):

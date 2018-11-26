@@ -8,5 +8,11 @@ function update_telemetry(){
 	console.log("Update ended")
 }
 
-setInterval(update_telemetry, 15000)
-update_telemetry()
+var socket = new WebSocket("ws://localhost:5000/home");
+socket.onopen = function(){
+	console.log("Connection open")
+	socket.send(JSON.stringify({"connect":"Special token"}));
+}
+socket.onmessage = function(data){
+	console.log(data.data)
+}

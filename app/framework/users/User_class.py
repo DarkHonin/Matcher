@@ -1,11 +1,9 @@
-from app.obj import DataObject
-from app.token import Token
-from app.validator import Validator, EMAIL_FIELD, UNAME_FIELD, Field
+import flask
+from app.framework import DataObject, Token
+from app.framework.validator import *
 import uuid
 
 class User(DataObject):
-
-   
 
     GENDER = {
         "Male" : 0,
@@ -47,6 +45,9 @@ class User(DataObject):
         self.lastLogin       = None
         self.sessionID     = None
         self.uid = uuid.uuid1().hex
+       
+
+   
 
     def fieldKeys(self):
         return [

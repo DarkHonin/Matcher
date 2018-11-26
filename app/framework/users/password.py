@@ -1,5 +1,5 @@
-from app.obj import DataObject
-from app.token import Token
+from app.framework import DataObject
+from app.framework import Token
 
 class Password(DataObject):
 
