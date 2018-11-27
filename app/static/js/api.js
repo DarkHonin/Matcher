@@ -16,6 +16,19 @@ function transmit(url, data, method="post"){
 		}).then(responce => responce.json());
 }
 
+function bindEvents(){
+	document.querySelectorAll("[event]").forEach(f => {
+		var j = JSON.parse(f.getAttribute("event"))
+		if(!f["eventsLoaded"]){
+			f.eventsLoaded = true
+			for(var i in j){
+				console.log("Binding: "+i+" to "+j[i]+f)
+				f.addEventListener(i, window[j[i]])
+			}
+		}
+	})
+}
+
 function formSubmit(event){
 	event.preventDefault()
 	var fd = new FormData(event.target)

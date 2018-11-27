@@ -1,9 +1,6 @@
-{% extends 'template.html' %}
-{%block content%}
-<article class='note'>
-<p class="content">Your profile</p>
+
 <article class="carosel">
-	<img class="preview" src="static/12018-11-05 06:50:40.png">
+
 	<div class="options">
 		<img src="static/12018-11-05 06:50:40.png">
 		<img src="static/22018-11-05 08:05:26.png">
@@ -16,7 +13,7 @@
 <article class="list">
 	<h3 class="context">Public info:</h3>
 	{% if user_current %}
-	<button class="ul" action='{"click" : "saveInfo"}'>Save</button>
+	<a class="ul" style="width:100%" href="#" event='{"click":"saveInfo"}'>Save</a>
 	{% endif %}
 
 	{% for field in user.PUBLIC_FIELDS %}
@@ -52,9 +49,3 @@
 	{% endfor %}
 	{% endif %}
 </article>
-<script src="{{url_for('static', filename='js/user.js')}}"></script>
-{%endblock%}
-
-{% block navbar %}
-	 {%include "pages/navbar.html" %}
-{% endblock %}

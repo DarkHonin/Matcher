@@ -5,29 +5,34 @@ import uuid
 
 class User(DataObject):
 
-    GENDER = {
-        "Male" : 0,
-        "Female" : 1
-    }
+    GENDER = [
+            "Male",
+            "Female"
+        ]
 
-    SEXUALITY = {
-        "Men"               : 0,
-        "Women"             : 1,
-        "Both"              : 2,
-        "Prefer not to say" : 3
-    }
-
+    SEXUALITY = [
+        "Men"               ,
+        "Women"             ,
+        "Both"              ,
+        "Prefer not to say" 
+    ]
+    
     PUBLIC_FIELDS = [
 	    UNAME_FIELD,
         Field("fname", {"Not a valid first name" : Validator.isValidName}, True, "First name"),
         Field("lname", {"Not a valid first name" : Validator.isValidName}, True, "Last name"),
-        Field("gender", Validator.oneOf, False, "Gender", "enum", GENDER),
-        Field("Sexuality", Validator.oneOf, False, "Interested in", "enum", SEXUALITY),
+        Field("gender", {"Not a valid gender":Validator.oneOf}, False, "Gender", "enum", GENDER),
+        Field("sexuality", {"Its cool that your into that but we cant show that here":Validator.oneOf}, False, "Interested in", "enum", SEXUALITY),
     ]
 
     PRIVATE_FIELDS = [
-        EMAIL_FIELD
+        EMAIL_FIELD,
+        PASSWORD_FIELD
     ]
+
+    FIELDS = PUBLIC_FIELDS + PRIVATE_FIELDS
+
+    GLOBAL_VALIDATOR = Validator(FIELDS)
 
     def __init__(self):
         DataObject.__init__(self, "Users")
@@ -37,8 +42,8 @@ class User(DataObject):
         self.lname         = None
         self.fname         = None
         self.active        = False
-        self.gender        = None
-        self.Sexuality     = None
+        self._gender        = None
+        self._sexuality     = None
         self.Biography     = None
         self.Images        = []
         self.Location      = None
@@ -46,9 +51,6 @@ class User(DataObject):
         self.sessionID     = None
         self.uid = uuid.uuid1().hex
        
-
-   
-
     def fieldKeys(self):
         return [
             "uid",
@@ -59,7 +61,7 @@ class User(DataObject):
             "fname",
             "active",
             "gender",
-            "Sexuality",
+            "sexuality",
             "Biography",
             "Location",
             "lastLogin"
@@ -83,3 +85,27 @@ class User(DataObject):
             if(not self.__getattribute__(i)):
                 return False
         return True
+
+    @property
+    def gender(self):
+        return self._gender
+
+    @gender.setter
+    def gender(self, value:str):
+        if value not in self.GENDER:
+            raise Exception("User gender must be one of %s" % self.GENDER)
+        self._gender = value
+
+    @property
+    def sexuality(self):
+        return self._sexuality
+
+    @sexuality.setter
+    def sexuality(self, value:str):
+        if value not in self.SEXUALITY:
+            raise Exception("User gender must be one of %s" % self.SEXUALITY)
+        self._sexuality = value
+
+    @property
+    def password(self):
+        return "Your super secret password"

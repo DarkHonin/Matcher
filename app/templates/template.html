@@ -28,12 +28,6 @@
         </footer>
     </body>
     <script>
-        document.querySelectorAll("[event]").forEach(f => {
-            var j = JSON.parse(f.getAttribute("event"))
-            for(var i in j){
-                console.log("Binding: "+i+" to "+j[i])
-                f.addEventListener(i, window[j[i]])
-            }
-        })
+        bindEvents()
     </script>
 </html>

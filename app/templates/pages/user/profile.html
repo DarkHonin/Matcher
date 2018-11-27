@@ -7,14 +7,13 @@
 		<img src="static/22018-11-05 08:05:26.png">
 		<img src="static/32018-11-05 09:12:39.png">
 		<img src="static/42018-11-05 09:36:39.png">
-		<span class="placeholder">+<br>Add</span>
 	</div>
 </article>
 
 <article class="list">
 	<h3 class="context">Public info:</h3>
 	{% if user_current %}
-	<a class="ul" style="width:100%" href='?edit=true'>Edit</a>
+	<a class="ul" style="width:100%" href="#" event='{"click":"goToPage"}' page="profile_edit">Edit</a>
 	{% endif %}
 
 	{% for field in user.PUBLIC_FIELDS %}

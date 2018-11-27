@@ -36,6 +36,7 @@ class UserPage(Page):
             "/register:REGISTER:GET" 			: self.showRegisterPage,
             "/register:REGISTER_ACTION:POST" 	: self.registerUser,
 			"/home:HOME_VIEW:GET" 				: self.showHomePage,
+			"/logut:LOGOUT:GET"					: self.logout
         })
 
 	def showRegisterPage(self):
@@ -43,7 +44,14 @@ class UserPage(Page):
 
 	def showLoginPage(self):
 		return flask.render_template("pages/index/login.html")
-	
+
+	def logout(self):
+		if self.isUserLoggedIn():
+			d = flask.session['user']
+			del(self.LOGGED_USERS[d])
+			del(flask.session['user'])
+		return flask.redirect("/")
+		
 	def isUserLoggedIn(self):
 		if "user" not in flask.session:
 			return False
@@ -51,6 +59,11 @@ class UserPage(Page):
 		if id not in self.LOGGED_USERS:
 			return False
 		return True
+
+	def getCurrentUser(self):
+		if self.isUserLoggedIn():
+			return self.LOGGED_USERS[flask.session['user']]["User"]
+		return None
 
 	def showHomePage(self):
 		if not self.isUserLoggedIn():
@@ -70,7 +83,7 @@ class UserPage(Page):
 		else:
 			responce.action("displayMessage" , ("Welcome back %s" % (user.uname)))
 			responce.action("redirect" , "/home")
-			self.LOGGED_USERS[user.uid] = {"SessionID" : uuid.uuid1().hex, "User" : user}
+			self.LOGGED_USERS[user.uid] = {"SessionID" : uuid.uuid4().hex, "User" : user}
 			print("User Logged in")
 		return responce.render()
 

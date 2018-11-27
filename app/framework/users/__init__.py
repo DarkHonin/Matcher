@@ -21,6 +21,10 @@ def RegisterUser(user, password):
 	password = Password(generate_password_hash(password), user.id)
 	password.save()
 	print("password created")
+	sendActivteionEmail(user)
+	return True
+
+def sendActivteionEmail(user):
 	from flask_mail import Message
 	from app import Mailer
 	from app.framework import Token
@@ -29,7 +33,6 @@ def RegisterUser(user, password):
 	token.save()
 	msg = Message("Activate the shrines",recipients=[user.email], html=flask.render_template("pages/email/activateEmail.html", token=token.token))
 	Mailer.send(msg)
-	return True
 
 def LookupUser(uname):
 	user = User.get(User, {"uname" : uname})

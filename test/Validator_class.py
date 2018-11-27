@@ -16,16 +16,24 @@ class Field:
 	def validate(self, param):
 		for m, f in self.stack.items():
 			if self.args:
+				print("\t there are args")
 				res = f(param, self.args)
 			else:
+				print("\t there are no ags")
 				res = f(param)
 			if(not res):
+				
 				self.fault = m
 				return False
 		return True
 
 	def getHTMLValue(self, value):
-		return value
+		if self.type is "text":
+			return value
+		elif self.type is "enum":
+			if (value is -1 or None or value not in self.args):
+				return "Unset"
+			return self.args[value]
 
 	def template(self):
 		if self.type is ("text" or "password" or "email"):
@@ -50,8 +58,11 @@ class Validator:
 
 	def validate(self, data : dict):
 		for field in self.fields:
+			print("Testing %s" % field.label)
 			if field.key in data:
+				print("Field is present")
 				if not field.validate(data[field.key]):
+					print("Invalid")
 					self.ERROR = field.fault
 					return False
 			elif field.required:
@@ -72,8 +83,12 @@ class Validator:
 		return test in arr
 
 	@staticmethod
-	def enum(test, arr):
-		return 0 <= int(test) < len(arr)
+	def inDict(test, arr):
+		for v in arr.values():
+			print("Testing %s = %s :: %s" % (type(test), type(v), str(v) is str(test)))
+			if v == test:
+				return True
+		return False
 
 	@staticmethod
 	def hasSpaces(test):
