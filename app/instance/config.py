@@ -15,3 +15,6 @@ CAPTCHA_SECRET = "6Le6R3wUAAAAAKKzYmms1I6uCd78K5OUYFRIIhSh"
 CAPTCHA_DISABLE = True
 TESTING = True
 TESTING_TOKEN = "this_is_a_testing_token"
+
+UPLOAD_FOLDER = 'static/uplodes'
+ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])

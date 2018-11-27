@@ -30,14 +30,46 @@ class UserPage(Page):
 
 	def __init__(self):
 		 Page.__init__(self, {
-            "/:INDEX:GET" 						: self.showLoginPage,
-            "/login:LOGIN:GET" 					: self.showLoginPage,
-            "/login:LOGIN_ACTION:POST" 			: self.loginUser,
-            "/register:REGISTER:GET" 			: self.showRegisterPage,
-            "/register:REGISTER_ACTION:POST" 	: self.registerUser,
-			"/home:HOME_VIEW:GET" 				: self.showHomePage,
-			"/logut:LOGOUT:GET"					: self.logout
+            "/:INDEX:GET" 								: self.showLoginPage,
+            "/login:LOGIN:GET" 							: self.showLoginPage,
+            "/login:LOGIN_ACTION:POST" 					: self.loginUser,
+            "/register:REGISTER:GET" 					: self.showRegisterPage,
+            "/register:REGISTER_ACTION:POST" 			: self.registerUser,
+			"/home:HOME_VIEW:GET" 						: self.showHomePage,
+			"/logut:LOGOUT:GET"							: self.logout,
+			"/userSettings/<part>:SETTING_FIELD:GET"	: self.getFieldHTML,
+			"/userSettings/<part>:SETTING_SAVE:POST"	: self.saveField
         })
+
+	def getFieldHTML(self, part):
+		from app.framework.users import GetCurrentUser
+		if not self.isUserLoggedIn():
+			return flask.jsonify({"status" : "NOJOY", "message" : "HA! Youre not logged in!"})
+		field = User.GLOBAL_VALIDATOR.fieldFor(part)
+		if not field:
+			return flask.jsonify({"status" : "NOJOY", "message" : "No field with key "+part})
+		value = GetCurrentUser().__getattribute__(part)
+		return flask.jsonify({"status" : "JOY", "data" : flask.render_template(field.template(), field=field, value=value)})
+
+	def saveField(self, part):
+		if not self.isUserLoggedIn():
+			return flask.jsonify({"status" : "NOJOY", "message" : "HA! Youre not logged in!"})
+		data = flask.request.json
+		field = User.GLOBAL_VALIDATOR.fieldFor(part)
+		if( not field.validate(data['value'])):
+			return  flask.jsonify({"status" : "NOJOY", "message" : field.ERROR})
+		user = self.getCurrentUser()
+		if not ('token' in data):
+			return flask.jsonify({"status" : "NOJOY", "message" : "No token man!"})
+		if not self.LOGGED_USERS[user.uid]['SessionID'] == data['token']:
+			return flask.jsonify({"status" : "NOJOY", "message" : "Invalid token!"})
+		if(part is "email"):
+			pass # send email and things
+		else:
+			user.__setattr__(part, data['value'])
+			user.save()
+		return flask.jsonify({"status" : "JOY"})
+		
 
 	def showRegisterPage(self):
 		return flask.render_template("pages/index/register.html")

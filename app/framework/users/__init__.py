@@ -18,13 +18,12 @@ def RegisterUser(user, password):
 	if not user.save():
 		return False
 	print("user created")
-	password = Password(generate_password_hash(password), user.id)
-	password.save()
+	user.password = password
 	print("password created")
-	sendActivteionEmail(user)
+	sendActivationEmail(user)
 	return True
 
-def sendActivteionEmail(user):
+def sendActivationEmail(user):
 	from flask_mail import Message
 	from app import Mailer
 	from app.framework import Token

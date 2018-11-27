@@ -35,3 +35,33 @@ function saveInfo(event){
 	console.log(data)
 	socket.emit("saveData", {token: SessionToken, data : data});
 }
+
+function editField(event){
+	event.preventDefault()
+	var field = event.target.parentNode.parentNode.querySelector(".data")
+	var name = field.getAttribute("name")
+	if(! event.target.state || event.target.state == "Waiting"){
+		transmit("/userSettings/"+name, {}, "GET").then(t => {
+			if(t.status == "NOJOY")
+				return displayMessage("Failed to prepare state", false)
+			framgent = document.createRange().createContextualFragment(t.data)
+			field.parentNode.appendChild(framgent)
+			field.remove()
+			event.target.innerHTML = "Save"
+			event.target.state = "Editing"
+		})
+	}else{
+		transmit("/userSettings/"+name, {token: SessionToken, value:field.value}).then(t => {
+			if(t.status == "NOJOY")
+				return displayMessage(t.message, false)
+			if(field.getAttribute("type") == "password")
+				framgent = document.createRange().createContextualFragment("<span class='data' name='"+name+"'>Super secret</span>")
+			else
+				framgent = document.createRange().createContextualFragment("<span class='data' name='"+name+"'>"+field.value+"</span>")
+			field.parentNode.appendChild(framgent)
+			field.remove()
+			event.target.innerHTML = "Edit"
+			event.target.state = "Waiting"
+		})
+	}
+}

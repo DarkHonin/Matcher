@@ -369,3 +369,8 @@ input[name*=":display"].slider:checked + label{
         width: 100vw;
     }
 }
+
+label>a.ul{
+    width: 25% !important;
+    float: right;
+}

@@ -21,4 +21,9 @@ from app.framework import Page
 for i in Page.PAGES:
     i.bind(app)
 
+@app.route("/loadBogusUsers")
+def bogus():
+    from app.bogus import load_bogus
+    return "Loaded bogus users"
+
 

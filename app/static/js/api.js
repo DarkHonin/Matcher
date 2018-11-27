@@ -2,18 +2,21 @@
 const path = window.location.pathname;
 
 function transmit(url, data, method="post"){
-	return fetch(url, { 
-			method: method, 
-			mode: "same-origin",
-			cache: "no-cache",
-			credentials: "same-origin",
-			headers: {
-				"Content-Type": "application/json; charset=utf-8",
-			},
-			redirect: "follow",
-			referrer: "no-referrer",
-			body: JSON.stringify(data),
-		}).then(responce => responce.json());
+	console.log("Transit - "+url+" - "+method)
+	head = { 
+		method: method, 
+		mode: "same-origin",
+		cache: "no-cache",
+		credentials: "same-origin",
+		headers: {
+			"Content-Type": "application/json; charset=utf-8",
+		},
+		redirect: "follow",
+		referrer: "no-referrer",
+	}
+	if(method != "GET")
+		head["body"] = JSON.stringify(data)
+	return fetch(url, head).then(responce => responce.json());
 }
 
 function bindEvents(){
@@ -34,7 +37,7 @@ function formSubmit(event){
 	var fd = new FormData(event.target)
 	var o = {}
 	fd.forEach((v, k) => { o[k] = v})
-	transmit(this.action, o).then(d => translate(d))
+	transmit(this.action, o).then(d => translate(d), method="post")
 }
 
 function displayMessage(message, state=true){

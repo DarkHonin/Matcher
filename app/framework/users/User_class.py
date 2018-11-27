@@ -6,18 +6,20 @@ import uuid
 class User(DataObject):
 
     GENDER = [
+            "Prefer not to say",
             "Male",
             "Female"
         ]
 
     SEXUALITY = [
+        "Prefer not to say" ,
         "Men"               ,
         "Women"             ,
         "Both"              ,
-        "Prefer not to say" 
     ]
     
     PUBLIC_FIELDS = [
+        Field("biography", {}, False, "Biography", "blob"),
 	    UNAME_FIELD,
         Field("fname", {"Not a valid first name" : Validator.isValidName}, True, "First name"),
         Field("lname", {"Not a valid first name" : Validator.isValidName}, True, "Last name"),
@@ -42,10 +44,10 @@ class User(DataObject):
         self.lname         = None
         self.fname         = None
         self.active        = False
-        self._gender        = None
-        self._sexuality     = None
-        self.Biography     = None
-        self.Images        = []
+        self._gender        = "Prefer not to say"
+        self._sexuality     = "Prefer not to say"
+        self.biography     = None
+        self.images        = []
         self.Location      = None
         self.lastLogin       = None
         self.sessionID     = None
@@ -55,14 +57,14 @@ class User(DataObject):
         return [
             "uid",
             "uname",
-            "email",
-            "email_valid",
             "lname",
             "fname",
+            "email",
+            "biography",
+            "email_valid",
             "active",
             "gender",
             "sexuality",
-            "Biography",
             "Location",
             "lastLogin"
         ]
@@ -109,3 +111,17 @@ class User(DataObject):
     @property
     def password(self):
         return "Your super secret password"
+
+    @password.setter
+    def password(self, password):
+        if not self.id:
+            raise Exception("User cannot have password if not saved")
+        from app.framework.users.password import Password
+        from werkzeug.security import generate_password_hash
+        pwd = Password.get(Password, {"user" : self.id})
+        if( not pwd):
+            pwd = Password(generate_password_hash(password), self.id)
+        pwd.save()
+
+    def hasMaxImages(self):
+        return len(self.images) < 5

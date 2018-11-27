@@ -28,10 +28,12 @@ class Field:
 		return value
 
 	def template(self):
-		if self.type is ("text" or "password" or "email"):
+		if self.type in ["text", "password", "email"]:
 			return "fields/text_style.html"
 		if self.type is "enum":
 			return "fields/enum_style.html"
+		if self.type is "blob":
+			return "fields/blob_style.html"
 
 class Validator:
 
@@ -48,16 +50,22 @@ class Validator:
 		self.fields = fields
 		self.ERROR = None
 
-	def validate(self, data : dict):
+	def validate(self, data : dict, ignoreRequired = False):
 		for field in self.fields:
 			if field.key in data:
 				if not field.validate(data[field.key]):
 					self.ERROR = field.fault
 					return False
-			elif field.required:
+			elif field.required and not ignoreRequired:
 				self.ERROR = ("'%s' is a required field" % field.label)
 				return False
 		return True
+
+	def fieldFor(self, key):
+		for f in self.fields:
+			if key == f.key:
+				return f
+		return None
 
 	@staticmethod
 	def noSpaces(test):

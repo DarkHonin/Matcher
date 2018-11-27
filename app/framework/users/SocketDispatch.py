@@ -28,8 +28,6 @@ class UserSocketNamespace(Namespace):
         print(data)
         emit("Responce", data)
 
-
-
     def on_saveData(self, data):
         from app.framework.users.Page import INSTANCE as UserPage
         print(data)
