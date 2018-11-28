@@ -4,13 +4,13 @@
 	<p class="content">To the first ever Viking matchmaking service</p>
 	<hr>
 	<p class="content">Please login or register to continue</p>
-	<form method="post" action="{{url_for('LOGIN')}}" event='{"submit":"formSubmit"}'>
+	<form method="post" action="{{url_for('index', page='login')}}" event='{"submit":"formSubmit"}'>
 		<h3 class="context">Login</h3>
 		<input type="text" placeholder="Username" required name="uname">
 		<input type="password" placeholder="Password" required name="password">
 		<script src="https://www.google.com/recaptcha/api.js"></script>
 		<div class="g-recaptcha" data-sitekey="6Le6R3wUAAAAALlzLt7dqWTxfsf3NQ2NI4rRpkR_"></div>
 		<input type="submit" class="content ul" value='Login'>
-		<a href="{{url_for('REGISTER')}}" class="content ul small" onclick="component_rp('#entryForm', 'register.form')">or Register</a>
+		<a href="{{url_for('index', page='register')}}" class="content ul small" onclick="component_rp('#entryForm', 'register.form')">or Register</a>
 	</form>
 {%endblock%}
