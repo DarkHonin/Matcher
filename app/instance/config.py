@@ -12,7 +12,7 @@ MAIL_USERNAME = 'matcher.wgourley@gmail.com'
 MAIL_PASSWORD = 'P4ssw0rd!'
 
 CAPTCHA_SECRET = "6Le6R3wUAAAAAKKzYmms1I6uCd78K5OUYFRIIhSh"
-CAPTCHA_DISABLE = True
+CAPTCHA_DISABLE = False
 TESTING = True
 TESTING_TOKEN = "this_is_a_testing_token"
 

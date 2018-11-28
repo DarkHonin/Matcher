@@ -17,12 +17,10 @@ class Property:
         self.required = required
         self.errorMessage = errorMessage
 
-    def validate(self, container):
-        value = getattr(container, self.key)
-        if not value and self.required:
+    def validate(self, container:dict):
+        if (self.key not in container) and self.required:
             raise SystemException(self.errorMessage, SystemException.FIELD_ERROR)
-        elif not value:
-            return False
+        value = container[self.key]
         if not self.tester.match(value):
             raise SystemException(self.errorMessage, SystemException.FIELD_ERROR)
         return True
