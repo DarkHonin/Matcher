@@ -235,38 +235,22 @@ select>option{
 }
 
 .carosel{
-
-}
-
-.carosel>.preview{
-    max-width: 30em;
-    width: 100%;
-    min-height: 1em;
-    width: 100%;
-    object-fit: contain;
-    background-image: linear-gradient(grey, white);
-}
-
-.carosel>.options{
     display: flex;
-    max-height: 5em;
-    width: fit-content;
-    width: -moz-fit-content;
+}
+
+.carosel>.usr_img{
     margin: auto;
-    overflow: hidden;
+    max-width:25%;
+    width: -moz-available;
 }
 
-.carosel>.options>*{
-    max-width: 5em;
-    min-width: 5em;
-    margin: auto 1em;
-    padding: 1em;
-    background-image: linear-gradient(grey, white);
-}
-
-.carosel>.options>.placeholder{
+.carosel>label.usr_img{
     border: 0.2em grey dashed;
     padding: 1em;
+}
+
+.carosel>input[type=radio] + .usr_img{
+    max-width: unset; 
 }
 
 .list{
@@ -301,17 +285,11 @@ select>option{
     margin: 0.5em 0.4em;
 }
 
-.list>.li>.alter{
-    display: flex;
-    flex: 1;
-}
-
-.list>.li>.alter>*{
-    display: block;
+.list>.li>button{
     margin: auto;
-}
-.list>.li>.alter>button{
-    margin-right: 1em;
+    margin-right: 6em;
+    transition: opacity 0.25s;
+    opacity: 0;
 }
 
 button.ul{

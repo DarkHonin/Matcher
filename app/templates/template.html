@@ -17,7 +17,10 @@
             <!--Navbar only shows after logged in-->
             {% endblock %}
         </header>
-        <a href="#" class="alert warning" id="message"></a>
+        <span class="alert" id="message">
+            {% block loadMessage %}
+            {% endblock %}
+        </span>
         <article class='note' id="display">
             {% block content %}
                 <!--Data comes there-->

@@ -7,7 +7,7 @@ class Token(DBDocument):
         DBDocument.__init__(self)
         self.subject = subject
         from app import app
-        if(app.config["TESTING"]):
+        if(app.config["TESTING_APP"]):
             self.token = app.config["TESTING_TOKEN"]
         else:
             self.token = uuid.uuid4()
@@ -23,8 +23,9 @@ class Token(DBDocument):
     @property
     def subject(self):
         import sys
+        from bson.objectid import ObjectId
         classname = getattr(sys.modules[__name__], self._subject['class'])
-        return classname.get({"_id" : self._subject['_id']})
+        return classname.get({"_id" :ObjectId( str(self._subject['_id']))})
 
     @subject.setter
     def subject(self, subject : DBDocument):

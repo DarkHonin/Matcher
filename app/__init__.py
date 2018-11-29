@@ -12,16 +12,13 @@ app.config.from_pyfile("instance/config.py")
 Database = PyMongo(app)
 Mailer = Mail(app)
 
-from app.framework.users.SocketDispatch import UserSocketNamespace
-sockets = SocketIO(app)
-sockets.on_namespace(UserSocketNamespace('/home'))
 
-errors = Blueprint('errors', __name__)
+sockets = SocketIO(app)
 
 @app.errorhandler(SystemException)
 def handle_error(error):
     message = [str(x) for x in error.args]
-    return jsonify({"status" : "NOJOY", "message" : message, "code" : error.code}), 500
+    return jsonify({"status" : "NOJOY", "actions" : {"displayMessage" : message}, "code" : error.code}), 500
 
 from views import VIEWS
 for view in VIEWS:

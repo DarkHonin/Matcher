@@ -11,9 +11,9 @@
 		<input type="text" placeholder="First Name" required name="fname">
 		<input type="text" placeholder="Last Name" required name="lname">
 		<input type="password" placeholder="Password" required name="password">
-		<script src="https://www.google.com/recaptcha/api.js"></script>
-		<div class="g-recaptcha" data-sitekey="6Le6R3wUAAAAALlzLt7dqWTxfsf3NQ2NI4rRpkR_"></div>
 		<input type="submit" class="content ul" value='Register'>
+		<input type="hidden" name="form_name" value="register">
 		<a href="{{url_for('index', page='login')}}" class="content ul small">or Login</a>
+		<script src='https://www.google.com/recaptcha/api.js?render=6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC'></script>
 	</form>
 {%endblock%}

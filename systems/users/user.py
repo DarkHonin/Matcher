@@ -1,5 +1,6 @@
 from systems.database import DBDocument
 from systems.exceptions import SystemException
+from systems.properties import USERNAME, EMAIL, PASSWORD
 from flask import session
 class User(DBDocument):
 
@@ -9,10 +10,12 @@ class User(DBDocument):
         self.hash = None
         self.password = password
         self._email = email
+        self.active = False
         self.email_valid = False
 
     def activate(self):
         self.email_valid = True
+        self.active = True
         self.save()
 
     def login(self, password):
@@ -20,12 +23,18 @@ class User(DBDocument):
         if not (check_password_hash(self.hash, password)):
             raise SystemException("Username/Password invalid", SystemException.USER_CREATE_EXCEPTION)
         session_info = dict(self)
-        del(session_info['hash'])
-        session["user"] = session_info
+        from systems.users.user_info import UserInfo
+        info = UserInfo.get({"user" : str(self._id)})
+        session["user"] = dict(self)
+        session['user_info'] = dict(info)
         return True
 
     def logout(self):
         del(session["user"])
+
+    @property
+    def fields(self):
+        return [USERNAME, EMAIL, PASSWORD]
 
     @property
     def password(self):
@@ -42,8 +51,15 @@ class User(DBDocument):
     
     @email.setter
     def email(self, email):
+        if email == self._email:
+            return
         self.email_valid = False
         self._email = email
+        if self._id:
+            from systems.tokens import Token, sendTokenEmail
+            token = Token(self, "activate")
+            token.save()
+            sendTokenEmail(self.email, token)
         pass
 
     def defineKeys(self, col):
@@ -51,13 +67,15 @@ class User(DBDocument):
         col.create_index(("_email"), unique=True)
 
     def getFields(self):
-        return ["uname", "hash", "_email", "email_valid"]
+        return ["uname", "hash", "_email", "email_valid", "active"]
 
     def getCollectionName(self):
         return "Users"
 
-    def save(self):
-        from systems.tokens import Token
-        super().save()
+    def register(self):
+        self.save()
+        from systems.tokens import Token, sendTokenEmail
         token = Token(self, "activate")
         token.save()
+        sendTokenEmail(self.email, token)
+        

@@ -34,10 +34,16 @@ function bindEvents(){
 
 function formSubmit(event){
 	event.preventDefault()
-	var fd = new FormData(event.target)
-	var o = {}
-	fd.forEach((v, k) => { o[k] = v})
-	transmit(this.action, o).then(d => translate(d), method="post")
+	grecaptcha.ready(function() {
+		grecaptcha.execute('6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC')
+			.then(function(token) {
+				var fd = new FormData(event.target)
+				var o = {}
+				fd.forEach((v, k) => { o[k] = v})
+				o["g-recaptcha-response"] = token
+				transmit(event.target.action, o).then(d => translate(d), method="post")
+			});
+	});
 }
 
 function displayMessage(message, state=true){
@@ -65,5 +71,4 @@ function translate(json){
 			window[a](json.actions[a], json.state == "JOY")
 	}
 }
-
 

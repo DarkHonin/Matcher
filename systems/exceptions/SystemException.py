@@ -6,6 +6,6 @@ class SystemException(Exception):
     FIELD_ERROR = 3
 
 
-    def __init__(self, message, code):
+    def __init__(self, message, code = 0):
         Exception.__init__(self, message)
         self.code = code

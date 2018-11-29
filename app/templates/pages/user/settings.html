@@ -1,0 +1,49 @@
+{% extends 'template.html' %}
+
+{% if not info.complete %}
+	{% block loadMessage %}
+		You will need to complete your account before preceeding
+	{% endblock %}
+{% endif %}
+
+{%block content%}
+<article class="carosel">
+	{% for i in info.images %}
+		<input type="radio" id="image_{{loop.index0}}" name='image_view' hidden {{ "selected" if loop.index0 == 0 else "" }}>
+		<label class="usr_img" for="image_{{loop.index0}}">
+			<img src="{{ url_for('static', filename='uploads/'+i) }}">
+		</label>
+	{% endfor %}
+	{% if info.imageCount < 5 %}
+		<input type="radio" name='image_view' hidden {{ "selected" if info.imageCount == 0 else "" }}>
+		<label for='imageUpload' class="usr_img">+<br>Add<br>Image</label>
+		<input type='file' accept="image/jpeg" hidden id='imageUpload' event='{"change":"uploadFile"}'>
+	{% endif %}
+</article>
+
+<article class="list">
+	<h3 class="context">General information</h3>
+	{% for field in info.fields %}
+		<div class="li content">
+			<label>{{field.label}}</label>
+			{{field.render(info) | safe}}
+			<button data-type='info' data-id="{{loop.index0}}" class='ul' event='{"click" : "saveField"}'>Save</button>
+		</div>
+	{% endfor %}
+</article>
+
+<article class="list">
+	<h3 class="context">Account information</h3>
+	<a class="ul" style="width:100%" href="#" event='{"click":"edit"}'>Edit</a>
+
+	{% for field in user.fields %}
+		<div class="li content">
+			<label>{{field.label}}</label>
+			{{field.render(user) | safe}}
+			<button class='ul' event='{"click" : "saveField"}' data-type='user' data-id="{{loop.index0}}">Save</button>
+		</div>
+	{% endfor %}
+</article>
+<script src='https://www.google.com/recaptcha/api.js?render=6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC'></script>
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}
