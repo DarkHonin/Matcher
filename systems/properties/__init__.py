@@ -10,6 +10,8 @@ LASTNAME = Property("lname", "Lastname", r"^[A-Z][a-z]+$", "A name must start wi
 PASSWORD = Property("password", "Password", r"^(?=.*[A-Z])(?=.*\d)(?=.*[a-z]).{6,20}$", "A password must contain atleast one uppercase, lowecase and numeric character", required=True, fieldtype="password")
 GENDER = Property("gender", "Gender", r"(Male|Female|Prefer not to say)", "Invalid gender, look, we dont really mind what you identify as but to others it matters whats inbetween your legs", fieldtype="enum")
 INTEREST = Property("interest", "Interested in", r"(Men|Women|Both|Prefer not to say)", "Its cool that youre into that but we cant have that on record, you understand", fieldtype="enum")
+TAGS = Property("tags", "Profile tags", r"^[^\<\>\{\}]+$", "Your tags may not look suspicios", fieldtype="list")
+BIOGRAPHY = Property("biography", "Biography", r"^[^\<\>\{\}]+$", "Your tags may not look suspicios", fieldtype="blob")
 
 class RequestValidator:
 

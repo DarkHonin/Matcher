@@ -16,5 +16,5 @@ CAPTCHA_DISABLE = True
 TESTING_APP = True
 TESTING_TOKEN = "this_is_a_testing_token"
 
-UPLOAD_FOLDER = 'static/uplodes'
+UPLOAD_FOLDER = 'app/static/uploads'
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])

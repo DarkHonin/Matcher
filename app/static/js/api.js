@@ -48,11 +48,10 @@ function formSubmit(event){
 
 function displayMessage(message, state=true){
 	var elm = document.getElementById("message")
-	elm.classList.remove("ok")
-	elm.classList.remove("warning")
-	if(state) 	elm.classList.add("ok")
-	else		elm.classList.add("warning")
+	if(state) 	elm.style.backgroundColor = "RGBA(90, 255, 90, 0.6)"
+	else		elm.style.backgroundColor = "RGBA(255, 90, 90, 0.6)"
 	elm.innerHTML = message
+	setTimeout(() => {elm.style.opacity = 0}, 5000)
 }
 
 function field_error(field){

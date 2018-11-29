@@ -16,11 +16,11 @@
             {% block navbar %}
             <!--Navbar only shows after logged in-->
             {% endblock %}
+            <span class="alert" id="message">
+                {% block loadMessage %}
+                {% endblock %}
+            </span>
         </header>
-        <span class="alert" id="message">
-            {% block loadMessage %}
-            {% endblock %}
-        </span>
         <article class='note' id="display">
             {% block content %}
                 <!--Data comes there-->

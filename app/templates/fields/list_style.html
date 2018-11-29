@@ -1,0 +1,9 @@
+<input type="hidden" name="{{item.key}}" event='{"change" : "showSaveButton"}' id="values_{{item.key}}" class="data" value='{{value}}'>
+<div class="item_list data">
+    <div class="items">
+        {% for i in value %}
+            <span event='{"click" : "destroyTag"}' data-input="values_{{item.key}}">{{i}}</span>
+        {% endfor %}
+    </div>
+    <input type="text" pattern="{{item.format}}" value="" data-input="values_{{item.key}}" event='{"input" : "tagTyped"}' placeholder="Type to add item">
+</div>

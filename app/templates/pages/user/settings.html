@@ -1,24 +1,29 @@
 {% extends 'template.html' %}
 
-{% if not info.complete %}
+
 	{% block loadMessage %}
-		You will need to complete your account before preceeding
+		{% if not info.complete %}
+			You will need to complete your account before preceeding
+		{% endif %}
 	{% endblock %}
-{% endif %}
 
 {%block content%}
 <article class="carosel">
+	{% if info.imageCount >= 1 %}
+		<img class="preview" src="{{ url_for('getUserImage', fn=info.images[0]) }}">
+	{% else %}
+		<img class="preview">
+		<span class="no_image">EX</span>
+	{%endif%}
+	<div class="options">
 	{% for i in info.images %}
-		<input type="radio" id="image_{{loop.index0}}" name='image_view' hidden {{ "selected" if loop.index0 == 0 else "" }}>
-		<label class="usr_img" for="image_{{loop.index0}}">
-			<img src="{{ url_for('static', filename='uploads/'+i) }}">
-		</label>
+		<img src="{{ url_for('getUserImage', fn=i) }}" class="usr_img" event='{"click" : "previewImage"}'>
 	{% endfor %}
 	{% if info.imageCount < 5 %}
-		<input type="radio" name='image_view' hidden {{ "selected" if info.imageCount == 0 else "" }}>
-		<label for='imageUpload' class="usr_img">+<br>Add<br>Image</label>
-		<input type='file' accept="image/jpeg" hidden id='imageUpload' event='{"change":"uploadFile"}'>
+		<label for='imageUpload' class="usr_img add" id="imageinput">+<br>Add image</label>
+		<input type='file' accept="image/jpeg" hidden id='imageUpload' event='{"change":"addImage"}'>
 	{% endif %}
+	</div>
 </article>
 
 <article class="list">
@@ -34,8 +39,6 @@
 
 <article class="list">
 	<h3 class="context">Account information</h3>
-	<a class="ul" style="width:100%" href="#" event='{"click":"edit"}'>Edit</a>
-
 	{% for field in user.fields %}
 		<div class="li content">
 			<label>{{field.label}}</label>
@@ -46,4 +49,8 @@
 </article>
 <script src='https://www.google.com/recaptcha/api.js?render=6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC'></script>
 <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}
+
+{% block navbar %}
+	 {%include "pages/navbar.html" %}
 {% endblock %}

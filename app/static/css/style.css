@@ -29,6 +29,7 @@ header{
     color: white;
     position: sticky;
     top: 0px;
+    z-index: 1;
 }
 
 header>h1{
@@ -88,14 +89,7 @@ a{
 .alert{
     text-align: center;
     display: inline-block;
-}
-
-.alert.warning{
-    background-color: RGBA(255, 90, 90, 0.6);
-}
-
-.alert.ok{
-    background-color: RGBA(90, 255, 90, 0.6);
+    padding: 0.5em
 }
 
 a:hover{
@@ -122,13 +116,14 @@ input[type="submit"]{
     color: white;
 }
 
-input, select{
+input, select, textarea{
     background-color: RGBA(0, 0, 0, 0.1);
     border: 2px solid RGBA(0, 0, 0, 0.5);
     color: white;
     font-size: 1em;
     padding: 0.25em;
     flex: 0.25;
+    font-family: 'Sansita', sans-serif;
 }
 
 input:hover, input:focus{
@@ -229,28 +224,51 @@ select>option{
     border-radius: 100%;
 }
 
-.carosel img{
-    object-fit: cover;
-    overflow: hidden;
+
+.preview{
+    max-height: 500px;
 }
 
-.carosel{
+.no_image{
+    display: none;
+}
+
+.no_image:after{
+    font-family: 'Sansita', sans-serif;
+    font-size: 0.5em;
+    display: block;
+    content: "No image to preview"
+}
+
+.preview:empty + .no_image{
+    font-family: "NordicSans";
+    content: "A";
+    display: block;
+    margin: 1em auto;
+    color: white;
+    font-size: 5em;
+    left: 0px;
+}
+
+.options{
     display: flex;
+    width: -webkit-fill-available;
 }
 
-.carosel>.usr_img{
-    margin: auto;
-    max-width:25%;
+.options>.usr_img{
     width: -moz-available;
+    width: -webkit-fill-available;
+    max-height: 10em;
+    z-index: 0;
+    position: relative;
+    flex: 1;
+    min-width: 20%;
+    object-fit: cover;
 }
 
-.carosel>label.usr_img{
+.options>label.usr_img.add{
     border: 0.2em grey dashed;
-    padding: 1em;
-}
-
-.carosel>input[type=radio] + .usr_img{
-    max-width: unset; 
+    padding-top: 6%;
 }
 
 .list{
@@ -351,4 +369,36 @@ input[name*=":display"].slider:checked + label{
 label>a.ul{
     width: 25% !important;
     float: right;
+}
+
+.item_list{
+    width: 50%;
+    padding: 1px;
+    display: flex !important;
+    flex-direction: column-reverse;
+    background-color: rgba(0,0,0, 0.1);
+}
+
+.item_list>.items{
+    min-height: 25px;
+}
+
+.item_list>.items>span{
+    float: left;
+    padding: 0.2em 0.4em;
+    background-color: grey;
+    margin: 0.4em;
+}
+
+.item_list>input{
+    border-top: None;
+    border-left: None;
+    border-right: None;
+    width: -webkit-fill-available;
+}
+
+textarea{
+    min-width: 50%;
+    min-height: 10em;
+    resize: none;
 }

@@ -37,4 +37,8 @@ class Property:
     def render(self, container):
         if self.type is "enum":
             return render_template("fields/enum_style.html", item=self, value=getattr(container, self.key))
+        if self.type is "list":
+            return render_template("fields/list_style.html", item=self, value=getattr(container, self.key))
+        if self.type is "blob":
+            return render_template("fields/blob_style.html", item=self, value=getattr(container, self.key))
         return render_template("fields/text_style.html", item=self, value=getattr(container, self.key))
