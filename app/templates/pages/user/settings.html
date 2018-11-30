@@ -2,24 +2,24 @@
 
 
 	{% block loadMessage %}
-		{% if not info.complete %}
+		{% if not user.complete %}
 			You will need to complete your account before preceeding
 		{% endif %}
 	{% endblock %}
 
 {%block content%}
 <article class="carosel">
-	{% if info.imageCount >= 1 %}
-		<img class="preview" src="{{ url_for('getUserImage', fn=info.images[0]) }}">
+	{% if user.imageCount >= 1 %}
+		<img class="preview" src="{{ url_for('getUserImage', fn=user.images[0]) }}">
 	{% else %}
-		<img class="preview">
-		<span class="no_image">EX</span>
+		<img class="preview empty">
 	{%endif%}
+	<span class="no_image">EX</span>
 	<div class="options">
-	{% for i in info.images %}
+	{% for i in user.images %}
 		<img src="{{ url_for('getUserImage', fn=i) }}" class="usr_img" event='{"click" : "previewImage"}'>
 	{% endfor %}
-	{% if info.imageCount < 5 %}
+	{% if user.imageCount < 5 %}
 		<label for='imageUpload' class="usr_img add" id="imageinput">+<br>Add image</label>
 		<input type='file' accept="image/jpeg" hidden id='imageUpload' event='{"change":"addImage"}'>
 	{% endif %}
@@ -27,19 +27,19 @@
 </article>
 
 <article class="list">
-	<h3 class="context">General information</h3>
-	{% for field in info.fields %}
+	<h3 class="context">General userrmation</h3>
+	{% for field in user.fields %}
 		<div class="li content">
 			<label>{{field.label}}</label>
-			{{field.render(info) | safe}}
-			<button data-type='info' data-id="{{loop.index0}}" class='ul' event='{"click" : "saveField"}'>Save</button>
+			{{field.render(user) | safe}}
+			<button data-type='user' data-id="{{loop.index0}}" class='ul' event='{"click" : "saveField"}'>Save</button>
 		</div>
 	{% endfor %}
 </article>
 
 <article class="list">
-	<h3 class="context">Account information</h3>
-	{% for field in user.fields %}
+	<h3 class="context">Account userrmation</h3>
+	{% for field in user.parent(user).fields %}
 		<div class="li content">
 			<label>{{field.label}}</label>
 			{{field.render(user) | safe}}

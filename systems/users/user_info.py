@@ -2,18 +2,33 @@ from systems.database import DBDocument
 from systems.users.user import User
 from systems.properties import FIRSTNAME, LASTNAME, GENDER, INTEREST, TAGS, BIOGRAPHY
 
-class UserInfo(DBDocument):
-	def __init__(self,user:User, fname, lname, biography, gender, interest, tags, images, location):
-		DBDocument.__init__(self)
-		self._user = user
+class UserInfo(User):
+	def __init__(self, fname, lname, **kwargs):
+		User.__init__(self, **kwargs)
 		self.fname = fname
 		self.lname = lname
-		self.biography = biography
-		self.gender = gender
-		self.interest = interest
-		self._tags = tags
-		self.images = images
-		self.location = location
+		self.biography = ""
+		self.gender = ""
+		self.interest = ""
+		self._tags = []
+		self.images = []
+		self.location = [0, 0]
+
+	def activate(self):
+		from systems.telemetry import Telemetry
+		from flask import request
+		import requests
+		url = "http://api.ipstack.com/%s?access_key=c3d5cfa1b31c8989bb9c1d4f36cc096b" % request.environ['REMOTE_ADDR']
+		response = requests.get(url).json()
+		self.location = [response['latitude'], response["longitude"]]
+		if not self.location[0]:
+			self.location = [0, 0]
+		Telemetry(self, 
+			["Male", "Prefer not to say", "Female"].index(self.gender) - 1,
+			["Men", "Both", "Women"].index(self.interest) - 1
+		).save()
+		self.active = True
+		self.save()
 
 	@property
 	def fields(self):
@@ -22,10 +37,6 @@ class UserInfo(DBDocument):
 	@property
 	def imageCount(self):
 		return len(self.images)
-
-	@property
-	def user(self):
-		return str(self._user._id)
 
 	@property
 	def complete(self):
@@ -46,12 +57,5 @@ class UserInfo(DBDocument):
 		import json
 		self._tags = json.loads(string)
 
-	@user.setter
-	def user(self, id:str):
-		self._user = User.get({"_id" : id}, {"hash" : 0})
-
 	def getFields(self):
-		return ["user", "fname", "lname", "biography", "gender", "interest", "_tags", "images", "location"]
-
-	def getCollectionName(self):
-		return "UserInfo"
+		return super().getFields() + ["user", "fname", "lname", "biography", "gender", "interest", "_tags", "images", "location"]

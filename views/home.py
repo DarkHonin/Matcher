@@ -9,10 +9,12 @@ class Home(MethodView):
 
 	decorators = [requires_Users]
 
-	def get(self, user : User, info : UserInfo):
+	def get(self, info : UserInfo):
+		if not info:
+			return redirect(url_for("logout"))
 		if not info.complete:
 			return redirect(url_for("settings"))
-		return "Home"
+		return render_template("pages/user/home.html", user=info)
 
 	@classmethod
 	def bind(cls, app : Flask):

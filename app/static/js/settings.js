@@ -60,6 +60,7 @@ function insertImage(imageUrl){
 
 function previewImage(event){
 	preview.src = event.target.src
+	preview.classList.remove("empty")
 }
 
 function tagTyped(event){

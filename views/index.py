@@ -2,7 +2,7 @@ from flask.views import MethodView
 from flask import request, abort, Flask, render_template, session, jsonify, redirect, url_for
 from functools import wraps
 from systems.properties import *
-from systems.users import User, UserInfo
+from systems.users import User, UserInfo, registerUser
 from systems.exceptions import SystemException
 
 def isValidUrl(f):
@@ -23,7 +23,7 @@ class IndexView(MethodView):
     decorators = [isValidUrl, check_captcha, RequestValidator()]
 
     def get(self, page="login"):
-        if(session['user']):
+        if("user" in session):
             return redirect(url_for("home"))
         if page == 'register':
             return render_template("pages/index/register.html")
@@ -31,11 +31,10 @@ class IndexView(MethodView):
         
     def post(self, page="login"):
         data = request.get_json()
+        del(data['form_name'])
+        del(data['g-recaptcha-response'])
         if(page == "register"):
-            usr = User(data['uname'], data['email'], data['password'])
-            usr.register()
-            info = UserInfo(usr, data['fname'], data['lname'], "", "Prefer not to say", "Prefer not to say", "[]", [], None)
-            info.save()
+            registerUser(**data)
             return jsonify({"status" : "JOY", "actions": {"displayMessage" : "Please check your account for an activation email"}})
         else:
             usr = User.get({"uname" : data["uname"]})
@@ -53,5 +52,4 @@ class IndexView(MethodView):
         @app.route("/logout")
         def logout():
             del(session['user'])
-            del(session['user_info'])
             return redirect("/login")

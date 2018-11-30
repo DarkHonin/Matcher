@@ -13,20 +13,15 @@ class User(DBDocument):
         self.active = False
         self.email_valid = False
 
-    def activate(self):
+    def validate_email(self):
         self.email_valid = True
-        self.active = True
         self.save()
 
     def login(self, password):
         from werkzeug.security import check_password_hash
         if not (check_password_hash(self.hash, password)):
             raise SystemException("Username/Password invalid", SystemException.USER_CREATE_EXCEPTION)
-        session_info = dict(self)
-        from systems.users.user_info import UserInfo
-        info = UserInfo.get({"user" : str(self._id)})
-        session["user"] = dict(self)
-        session['user_info'] = dict(info)
+        session["user"] = str(self._id)
         return True
 
     def logout(self):
@@ -75,7 +70,10 @@ class User(DBDocument):
     def register(self):
         self.save()
         from systems.tokens import Token, sendTokenEmail
-        token = Token(self, "activate")
+        token = Token(self, "validate_email")
         token.save()
         sendTokenEmail(self.email, token)
-        
+
+    @classmethod
+    def parent(cls, instance):
+        return super(cls, instance)

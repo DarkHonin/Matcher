@@ -1,8 +1,35 @@
+{% extends 'template.html' %}
 
+{%block content%}
 <input type="hidden" id="SpecialLittleSecret" value="{{SessionToken}}">
-<p class="content">Your home page</p>
-<article class="tile-panel">
-	<a href="#" class="content fs-P tile">My Profile</a>
-	<a href="#" class="content fs-M tile" id="messages"><span class="counter">6</span>Messages</a>
-	<a href="#" class="content fs-S tile">Search</a>
+<p class="content">Your profile</p>
+<article class="tile-panel" id="dash">
+	<div id="profile_icon">
+		{% for i in user.images %}
+			<div style=" background-image:URL({{ url_for('getUserImage', fn=i) }})" event='{"click" : "carosel_shift"}' class="{{ 'show' if loop.index0 == 0 else '' }}"></div>
+		{% endfor %}
+	</div>
+	<div  id="stats" watermark="{{user.uname.upper()}}">
+		<h3 class="context">{{user.uname}}</h3>
+		{% for field in user.fields %}
+			<div class="li content {{field.type}}">
+				<label class="title">{{field.label}}</label>
+				<label class="value">
+					{% if field.type == "list" %}
+						{% for e in user.__getattribute__(field.key) %}
+							<span>{{e}}</span>
+						{% endfor %}
+					{% else %}
+						{{user.__getattribute__(field.key)}}
+					{% endif %}
+				</label>
+			</div>
+		{% endfor %}
+	</div>
 </article>
+
+{% endblock %}
+
+{% block navbar %}
+	 {%include "pages/navbar.html" %}
+{% endblock %}

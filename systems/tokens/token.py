@@ -1,4 +1,4 @@
-from systems.users import User
+from systems.users import User, UserInfo
 from systems.database import DBDocument
 import uuid
 import datetime
@@ -15,7 +15,7 @@ class Token(DBDocument):
         self.action = action
 
     def getFields(self):
-        return ["_subject", "token", "token", "action"]
+        return ["_subject", "token", "action"]
 
     def getCollectionName(self):
         return "Tokens"

@@ -20,13 +20,10 @@ def handle_error(error):
     message = [str(x) for x in error.args]
     return jsonify({"status" : "NOJOY", "actions" : {"displayMessage" : message}, "code" : error.code}), 500
 
-@app.route("/test")
-def test():
-    import requests
-    import sys
-    url = "http://api.ipstack.com/%s?access_key=c3d5cfa1b31c8989bb9c1d4f36cc096b" % request.environ['REMOTE_ADDR']
-    response = requests.get(url)
-    return jsonify(response.json())
+@app.route("/bogus")
+def bogus():
+    import app.bogus.load_bogus
+    return "Bogus users loaded"
 
 
 from views import VIEWS

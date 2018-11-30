@@ -4,6 +4,7 @@ import copy
 import json
 from datetime import datetime
 from pymongo.errors import DuplicateKeyError
+from bson.objectid import ObjectId
 
 
 class DBDocument:
@@ -53,6 +54,10 @@ class DBDocument:
 
     @classmethod
     def get(class_object, where={}, what : dict = None):
+        print(where)
+        if "_id" in where:
+            if type(where['_id']) is str:
+                where["_id"] = ObjectId(where["_id"])
         instance = class_object.__new__(class_object)
         items = instance.collection.find(where, what)
         ret = []
@@ -78,7 +83,6 @@ class DBDocument:
                 self._id = str(id.inserted_id)
                 print("%s inserted at %s" % (self.__class__.__name__, str(self._id)))
             else:
-                from bson.objectid import ObjectId
                 id = ObjectId(str(self._id))
                 self.collection.update_one({"_id" : id}, {"$set" : data})
                 print("%s updated %s" % (self.__class__.__name__, str(self._id)))

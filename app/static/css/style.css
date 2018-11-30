@@ -34,6 +34,7 @@ header{
 
 header>h1{
     margin-bottom: 0px;
+    font-size: 3em;
 }
 
 h1, h2, h3, .alert{
@@ -180,7 +181,7 @@ select>option{
 }
 
 .tile-panel{
-    display: flex;
+    display: block;
     margin: auto;
     padding: 1em;
     background-color: #FFFFFF0F;
@@ -240,7 +241,7 @@ select>option{
     content: "No image to preview"
 }
 
-.preview:empty + .no_image{
+.empty + .no_image{
     font-family: "NordicSans";
     content: "A";
     display: block;
@@ -383,8 +384,8 @@ label>a.ul{
     min-height: 25px;
 }
 
-.item_list>.items>span{
-    float: left;
+.item_list>.items>span, #stats>.content.list>.value>span{
+    display: inline-block;
     padding: 0.2em 0.4em;
     background-color: grey;
     margin: 0.4em;
@@ -402,3 +403,123 @@ textarea{
     min-height: 10em;
     resize: none;
 }
+
+#dash{
+    position: relative;
+}
+
+#stats{
+    overflow: hidden;
+    position: relative;
+    margin: auto;
+}
+
+#stats:after{
+    content: attr(watermark);
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    z-index: 0;
+    font-size: 6em;
+    font-family: "NordicSans";
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    color: #f0f8ff21;
+}
+
+#stats>*{
+    z-index: 1;
+}
+
+#stats>h3{
+    max-height: 1.5em;
+    font-size: 1.75em;
+}
+
+#profile_icon{
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    border-radius: 100%;
+    width: 15em;
+    height: 15em;
+    margin: auto;
+    box-shadow: black 0px 0px 15px 1px;
+    transition: border-radius .5s, box-shadow 0.5s;
+}
+
+#profile_icon:hover{
+    border-radius: 0;
+    box-shadow: white 0px 0px 15px 1px;
+}
+
+#profile_icon>div{
+    display: none;
+}
+
+#profile_icon>div.show{
+    display: block;
+}
+
+#profile_icon>div{
+    min-width: -webkit-fill-available;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    margin: auto;
+    transition: background-size .5s;
+    z-index: 0;
+}
+
+#profile_icon>div:hover{
+    background-size: contain;
+}
+
+.content>.title{
+    display: block;
+    position: relative;
+    text-align: left;
+}
+
+.content>.title:after{
+    content: "";
+    background: linear-gradient(to right, grey 0%, transparent 90%);
+    display: block;
+    width: 100%;
+    height: 2px;
+    width: -webkit-fill-available;
+}
+
+.content>.value{
+    display: block;
+    padding: 0.2em;
+}
+
+.blob{
+    display: block;
+    text-align: left;
+}
+
+.blob>.value{
+    padding: 1em;
+}
+
+.text{
+    
+}
+
+#stats>.content.list{
+    background-color: transparent !important;
+}
+
+#stats>.content.list>.value{
+    background-color: #4a4a4a;
+    text-align: left;
+}
+

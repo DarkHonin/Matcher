@@ -71,3 +71,11 @@ function translate(json){
 	}
 }
 
+function carosel_shift(event){
+	if(! (elm = event.target.nextElementSibling))
+		if (!(elm = event.target.parentNode.firstElementChild))
+			return
+	event.target.classList.remove("show")
+	elm.classList.add("show")
+}
+
