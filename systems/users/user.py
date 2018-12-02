@@ -2,6 +2,7 @@ from systems.database import DBDocument
 from systems.exceptions import SystemException
 from systems.properties import USERNAME, EMAIL, PASSWORD
 from flask import session
+import datetime
 class User(DBDocument):
 
     def __init__(self, uname, email, password):
@@ -12,6 +13,7 @@ class User(DBDocument):
         self._email = email
         self.active = False
         self.email_valid = False
+        self.last_login = datetime.datetime.now()
 
     def validate_email(self):
         self.email_valid = True
@@ -22,9 +24,14 @@ class User(DBDocument):
         if not (check_password_hash(self.hash, password)):
             raise SystemException("Username/Password invalid", SystemException.USER_CREATE_EXCEPTION)
         session["user"] = str(self._id)
+        self.last_login = datetime.datetime.now()
+        self.save()
         return True
 
     def logout(self):
+        from views.SocketSystems import SocketSystem
+        if session["user"] in SocketSystem.CONNECTED_USERS:
+            del(SocketSystem.CONNECTED_USERS[session["user"]])
         del(session["user"])
 
     @property
@@ -62,7 +69,7 @@ class User(DBDocument):
         col.create_index(("_email"), unique=True)
 
     def getFields(self):
-        return ["uname", "hash", "_email", "email_valid", "active"]
+        return ["uname", "hash", "_email", "email_valid", "active", "last_login"]
 
     def getCollectionName(self):
         return "Users"

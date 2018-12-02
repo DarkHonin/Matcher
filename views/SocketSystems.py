@@ -6,8 +6,7 @@ class SocketSystem(Namespace):
     CONNECTED_USERS = {}
 
     def on_connect(self):
-        if session["user"] not in SocketSystem.CONNECTED_USERS:
-            SocketSystem.CONNECTED_USERS[session["user"]] = "Online"
+        SocketSystem.CONNECTED_USERS[session["user"]] = "Online"
 
     def on_disconnect(self):
         SocketSystem.CONNECTED_USERS[session["user"]] = "Away"

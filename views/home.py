@@ -5,6 +5,7 @@ from systems.exceptions import SystemException
 from systems.users import User, UserInfo, requires_Users
 from systems.tokens import redeemToken
 from systems.telemetry import Telemetry
+from bson.objectid import ObjectId
 
 class Home(MethodView):
 
@@ -20,7 +21,15 @@ class Home(MethodView):
 		elif not user.active:
 			return "There was a problem activating the account"
 		tele = Telemetry.forUser(user)
-		return render_template("pages/user/home.html", user=user, tel=tele)
+		ids = [ObjectId(i) for i in tele.pageViews ]
+		viewers = UserInfo.get({"_id" : {"$in" : ids}})
+		if viewers:
+			if not isinstance(viewers, list):
+				viewers = [viewers]
+		else:
+			viewers = []
+
+		return render_template("pages/user/home.html", user=user, tel=tele, viewers=viewers)
 
 	@classmethod
 	def bind(cls, app : Flask):

@@ -6,11 +6,7 @@
 <article class="tile-panel" id="dash">
 	<div class="profile_banner">
 		<span id="page_views" class="telemetry">{{tel.pageViews | length}}</span>
-		<div id="profile_icon">
-			{% for i in user.images %}
-				<div style=" background-image:URL({{ url_for('getUserImage', fn=i) }})" event='{"click" : "carosel_shift"}' class="{{ 'show' if loop.index0 == 0 else '' }}"></div>
-			{% endfor %}
-		</div>
+		{% include "pages/profile_icon.html" %}
 		<span id="fame_rating" class="telemetry">{{tel.fame() | int}}</span>
 	</div>
 	<div  id="stats" watermark="{{user.uname.upper()}}">
@@ -30,6 +26,15 @@
 			</div>
 		{% endfor %}
 	</div>
+</article>
+<article>
+	<h3 class="context">Views</h3>
+	<div id="viewers" class="{{'empty' if not viewers else ""}}">
+	{% for user in viewers %}
+		{% include "pages/profile_tile.html" %}
+	{% endfor %}
+	</div>
+	<div class="no_views">UG</div>
 </article>
 <script src="{{ url_for('static', filename='js/user.js') }}"></script>
 {% endblock %}

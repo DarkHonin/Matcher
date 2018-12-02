@@ -1,0 +1,4 @@
+<div class="profile_tile">
+		{% include "pages/profile_icon.html" %}
+		<a href="{{url_for('user', name=user.uname)}}" class="alert">{{user.uname}}</a>
+</div>

@@ -45,6 +45,7 @@ h1, h2, h3, .alert{
     border-bottom: black 1px solid;
     border-top: black 1px solid;
     width: -moz-available;
+    font-family: 'Sansita', sans-serif;
 }
 
 h1:before, h1:after, h2:before, h2:after, h3:before, h3:after{
@@ -237,30 +238,35 @@ select>option{
 
 [class*="no_"]{
     display: none;
-}
-
-.no_image:after{
-    font-family: 'Sansita', sans-serif;
-    font-size: 0.5em;
-    display: block;
-    content: "No image to preview"
-}
-
-.no_users:after{
-    font-family: 'Sansita', sans-serif;
-    font-size: 0.5em;
-    display: block;
-    content: "No Users found";
-    padding-bottom: 1em;
-}
-
-.empty + [class*="no_"]{
     font-family: "NordicSans";
-    display: block;
     margin: 1em auto;
     color: white;
     font-size: 5em;
     left: 0px;
+}
+
+[class*="no_"]:after{
+    display: none;
+    font-family: 'Sansita', sans-serif;
+    font-size: 0.5em;
+    display: block;
+}
+
+.no_image:after{
+    content: "No image to preview"
+}
+
+.no_users:after{
+    content: "No Users found";
+    padding-bottom: 1em;
+}
+
+.no_views:after{
+    content: "No views on your page yet"
+}
+
+.empty + [class*="no_"]{
+    display: block;
 }
 
 .options{
@@ -662,4 +668,45 @@ input[type="range"]{
 .search fieldset>select{
     flex: 1;
     margin: auto;
+}
+
+.profile_tile{
+    width: 10em;
+    height: 5em;
+    position: relative;
+    display: inline-block;
+}
+
+.profile_tile>.profile_icon{
+    max-width: 5em;
+    max-height: 5em;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top:0px;
+    bottom: 0px;
+    margin: auto;
+    z-index: 0;
+}
+
+.profile_tile>.alert{
+    position: relative;
+    margin: auto;
+    background-color: RGBA(0,0,0,.8)
+}
+
+#viewers{
+    padding: 1em;
+}
+
+.lastOnline:before{
+    content: "Last online: "
+}
+
+.lastOnline{
+    display: block;
+    padding: 0.5em;
+    font-size: 2em;
+    font-weight: 900;
+    width: -moz-available;
 }

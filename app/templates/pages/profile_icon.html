@@ -2,4 +2,5 @@
     {% for i in user.images %}
         <div style=" background-image:URL({{ url_for('getUserImage', fn=i) }})" event='{"click" : "carosel_shift"}' class="{{ 'show' if loop.index0 == 0 else '' }}"></div>
     {% endfor %}
+    
 </div>

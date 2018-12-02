@@ -8,6 +8,9 @@
 		{% include "pages/profile_icon.html" %}
 		<span id="fame_rating" class="telemetry">{{tel.fame() | int}}</span>
 	</div>
+	{% if user.onlineStatus() == "Offline" %}
+    <span class="lastOnline">{{user.last_login.date()}}</span>
+    {% endif %}
 	<div  id="stats" watermark="{{user.uname.upper()}}">
 		<h3 class="context">{{user.uname}}</h3>
 		{% for field in user.fields %}
