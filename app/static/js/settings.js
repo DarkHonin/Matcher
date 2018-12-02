@@ -64,7 +64,7 @@ function previewImage(event){
 }
 
 function tagTyped(event){
-	if(event.data != "," || event.target.value.length < 3)
+	if(event.key != "," || event.target.value.length < 3)
 		return
 	var elm = document.createElement("span")
 	id = event.target.getAttribute("data-input")

@@ -1,48 +1,39 @@
-<article class='note'>
+{% extends 'template.html' %}
+
+{%block content%}
+<input type="hidden" id="SpecialLittleSecret" value="{{SessionToken}}">
 <p class="content">Your profile</p>
-<article class="carosel">
-	<img class="preview" src="static/12018-11-05 06:50:40.png">
-	<div class="options">
-		{% for i in user.images %}
-			<img src="{{url_for('statis', filename='uplodes\'+i)}}">
-		{% endfor %}
-		{% if user.hasMaxImages() %}
-			<label for='imageUpload' class="placeholder">+<br>Add</label>
-			<input type='file' accept="image/jpeg" hidden id='imageUpload' event='{"change":"alert"}'>
-		{% endif %}
+<article class="tile-panel" id="dash">
+	<div class="profile_banner">
+		<span id="page_views" class="telemetry">{{tel.pageViews | int}}</span>
+		<div id="profile_icon">
+			{% for i in user.images %}
+				<div style=" background-image:URL({{ url_for('getUserImage', fn=i) }})" event='{"click" : "carosel_shift"}' class="{{ 'show' if loop.index0 == 0 else '' }}"></div>
+			{% endfor %}
+		</div>
+		<span id="fame_rating" class="telemetry">{{tel.fame() | int}}</span>
 	</div>
-</article>
-
-<article class="list">
-	<h3 class="context">Public info:</h3>
-
-	{% for field in user.PUBLIC_FIELDS %}
-		<div class="li content">
-			<label>{{field.label}}
-					{% if user_current %}
-				<a class="ul" style="width:100%" href="#" event='{"click":"editField"}'>Edit</a>
+	<div  id="stats" watermark="{{user.uname.upper()}}">
+		<h3 class="context">{{user.uname}}</h3>
+		{% for field in user.fields %}
+			<div class="li content {{field.type}}">
+				<label class="title">{{field.label}}</label>
+				<label class="value">
+					{% if field.type == "list" %}
+						{% for e in user.__getattribute__(field.key) %}
+							<span>{{e}}</span>
+						{% endfor %}
+					{% else %}
+						{{user.__getattribute__(field.key)}}
 					{% endif %}
-			</label>
-			<span class="data" name="{{field.key}}">{{field.getHTMLValue(user.__getattribute__(field.key))}}</span>
-		</div>
-	{% endfor %}
-	<div class="li content">
-		<label>Location:</label>
-		<input type="text" class="data" placeholder="Location" name="alter:location:set">
-		<div class="alter">
-			<button class="ul">Save</button>
-		</div>
-	</div>
-</article>
-<article class="list">
-	<h3 class="context">Private info:</h3>
-	{% if user_current %}
-		{% for field in user.PRIVATE_FIELDS %}
-			<div class="li content">
-				<label>{{field.label}}<a class="ul" style="width:100%" href="#" event='{"click":"editField"}'>Edit</a></label>
-				<span name="{{field.key}}" class="data">{{field.getHTMLValue(user.__getattribute__(field.key))}}</span>
+				</label>
 			</div>
 		{% endfor %}
-	{% endif %}
+	</div>
 </article>
-<script src="{{url_for('static', filename='js/user.js')}}"></script>
+
+{% endblock %}
+
+{% block navbar %}
+	 {%include "pages/navbar.html" %}
+{% endblock %}

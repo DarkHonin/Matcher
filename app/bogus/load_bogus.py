@@ -1,5 +1,6 @@
 from systems.users import UserInfo, User, registerUser
 import json
+import datetime
 import random
 
 surnames = json.load(open("app/bogus/Surnames.json", "r"))
@@ -20,7 +21,7 @@ for e in range(0, 50):
     else:
         fn = f_names[random.randint(0, flen-1)]
     print("making user: %s %s" % (fn, n))
-    user = registerUser(fn[:1]+n[:4], "%s%s@email.com" % (fn, n), fn, n, "Passw0rd")
+    user = UserInfo(fn, n, uname=fn[:1]+n[:4], email="%s%s@email.com" % (fn, n), password="Passw0rd")
     tgs = []
     for i in range(0, 6):
         tgs.append(liptag[random.randint(0, len(liptag) - 1)])
@@ -30,7 +31,9 @@ for e in range(0, 50):
     user.gender = ("Male" if e % 2 else "Female")
     user.biography = "This is a bogus bio"
     user.images = ["2018_11_12_7_21_5bffab58ddbbbea8b7b49243.jpg"]
+    user._dob = datetime.datetime(random.randint(1980, 2018), 7, 1)
     user.validate_email()
     user.activate()
+    
 
 

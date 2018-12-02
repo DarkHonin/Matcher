@@ -5,5 +5,5 @@
             <span event='{"click" : "destroyTag"}' data-input="values_{{item.key}}">{{i}}</span>
         {% endfor %}
     </div>
-    <input type="text" pattern="{{item.format}}" value="" data-input="values_{{item.key}}" event='{"input" : "tagTyped"}' placeholder="Type to add item">
+    <input type="text" pattern="{{item.format}}" value="" data-input="values_{{item.key}}" event='{"keyup" : "tagTyped"}' placeholder="Type to add item">
 </div>

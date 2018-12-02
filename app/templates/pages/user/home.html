@@ -4,10 +4,14 @@
 <input type="hidden" id="SpecialLittleSecret" value="{{SessionToken}}">
 <p class="content">Your profile</p>
 <article class="tile-panel" id="dash">
-	<div id="profile_icon">
-		{% for i in user.images %}
-			<div style=" background-image:URL({{ url_for('getUserImage', fn=i) }})" event='{"click" : "carosel_shift"}' class="{{ 'show' if loop.index0 == 0 else '' }}"></div>
-		{% endfor %}
+	<div class="profile_banner">
+		<span id="page_views" class="telemetry">{{tel.pageViews | int}}</span>
+		<div id="profile_icon">
+			{% for i in user.images %}
+				<div style=" background-image:URL({{ url_for('getUserImage', fn=i) }})" event='{"click" : "carosel_shift"}' class="{{ 'show' if loop.index0 == 0 else '' }}"></div>
+			{% endfor %}
+		</div>
+		<span id="fame_rating" class="telemetry">{{tel.fame() | int}}</span>
 	</div>
 	<div  id="stats" watermark="{{user.uname.upper()}}">
 		<h3 class="context">{{user.uname}}</h3>

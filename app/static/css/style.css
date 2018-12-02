@@ -22,12 +22,12 @@ footer{
 }
 
 header{
-    background-color: RGBA(0, 0, 0, 0.5);
+    background-color: RGB(50,50,50);
     border-bottom: black 1px solid;
     border-top: black 1px solid;
     text-align: center;
     color: white;
-    position: sticky;
+    
     top: 0px;
     z-index: 1;
 }
@@ -99,6 +99,11 @@ a:hover{
 
 nav{
     margin: 0.5em 0;
+    display: block;
+    text-align: center;
+    position: sticky;
+    top:0px;
+    z-index: 10;
 }
 
 .pa{
@@ -230,7 +235,7 @@ select>option{
     max-height: 500px;
 }
 
-.no_image{
+[class*="no_"]{
     display: none;
 }
 
@@ -241,9 +246,16 @@ select>option{
     content: "No image to preview"
 }
 
-.empty + .no_image{
+.no_users:after{
+    font-family: 'Sansita', sans-serif;
+    font-size: 0.5em;
+    display: block;
+    content: "No Users found";
+    padding-bottom: 1em;
+}
+
+.empty + [class*="no_"]{
     font-family: "NordicSans";
-    content: "A";
     display: block;
     margin: 1em auto;
     color: white;
@@ -419,6 +431,8 @@ textarea{
     position: absolute;
     width: fit-content;
     height: fit-content;
+    width: -moz-fit-content;
+    height: -moz-fit-content;
     z-index: 0;
     font-size: 6em;
     font-family: "NordicSans";
@@ -466,6 +480,7 @@ textarea{
 
 #profile_icon>div{
     min-width: -webkit-fill-available;
+    min-width: -moz-available;
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
@@ -475,10 +490,6 @@ textarea{
     margin: auto;
     transition: background-size .5s;
     z-index: 0;
-}
-
-#profile_icon>div:hover{
-    background-size: contain;
 }
 
 .content>.title{
@@ -494,6 +505,7 @@ textarea{
     width: 100%;
     height: 2px;
     width: -webkit-fill-available;
+    width: -moz-available;
 }
 
 .content>.value{
@@ -523,3 +535,115 @@ textarea{
     text-align: left;
 }
 
+.profile_banner{
+    display: flex;
+}
+
+.telemetry{
+    font-size: 2em;
+    top: 0px;
+    margin: auto;
+    flex: 1;
+}
+
+#fame_rating.telemetry:before{
+    content: "Fame";
+    display: block;
+}
+
+#page_views.telemetry:before{
+    content: "Page views";
+    display: block;
+}
+
+.range{
+    width: 100%;
+    min-height: 6px;
+    background-color: green;
+    position: relative;
+}
+
+.range>.marker{
+    position: absolute;
+    height: 100%;
+    width: 6px;
+    background-color: black;
+}
+
+.marker.max{
+    right: 0px;
+    margin-right: attr(value)
+}
+
+.marker.min{
+    left:0px;
+    margin-left: attr(value px)
+}
+
+
+
+.empty{
+    display: none;
+}
+
+.search>ul{
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+    text-align: center;
+    font-family: 'Montserrat Alternates', sans-serif;
+    margin-top: 0.4em;
+}
+
+.search>ul>li{
+    display: flex;
+    background-color: RGB(120,120,120);
+}
+
+.search>ul>li>span{
+    flex: 1;
+    padding: 1em;
+    overflow: hidden;
+}
+
+
+
+.search>ul>li.item>span{
+    box-shadow: 2px 0px 0px -1px;
+    padding: 0.5em;
+}
+
+.search>ul>li.header{
+    background-color: RGB(40,40,40);
+    font-weight: 900;
+}
+
+.search>form>input{
+    min-width: -moz-available;
+    flex: 1;
+}
+
+input[type="range"]{
+    display: inline;
+}
+
+.search>form{
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.search label{
+    display: block;
+    float: right;
+    width: -moz-fit-content;
+}
+
+.search fieldset{
+    width: -moz-available;
+    border: none;
+    display: flex;
+}
+
+.search fieldset>select{
+    flex: 1;
+}

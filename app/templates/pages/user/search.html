@@ -1,0 +1,53 @@
+{% extends 'template.html' %}
+
+{% block content %}
+	<article class="search">
+		<form>
+			<input type="search" name="name" event='{"change" : "search"}' placeholder="Username/Firstname/Lastname" value="{{name}}">
+			<label for="ageGap">Age Gap</label><input type="range" min="0" max="100" name="age_gap" value="{{age_gap | int}}" step="1" id="ageGap">
+			<label for="distance">Distance</label><input type="range" min="0" max="500" name="distance" value="{{distance | int}}" step="1" id="distance">
+			<label>Ages</label>
+			<input type="number" min="0" value="{{min_age}}" name="min_age" step="1" placeholder="MinAge">
+			<input type="number" min="0" value="{{max_age}}" name="max_age" step="1" placeholder="MaxAge">
+			<label>Sort by</label>
+			<fieldset>
+				<select name="sort">
+						<option value="uname" {{"selected" if sort == "uname" else ""}}>Username</option>
+						<option value="lname" {{"selected" if sort == "lname" else ""}}>Last name</option>
+						<option value="fname" {{"selected" if sort == "fname" else ""}}>First name</option>
+						<option value="age" {{"selected" if sort == "age" else ""}}>Age</option>
+						<option value="fame" {{"selected" if sort == "fame" else ""}}>Fame</option>
+				</select>
+				<select name="dir">
+						<option value="0" {{"selected" if dir == "0" else ""}}>Accending</option>
+						<option value="1" {{"selected" if dir == "1" else ""}} >Decending</option>
+				</select>
+			</fieldset>
+			<input type="submit" value="Search">
+		</form>
+		<ul class='{{"" if users else "empty"}}'>
+			<li class="header">
+				<span>Username</span>
+				<span>Last name</span>
+				<span>First name</span>
+				<span>Age</span>
+				<span>Fame</span>
+			</li>
+			{% for i in users %}
+				<li class="item">
+					<span><a href="{{url_for('user', name=i['uname'])}}">{{i["uname"]}}</a></span>
+					<span>{{i["lname"]}}</span>
+					<span>{{i["fname"]}}</span>
+					<span>{{i["age"]}}</span>
+					<span>{{i["fame"]}}</span>
+				</li>
+			{% endfor %}
+		</ul>
+		<div class="no_users">AE</div>
+	</article>
+	<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% endblock %}
+
+{% block navbar %}
+	 {%include "pages/navbar.html" %}
+{% endblock %}

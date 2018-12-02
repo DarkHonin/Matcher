@@ -4,6 +4,7 @@ from systems.properties import check_captcha, RequestValidator
 from systems.exceptions import SystemException
 from systems.users import User, UserInfo, requires_Users
 from systems.tokens import redeemToken
+from systems.telemetry import Telemetry
 
 class Home(MethodView):
 
@@ -14,7 +15,12 @@ class Home(MethodView):
 			return redirect(url_for("logout"))
 		if not info.complete:
 			return redirect(url_for("settings"))
-		return render_template("pages/user/home.html", user=info)
+		elif info.complete and not info.active:
+			info.activate()
+		elif not info.active:
+			return "There was a problem activating the account"
+		tele = Telemetry.forUser(info)
+		return render_template("pages/user/home.html", user=info, tel=tele)
 
 	@classmethod
 	def bind(cls, app : Flask):

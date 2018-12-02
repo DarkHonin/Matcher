@@ -11,6 +11,7 @@ class DBDocument:
     def __init__(self):
         self._id = False
         self.lastChanged = None
+        self.created = datetime.now()
 
     def getFields(self):
         return []
@@ -32,7 +33,7 @@ class DBDocument:
     #Helper functions
 
     def __iter__(self):
-        for i in self.getFields() + ["lastChanged", "_id"]:
+        for i in self.getFields() + ["lastChanged", "created", "_id"]:
             if hasattr(self, i):
                 attr = self.__getattribute__(i)
                 if(i == "_id"):
@@ -40,12 +41,9 @@ class DBDocument:
                 else:
                     yield i, attr
 
-    @classmethod
-    def from_dict(cls, data):
-        instance = cls.__new__(cls)
+    def set_values(self, data):
         for k, v in data.items():
-            setattr(instance, k, v)
-        return instance
+            setattr(self, k, v)
 
     def defineKeys(self, collection):
         pass
@@ -53,19 +51,19 @@ class DBDocument:
     #end Helper functions
 
     @classmethod
-    def get(class_object, where={}, what : dict = None):
-        print(where)
+    def get(class_object, where={}, what : dict = None, sort=None):
         if "_id" in where:
             if type(where['_id']) is str:
                 where["_id"] = ObjectId(where["_id"])
         instance = class_object.__new__(class_object)
-        items = instance.collection.find(where, what)
+        if sort:
+            items = instance.collection.find(where, what).sort(sort)
+        else:    
+            items = instance.collection.find(where, what)
         ret = []
         for item in items:
             subi = copy.deepcopy(instance)
-            for k, v in item.items():
-                print("loading propery: %s %s" % (k, v))
-                setattr(subi, k, v)
+            subi.set_values(item)
             ret.append(subi)
         if len(ret) == 1:
             return ret.pop()
@@ -91,3 +89,8 @@ class DBDocument:
 
     def delete(self):
         self.collection.delete_one({"_id" : self._id})
+
+    def toDisplaySet(self):
+        item = copy.deepcopy(self)
+        del(item._id)
+        return item.__dict__

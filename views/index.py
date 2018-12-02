@@ -38,7 +38,7 @@ class IndexView(MethodView):
             return jsonify({"status" : "JOY", "actions": {"displayMessage" : "Please check your account for an activation email"}})
         else:
             usr = User.get({"uname" : data["uname"]})
-            if not usr or not usr.active:
+            if not usr or not usr.email_valid:
                 raise SystemException("Username/Password invalid", SystemException.USER_CREATE_EXCEPTION)
             usr.login(data['password'])
         return jsonify({"status" : "JOY", "actions": {"displayMessage" : "Welcome back %s" % usr.uname, "redirect" : "/home"}})

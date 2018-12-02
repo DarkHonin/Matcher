@@ -17,6 +17,7 @@ def requires_Users(f):
 
 def registerUser(uname, email, fname, lname, password):
 	user = UserInfo(fname, lname, password=password, uname=uname, email=email)
+	user.register()
 	return user
 
 def setProp(data, subject):
@@ -27,14 +28,14 @@ def setProp(data, subject):
 	field.validate(data)
 	subject.__setattr__(field.key, data[field.key])
 	if subject.active:
-		i = Telemetry.forUser(subject).handle(data['key'], data[int(data['id'])])
-		i.save()
+		tel = Telemetry.forUser(subject)
+		tel.handle(data['key'], data[data['key']])
+		tel.save()
 		subject.save()
 	else:
 		if subject.complete:
-			i = Telemetry(subject)
-			i.handle(data['key'], data[int(data['id'])])
-			i.save()
 			subject.activate()
+		else:
+			subject.save()
 
 

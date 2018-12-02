@@ -6,13 +6,13 @@ class Telemetry(DBDocument):
     def __init__(self,user:User, genderInterest, location):
         DBDocument.__init__(self)
         self._user = user
-        self.pageViews="0"
+        self.pageViews=0
         self.genderInterest=str(genderInterest)
         self.location = location
 
     @staticmethod
     def forUser(user : User):
-        return Telemetry.get({"user" : user._id})
+        return Telemetry.get({"user" : str(user._id)})
 
     @property
     def user(self):
@@ -22,11 +22,16 @@ class Telemetry(DBDocument):
     def user(self, id:str):
         self._user = User.get({"_id" : id}, {"hash" : 0})
 
-    @property
     def fame(self):
-        delta = self.lastChanged - datetime.now()
-        prs = delta / datetime.now().total_seconds()
-        return self.pageViews * prs
+        #print("%s - %s = %s" % (self.lastChanged, datetime.now(), datetime.now() - self.lastChanged))
+        base = datetime.now() - self.created
+        sinceLastEdit = datetime.now() - self.lastChanged
+        delta = base - sinceLastEdit
+        print("time since last edit: %s" % delta)
+        prs = delta / base
+        print("Modifyer: %s" % prs)
+        ret = self.pageViews * prs
+        return int(ret)
 
     def handle(self, field, value):
         if field == "genderInterest":

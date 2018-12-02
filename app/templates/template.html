@@ -13,21 +13,18 @@
     <body>
         <header>
             <h1 class="context">Matcha</h1>
-            {% block navbar %}
-            <!--Navbar only shows after logged in-->
-            {% endblock %}
-            <span class="alert" id="message">
-                {% block loadMessage %}
-                {% endblock %}
-            </span>
         </header>
+        {% block navbar %}
+            <!--Navbar only shows after logged in-->
+        {% endblock %}
+        <span class="alert" id="message">{% block loadMessage %}{% endblock %}</span>
         <article class='note' id="display">
             {% block content %}
                 <!--Data comes there-->
             {% endblock %}
         </article>
         <footer>
-                Designed and build by HoninWorx, aka wgourley
+                Designed and built by HoninWorx, aka wgourley
         </footer>
     </body>
     <script>
