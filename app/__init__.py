@@ -32,6 +32,8 @@ for view in VIEWS:
     view.bind(app)
 
 
+
+
 """
 from app.instance import routes
 from app.framework import Page

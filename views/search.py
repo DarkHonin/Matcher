@@ -34,7 +34,7 @@ class Search(MethodView):
 			if query:
 				params[i] = query
 				db_pass = self.recurMerge(db_pass, f(query))
-		data = UserInfo.get(db_pass, {"fname" : 1, "lname" : 1, "uname" : 1, "interest" : 1, "gender" : 1, "images" : 1, "dob" : 1, "location" : 1})
+		data = UserInfo.get(db_pass, {"fname" : 1, "lname" : 1, "uname" : 1, "interest" : 1, "gender" : 1, "images" : 1, "_dob" : 1, "location" : 1})
 		if isinstance(data, list):
 			result = [ f.toDisplaySet() for f in data]
 		else:

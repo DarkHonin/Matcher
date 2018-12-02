@@ -85,6 +85,10 @@ class UserInfo(User):
 		from systems.telemetry import Telemetry
 		return Telemetry.forUser(self).fame()
 
+	def onlineStatus(self):
+		from views import SocketSystem
+		return SocketSystem.getStatus(str(self._id))
+
 	def getFields(self):
 		return super().getFields() + ["user", "fname", "lname", "biography", "gender", "interest", "_tags", "images", "location", "_dob"]
 

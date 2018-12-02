@@ -8,13 +8,16 @@ from systems.telemetry import Telemetry
 
 class Profile(MethodView):
 
-	def get(self, name):
-		user = UserInfo.get({"uname" : name})
-		tele = Telemetry.forUser(user)
+	decorators = [requires_Users]
+
+	def get(self, name, user):
+		view_user = UserInfo.get({"uname" : name})
+		tele = Telemetry.forUser(view_user)
 		if (tele):
-			tele.pageViews += 1
-			tele.save()
-		return render_template("pages/user/profile.html", user=user, tel=tele)
+			if (str(user._id) not in tele.pageViews and view_user.uname != user.uname):
+				tele.pageViews.append(str(user._id))
+				tele.save()
+		return render_template("pages/user/profile.html", user=view_user, tel=tele)
 
 	@classmethod
 	def bind(cls, app : Flask):

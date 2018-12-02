@@ -6,7 +6,7 @@ class Telemetry(DBDocument):
     def __init__(self,user:User, genderInterest, location):
         DBDocument.__init__(self)
         self._user = user
-        self.pageViews=0
+        self.pageViews=[]
         self.genderInterest=str(genderInterest)
         self.location = location
 
@@ -30,7 +30,7 @@ class Telemetry(DBDocument):
         print("time since last edit: %s" % delta)
         prs = delta / base
         print("Modifyer: %s" % prs)
-        ret = self.pageViews * prs
+        ret = len(self.pageViews) * prs
         return int(ret)
 
     def handle(self, field, value):

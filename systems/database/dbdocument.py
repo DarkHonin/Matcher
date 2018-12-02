@@ -43,6 +43,7 @@ class DBDocument:
 
     def set_values(self, data):
         for k, v in data.items():
+            print("setting %s %s in %s" % (k, v, __class__))
             setattr(self, k, v)
 
     def defineKeys(self, collection):

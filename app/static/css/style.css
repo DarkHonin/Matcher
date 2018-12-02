@@ -453,7 +453,7 @@ textarea{
     font-size: 1.75em;
 }
 
-#profile_icon{
+.profile_icon{
     overflow: hidden;
     position: relative;
     display: flex;
@@ -465,20 +465,32 @@ textarea{
     transition: border-radius .5s, box-shadow 0.5s;
 }
 
-#profile_icon:hover{
+.profile_icon.Online{
+    box-shadow: #62ff66 0px 0px 15px 1px;
+}
+
+.profile_icon.Away{
+    box-shadow: #ffc762 0px 0px 15px 1px;
+}
+
+.profile_icon.Offline{
+    box-shadow: #ff461e 0px 0px 15px 1px;
+}
+
+.profile_icon:hover{
     border-radius: 0;
     box-shadow: white 0px 0px 15px 1px;
 }
 
-#profile_icon>div{
+.profile_icon>div{
     display: none;
 }
 
-#profile_icon>div.show{
+.profile_icon>div.show{
     display: block;
 }
 
-#profile_icon>div{
+.profile_icon>div{
     min-width: -webkit-fill-available;
     min-width: -moz-available;
     width: 100%;
@@ -620,6 +632,7 @@ textarea{
 
 .search>form>input{
     min-width: -moz-available;
+    width: -webkit-fill-available;
     flex: 1;
 }
 
@@ -636,14 +649,17 @@ input[type="range"]{
     display: block;
     float: right;
     width: -moz-fit-content;
+    width: -webkit-fill-available;
 }
 
 .search fieldset{
     width: -moz-available;
+    width: -webkit-fill-available;
     border: none;
     display: flex;
 }
 
 .search fieldset>select{
     flex: 1;
+    margin: auto;
 }

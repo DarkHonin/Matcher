@@ -12,7 +12,10 @@ def requires_Users(f):
 		if ("user" not in session):
 			return redirect(url_for("index", page="login"))
 		user = UserInfo.get({"_id": session['user']})
-		return f(user)
+		if not user:
+			del(session['user'])
+			return redirect(url_for("index", page="login"))
+		return f(user=user, *args, **kws)
 	return ParseSession
 
 def registerUser(uname, email, fname, lname, password):

@@ -10,17 +10,17 @@ class Home(MethodView):
 
 	decorators = [requires_Users]
 
-	def get(self, info : UserInfo):
-		if not info:
+	def get(self, user : UserInfo):
+		if not user:
 			return redirect(url_for("logout"))
-		if not info.complete:
+		if not user.complete:
 			return redirect(url_for("settings"))
-		elif info.complete and not info.active:
-			info.activate()
-		elif not info.active:
+		elif user.complete and not user.active:
+			user.activate()
+		elif not user.active:
 			return "There was a problem activating the account"
-		tele = Telemetry.forUser(info)
-		return render_template("pages/user/home.html", user=info, tel=tele)
+		tele = Telemetry.forUser(user)
+		return render_template("pages/user/home.html", user=user, tel=tele)
 
 	@classmethod
 	def bind(cls, app : Flask):
