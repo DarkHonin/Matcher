@@ -4,7 +4,7 @@ from systems.properties import check_captcha, RequestValidator
 from systems.exceptions import SystemException
 from systems.users import User, UserInfo, requires_Users
 from systems.tokens import redeemToken
-from systems.telemetry import Telemetry
+
 
 class Profile(MethodView):
 
@@ -20,6 +20,15 @@ class Profile(MethodView):
 				tele.pageViews.append(str(user._id))
 				tele.save()
 		return render_template("pages/user/profile.html", user=view_user, tel=tele)
+
+	def post(self, name, user):
+		view_user = UserInfo.get({"uname" : name})
+		if not view_user:
+			return redirect(url_for("error", error="User does not exist"))
+		tele = Telemetry.forUser(view_user)
+		cur_tel = Telemetry.forUser(user)
+		if str(view_user._id) in cur_tel.likes:
+			cur_tel.likes.remove(str(view_user._id))
 
 	@classmethod
 	def bind(cls, app : Flask):

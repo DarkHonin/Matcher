@@ -12,7 +12,6 @@ app.config.from_pyfile("instance/config.py")
 Database = PyMongo(app)
 Mailer = Mail(app)
 
-
 sockets = SocketIO(app)
 
 @app.errorhandler(SystemException)
@@ -34,19 +33,14 @@ for view in VIEWS:
     print("Binding %s" % view)
     view.bind(app)
 
+from systems.database import DBDEncoder, DBDDecoder
 
+app.json_encoder = DBDEncoder
+app.json_decoder = DBDDecoder
 
-
-"""
-from app.instance import routes
-from app.framework import Page
-for i in Page.PAGES:
-    i.bind(app)
-
-@app.route("/loadBogusUsers")
-def bogus():
-    from app.bogus import load_bogus
-    return "Loaded bogus users"
-"""
-
+@app.route("/test")
+def test():
+    from systems.users import registerUser, User
+    #registerUser("Username", "email@email.com", "First", "Last", "Passw0rd")
+    return jsonify(User.get())
 

@@ -10,3 +10,6 @@ function checkMessages(){
 
 setInterval(checkMessages, 5000)
 
+function like(event){
+	
+}

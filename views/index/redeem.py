@@ -7,18 +7,16 @@ from systems.tokens import redeemToken
 
 class Redeem(MethodView):
 
-	decorators = [check_captcha, RequestValidator()]
+	decorators = [check_captcha, RequestValidator("/redeem")]
 
 	def get(self, token=None):
 		return render_template("pages/index/redeem.html", token=token)
 
-	def post(self, token):
-		data = request.get_json()
-		usr = User.get({"uname" : data["uname"]})
-		print(dict(usr))
+	def post(self, token, uname, password):
+		usr = User.get({"uname" : uname})
 		if not usr:
 			raise SystemException("Username/Password invalid", SystemException.USER_CREATE_EXCEPTION)
-		usr.login(data['password'])
+		usr.login(password)
 		redeemToken(token)
 		return jsonify({"status" : "JOY", "actions" : {"displayMessage" : "Your account is now active", "redirect" : "/home"}})		
 

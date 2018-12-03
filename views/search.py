@@ -4,7 +4,7 @@ from systems.properties import check_captcha, RequestValidator
 from systems.exceptions import SystemException
 from systems.users import User, UserInfo, requires_Users
 from systems.tokens import redeemToken
-from systems.telemetry import Telemetry
+
 import datetime
 from dateutil.relativedelta import relativedelta
 from systems.search import SearchEngine

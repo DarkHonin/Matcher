@@ -5,25 +5,32 @@ from flask import session
 import datetime
 class User(DBDocument):
 
-    def __init__(self, uname, email, password):
+    collection_name =  "Users"
+
+    def __init__(self, uname, email):
         DBDocument.__init__(self)
         self.uname = uname
-        self.hash = None
-        self.password = password
         self._email = email
         self.active = False
         self.email_valid = False
-        self.last_login = datetime.datetime.now()
+        self.hash = None
+        self.last_online = datetime.datetime.now()
+        self.info = Object()
 
     def validate_email(self):
         self.email_valid = True
+        self.save()
+
+    def activate(self):
+        if self.info.complete:
+            self.active = True
         self.save()
 
     def login(self, password):
         from werkzeug.security import check_password_hash
         if not (check_password_hash(self.hash, password)):
             raise SystemException("Username/Password invalid", SystemException.USER_CREATE_EXCEPTION)
-        session["user"] = str(self._id)
+        session["user"] = self._id
         self.last_login = datetime.datetime.now()
         self.save()
         return True
@@ -64,22 +71,21 @@ class User(DBDocument):
             sendTokenEmail(self.email, token)
         pass
 
-    def defineKeys(self, col):
+    @staticmethod
+    def defineKeys(col):
         col.create_index(("uname"), unique=True)
         col.create_index(("_email"), unique=True)
-
-    def getFields(self):
-        return ["uname", "hash", "_email", "email_valid", "active", "last_login"]
-
-    def getCollectionName(self):
-        return "Users"
 
     def register(self):
         self.save()
         from systems.tokens import Token, sendTokenEmail
         token = Token(self, "validate_email")
-        token.save()
-        sendTokenEmail(self.email, token)
+        try:
+            sendTokenEmail(self.email, token)
+            token.save()
+        except SystemException as e:
+            self.delete()
+            raise e
 
     @classmethod
     def parent(cls, instance):

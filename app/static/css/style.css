@@ -85,13 +85,20 @@ a{
 }
 
 .alert:empty{
-    display:none;
+   opacity: 0;
+   padding: 0;
+   border: 0;
 }
 
 .alert{
     text-align: center;
     display: inline-block;
-    padding: 0.5em
+    padding: 0.5em;
+    position: sticky;
+    transition: opacity 0.5s, padding 0.5s, border 0.5s;
+    opacity: 1;
+    top: 2em;
+    z-index: 1;
 }
 
 a:hover{
@@ -234,6 +241,7 @@ select>option{
 
 .preview{
     max-height: 500px;
+    width: -moz-available;
 }
 
 [class*="no_"], .error{
@@ -279,6 +287,8 @@ select>option{
 .options{
     display: flex;
     width: -webkit-fill-available;
+    width: -moz-available;
+    overflow: hidden;
 }
 
 .options>.usr_img{
@@ -388,7 +398,7 @@ input[name*=":display"].slider:checked + label{
 
 @media screen and (max-width: 900px){
     body{
-        width: 100vw;
+        width: -moz-available;
     }
     
     article{
@@ -450,7 +460,7 @@ textarea{
     height: fit-content;
     width: -moz-fit-content;
     height: -moz-fit-content;
-    z-index: 0;
+    z-index: -1;
     font-size: 6em;
     font-family: "NordicSans";
     top: 0;

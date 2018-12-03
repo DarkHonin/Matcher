@@ -4,7 +4,7 @@ from systems.properties import check_captcha, RequestValidator
 from systems.exceptions import SystemException
 from systems.users import User, UserInfo, requires_Users
 from systems.tokens import redeemToken
-from systems.telemetry import Telemetry
+
 from bson.objectid import ObjectId
 
 class Home(MethodView):
@@ -14,9 +14,9 @@ class Home(MethodView):
 	def get(self, user : UserInfo):
 		if not user:
 			return redirect(url_for("logout"))
-		if not user.complete:
+		if not user.info.complete:
 			return redirect(url_for("settings"))
-		elif user.complete and not user.active:
+		elif user.info.complete and not user.active:
 			user.activate()
 		elif not user.active:
 			return "There was a problem activating the account"

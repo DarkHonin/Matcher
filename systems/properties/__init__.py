@@ -17,15 +17,15 @@ DOB = Property("dob", "Date of birth", r".*", "Please supply a propper date", fi
 class RequestValidator:
 
     FIELDS = {
-        "login" : [
+        "/login" : [
             USERNAME,
             PASSWORD
         ],
-        "redeem" : [
+        "/redeem" : [
             USERNAME,
             PASSWORD
         ],
-        "register" : [
+        "/register" : [
             USERNAME,
             EMAIL,
             FIRSTNAME,
@@ -33,6 +33,9 @@ class RequestValidator:
             PASSWORD
         ]
     }
+
+    def __init__(self, expliciteIndex=None):
+        self.explicite = expliciteIndex
 
     def getFormName(self, data):
         if "form_name" not in data:
@@ -46,12 +49,17 @@ class RequestValidator:
         def ValidateFields(*args, **kws):
             if(request.method != 'POST'):
                 return f(*args, **kws)
-            page = request.path
+            if self.explicite:
+                page = self.explicite
+            else:
+                page = request.path
             data = request.get_json()
-            fields = RequestValidator.FIELDS[self.getFormName(data)]
+            fields = RequestValidator.FIELDS[page]
+            pas = {}
             for field in fields:
                 field.validate(data)
-            return f(*args, **kws)
+                pas[field.key] = data[field.key]
+            return f(*args, **pas, **kws)
         return ValidateFields
 
 def check_captcha(f):
@@ -70,7 +78,7 @@ def check_captcha(f):
         import requests
         import json
         secret = app.config.get("CAPTCHA_SECRET")
-        payload = {'response':data["g-recaptcha-response"], 'secret':secret}
+        payload = {'response':data.pop("g-recaptcha-response"), 'secret':secret}
         try:
             response = requests.post("https://www.google.com/recaptcha/api/siteverify", payload)
         except requests.exceptions.ConnectionError:

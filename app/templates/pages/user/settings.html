@@ -9,17 +9,17 @@
 
 {%block content%}
 <article class="carosel">
-	{% if user.imageCount >= 1 %}
-		<img class="preview" src="{{ url_for('getUserImage', fn=user.images[0]) }}">
+	{% if user.info.imageCount >= 1 %}
+		<img class="preview" src="{{ url_for('getUserImage', fn=user.info.images[0]) }}">
 	{% else %}
 		<img class="preview empty">
 	{%endif%}
 	<span class="no_image">EX</span>
 	<div class="options">
-	{% for i in user.images %}
+	{% for i in user.info.images %}
 		<img src="{{ url_for('getUserImage', fn=i) }}" class="usr_img" event='{"click" : "previewImage"}'>
 	{% endfor %}
-	{% if user.imageCount < 5 %}
+	{% if user.info.imageCount < 5 %}
 		<label for='imageUpload' class="usr_img add" id="imageinput">+<br>Add image</label>
 		<input type='file' accept="image/jpeg" hidden id='imageUpload' event='{"change":"addImage"}'>
 	{% endif %}
@@ -28,11 +28,11 @@
 
 <article class="list">
 	<h3 class="context">General userrmation</h3>
-	{% for field in user.fields %}
+	{% for field in user.info.fields %}
 		<div class="li content">
 			<label>{{field.label}}</label>
-			{{field.render(user) | safe}}
-			<button data-type='user' data-id="{{loop.index0}}" class='ul' event='{"click" : "saveField"}'>Save</button>
+			{{field.render(user.info) | safe}}
+			<button data-type='info' data-id="{{loop.index0}}" class='ul' event='{"click" : "saveField"}'>Save</button>
 		</div>
 	{% endfor %}
 </article>

@@ -12,12 +12,8 @@
 	<span class="lastOnline">{{user.last_login.date()}}</span>
     {% endif %}
 	<div  id="stats" watermark="{{user.uname.upper()}}">
+		<h3><button class="ul context" event='{"click" : "like"}' >Like</button></h3>
 		<h3 class="context">{{user.uname}}</h3>
-		<span id="social">
-				<button class="ul content" >Like</button>
-				<button class="ul content" >Block</button>
-				<button class="ul content">Report</button>
-			</span>
 		{% for field in user.fields %}
 			<div class="li content {{field.type}}">
 				<label class="title">{{field.label}}</label>

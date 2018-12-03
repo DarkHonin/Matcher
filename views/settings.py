@@ -16,12 +16,21 @@ class Settings(MethodView):
 
 	def post(self, user : User):
 		data = request.get_json()
-		setProp(data, user)
+		for i in ["key", "id", "item"]:
+			if i not in data:
+				raise SystemException("Invalid field selection", SystemException.FIELD_ERROR)
+		if data["item"] == "user":
+			setProp(data, user)
+		elif data['item'] == "info":
+			setProp(data, user.info)
+		else:
+			raise SystemException("Invalid field selection", SystemException.FIELD_ERROR)
+		user.activate()
 		return jsonify({"status" : "JOY", "actions" : {"displayMessage" : "The field has been saved"}})
 
 	def insert(self, user : User):
 		data = request.get_json()
-		if user.imageCount == 5:
+		if user.info.imageCount == 5:
 			raise SystemException("You may not have more than 5 images", SystemException.FIELD_ERROR)
 		if 'data' not in data:
 			raise SystemException("No image to read", SystemException.FIELD_ERROR)
@@ -40,7 +49,7 @@ class Settings(MethodView):
 		fd = open(os.path.join(app.config['UPLOAD_FOLDER'], fn) , "wb+")
 		fd.write(bins)
 		fd.close()
-		user.images.append(fn)
+		user.info.images.append(fn)
 		user.save()
 		return jsonify({"status" : "JOY", "actions" : {"displayMessage" : "Image uploaded", "insertImage":url_for("getUserImage", fn=fn)}})
 

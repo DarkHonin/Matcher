@@ -3,15 +3,18 @@ from systems.exceptions import UserCreateException
 import copy
 import json
 from datetime import datetime
+import sys
 from pymongo.errors import DuplicateKeyError
 from bson.objectid import ObjectId
-
+import re
 
 class DBDocument:
-    def __init__(self):
-        self._id = False
-        self.lastChanged = None
-        self.created = datetime.now()
+
+    collection_name = None
+
+    def __init__(self, _id : ObjectId=None):
+        if _id:
+            self._id = _id
 
     def getFields(self):
         return []
@@ -19,53 +22,95 @@ class DBDocument:
     def getCollectionName(self):
         return ""
 
-    @property
-    def collection(self):
+    @classmethod
+    def collection(clls):
         from app import Database
-        if self.getCollectionName() not in Database.db.collection_names():
+        if clls.collection_name not in Database.db.collection_names():
             print("Loading database keys")
-            col = Database.db[self.getCollectionName()]
-            self.defineKeys(col)
+            col = Database.db[clls.collection_name]
+            clls.defineKeys(col)
         else:
-            col = Database.db[self.getCollectionName()]
+            col = Database.db[clls.collection_name]
         return col
 
     #Helper functions
-
-    def __iter__(self):
-        for i in self.getFields() + ["lastChanged", "created", "_id"]:
-            if hasattr(self, i):
-                attr = self.__getattribute__(i)
-                if(i == "_id"):
-                    yield i, str(attr)
-                else:
-                    yield i, attr
 
     def set_values(self, data):
         for k, v in data.items():
             print("setting %s %s in %s" % (k, v, __class__))
             setattr(self, k, v)
 
-    def defineKeys(self, collection):
+    def encodeDocument(self):
+        ret = {}
+        for k, v in self.__dict__.items():
+            if isinstance(v, DBDocument):
+                if("classes" not in ret):
+                    ret.update({"classes" : {}})
+                ret["classes"][k] = str(v.__class__)
+                ret[k] = v.encodeDocument()
+            else:
+                ret[k] = v
+        return ret
+
+    @staticmethod
+    def getClassFromString(st):
+        m = re.search("'(.+?)'", st)
+        if not m:
+            return None
+        classParts = m.group(1).split(".")        
+        clsname = classParts.pop()
+        namespace = ".".join(classParts)
+        return getattr(sys.modules[namespace], clsname)
+
+    @classmethod
+    def decodeDocument(lc, dt:dict):
+        classes = {}
+        instance = lc.__new__(lc)
+        if "classes" in dt:
+            classes = dt.pop("classes")
+        for k, v in dt.items():
+            if k in classes and isinstance(v, dict):
+                cl = DBDocument.getClassFromString(classes[k])
+                setattr(instance, k, cl.decodeDocument(v))
+            else:
+                setattr(instance, k, v)
+        return instance
+
+    def toJSON(self):
+        data = self.__dict__
+        data["__class"] = str(self.__class__)
+        return data
+
+    @staticmethod
+    def fromJSON(json):
+        cl = DBDocument.getClassFromString(json.pop("__class"))
+        instance = cl.__new__()
+        for e, v in json.items():
+            if isinstance(v, dict) and "__class" in v:
+                setattr(instance, e, DBDocument.fromJSON(json[e]))
+            elif e == "_id":
+                setattr(instance, e, ObjectId(json[e]))    
+            else:
+                setattr(instance, e, json[e])
+        return instance
+
+    @classmethod
+    def defineKeys(clls, collection):
         pass
 
     #end Helper functions
 
+
     @classmethod
-    def get(class_object, where={}, what : dict = None, sort=None):
-        if "_id" in where:
-            if type(where['_id']) is str:
-                where["_id"] = ObjectId(where["_id"])
-        instance = class_object.__new__(class_object)
-        if sort:
-            items = instance.collection.find(where, what).sort(sort)
-        else:    
-            items = instance.collection.find(where, what)
+    def get(clss, where={}, what : dict = None):
+        from app import Database
+        hip = clss.collection_name
+        col = Database.db[hip]
+        items = col.find(where, what)
         ret = []
         for item in items:
-            subi = copy.deepcopy(instance)
-            subi.set_values(item)
-            ret.append(subi)
+            inst = clss.decodeDocument(item)
+            ret.append(inst)
         if len(ret) == 1:
             return ret.pop()
         elif len(ret) == 0:
@@ -75,21 +120,20 @@ class DBDocument:
     def save(self):
         try:
             self.lastChanged = datetime.now()
-            data = dict(self)
-            del(data['_id'])
-            if not self._id:
-                id = self.collection.insert_one(data)
-                self._id = str(id.inserted_id)
+            if  not "_id" in self.__dict__:
+                if self.collection() == 0:
+                    self.defineKeys(self.collection())
+                id = self.collection().insert_one(self.encodeDocument())
+                self._id = id.inserted_id
                 print("%s inserted at %s" % (self.__class__.__name__, str(self._id)))
             else:
-                id = ObjectId(str(self._id))
-                self.collection.update_one({"_id" : id}, {"$set" : data})
+                self.collection().update_one({"_id" : self._id}, {"$set" : self.encodeDocument()})
                 print("%s updated %s" % (self.__class__.__name__, str(self._id)))
         except DuplicateKeyError:
             raise UserCreateException("Username/Email already in use.")
 
     def delete(self):
-        self.collection.delete_one({"_id" : self._id})
+        self.collection().delete_one({"_id" : self._id})
 
     def toDisplaySet(self):
         item = copy.deepcopy(self)

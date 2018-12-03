@@ -4,7 +4,7 @@
 	<p class="content">To the first ever Viking matchmaking service</p>
 	<hr>
 	<p class="content">Please login or register to continue</p>
-	<form method="post" action="{{url_for('index', page='register')}}" event='{"submit":"formSubmit"}'>
+	<form method="post" action="{{url_for('register')}}" event='{"submit":"formSubmit"}'>
 		<h3 class="context">Register</h3>
 		<input type="email" placeholder="Email" required name="email">
 		<input type="text" placeholder="Username" required name="uname">
@@ -12,8 +12,7 @@
 		<input type="text" placeholder="Last Name" required name="lname">
 		<input type="password" placeholder="Password" required name="password">
 		<input type="submit" class="content ul" value='Register'>
-		<input type="hidden" name="form_name" value="register">
-		<a href="{{url_for('index', page='login')}}" class="content ul small">or Login</a>
+		<a href="{{url_for('login')}}" class="content ul small">or Login</a>
 		<script src='https://www.google.com/recaptcha/api.js?render=6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC'></script>
 	</form>
 {%endblock%}

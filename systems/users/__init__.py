@@ -1,7 +1,7 @@
 from systems.users.user import User
 from systems.users.user_info import UserInfo
+from systems.users.telemetry import Telemetry
 from systems.exceptions import SystemException
-from systems.telemetry import Telemetry
 from flask import session
 
 def requires_Users(f):
@@ -9,9 +9,12 @@ def requires_Users(f):
 	from flask import session, redirect, url_for
 	@wraps(f)
 	def ParseSession(*args, **kws):
+		print("Resolveing current user")
 		if ("user" not in session):
-			return redirect(url_for("index", page="login"))
-		user = UserInfo.get({"_id": session['user']})
+			return redirect(url_for("login"))
+		print("User is present")
+		user = User.get({"_id": session['user']})
+		print("User %s", user)
 		if not user:
 			del(session['user'])
 			return redirect(url_for("index", page="login"))
@@ -19,26 +22,16 @@ def requires_Users(f):
 	return ParseSession
 
 def registerUser(uname, email, fname, lname, password):
-	user = UserInfo(fname, lname, password=password, uname=uname, email=email)
+	user = User(uname, email)
+	user.password = password
+	user.info = UserInfo(fname, lname)
+	user.telemetry = Telemetry()
 	user.register()
 	return user
 
 def setProp(data, subject):
-	for i in ["key", "id"]:
-		if i not in data:
-			raise SystemException("Invalid field selection", SystemException.FIELD_ERROR)
 	field = subject.fields[int(data['id'])]
 	field.validate(data)
 	subject.__setattr__(field.key, data[field.key])
-	if subject.active:
-		tel = Telemetry.forUser(subject)
-		tel.handle(data['key'], data[data['key']])
-		tel.save()
-		subject.save()
-	else:
-		if subject.complete:
-			subject.activate()
-		else:
-			subject.save()
 
 

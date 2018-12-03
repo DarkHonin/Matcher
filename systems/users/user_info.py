@@ -3,9 +3,8 @@ from systems.users.user import User
 from systems.properties import FIRSTNAME, LASTNAME, GENDER, INTEREST, TAGS, BIOGRAPHY, DOB
 import datetime
 
-class UserInfo(User):
-	def __init__(self, fname, lname, **kwargs):
-		User.__init__(self, **kwargs)
+class UserInfo(DBDocument):
+	def __init__(self, fname, lname):
 		self.fname = fname
 		self.lname = lname
 		self.biography = ""

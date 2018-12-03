@@ -51,7 +51,7 @@ function displayMessage(message, state=true){
 	if(state) 	elm.style.backgroundColor = "RGBA(90, 255, 90, 0.6)"
 	else		elm.style.backgroundColor = "RGBA(255, 90, 90, 0.6)"
 	elm.innerHTML = message
-	setTimeout(() => {elm.style.opacity = 0}, 5000)
+	setTimeout(() => {elm.innerHTML = ""}, 5000)
 }
 
 function field_error(field){

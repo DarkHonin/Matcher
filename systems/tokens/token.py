@@ -3,6 +3,9 @@ from systems.database import DBDocument
 import uuid
 import datetime
 class Token(DBDocument):
+
+    collection_name = "Tokens"
+
     def __init__(self, subject : DBDocument, action):
         DBDocument.__init__(self)
         self.subject = subject
@@ -17,9 +20,7 @@ class Token(DBDocument):
     def getFields(self):
         return ["_subject", "token", "action"]
 
-    def getCollectionName(self):
-        return "Tokens"
-
+    
     @property
     def subject(self):
         import sys
