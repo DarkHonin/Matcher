@@ -12,6 +12,8 @@ class Profile(MethodView):
 
 	def get(self, name, user):
 		view_user = UserInfo.get({"uname" : name})
+		if not view_user:
+			return redirect(url_for("error", error="User does not exist"))
 		tele = Telemetry.forUser(view_user)
 		if (tele):
 			if (str(user._id) not in tele.pageViews and view_user.uname != user.uname):

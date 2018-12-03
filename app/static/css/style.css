@@ -236,7 +236,7 @@ select>option{
     max-height: 500px;
 }
 
-[class*="no_"]{
+[class*="no_"], .error{
     display: none;
     font-family: "NordicSans";
     margin: 1em auto;
@@ -245,8 +245,15 @@ select>option{
     left: 0px;
 }
 
-[class*="no_"]:after{
-    display: none;
+.error{
+    display: block;
+}
+
+.error:after{
+    content: attr(error);
+}
+
+[class*="no_"]:after, .error:after{
     font-family: 'Sansita', sans-serif;
     font-size: 0.5em;
     display: block;
@@ -382,6 +389,10 @@ input[name*=":display"].slider:checked + label{
 @media screen and (max-width: 900px){
     body{
         width: 100vw;
+    }
+    
+    article{
+        padding: 0px;
     }
 }
 
@@ -709,4 +720,14 @@ input[type="range"]{
     font-size: 2em;
     font-weight: 900;
     width: -moz-available;
+}
+
+#social{
+    font-size: 1.5em;
+    z-index: 10;
+}
+
+#social>button{
+     font-weight: 900;
+    z-index: 10;
 }

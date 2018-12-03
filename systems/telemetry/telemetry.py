@@ -9,6 +9,9 @@ class Telemetry(DBDocument):
         self.pageViews=[]
         self.genderInterest=str(genderInterest)
         self.location = location
+        self.likes = []
+        self.blocked = []
+        self.reportedBy = []
 
     @staticmethod
     def forUser(user : User):

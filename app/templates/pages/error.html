@@ -1,0 +1,9 @@
+{% extends 'template.html' %}
+
+{%block content%}
+	<span class="error" error="{{err}}">{{txt}}</span>
+{%endblock %}
+
+{% block navbar %}
+	 {%include "pages/navbar.html" %}
+{% endblock %}

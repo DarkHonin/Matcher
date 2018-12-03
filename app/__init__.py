@@ -1,4 +1,4 @@
-from flask import Flask, session, Blueprint, jsonify, request
+from flask import Flask, session, Blueprint, jsonify, request, render_template
 from flask_socketio import SocketIO
 from flask_pymongo import PyMongo
 from flask_mail import Mail
@@ -25,6 +25,9 @@ def bogus():
     import app.bogus.load_bogus
     return "Bogus users loaded"
 
+@app.route("/error/<error>")
+def error(error):
+    return render_template("pages/error.html", err=error, txt=error[:2].upper())
 
 from views import VIEWS
 for view in VIEWS:
