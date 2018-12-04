@@ -34,7 +34,9 @@ class Search(MethodView):
 			if query:
 				params[i] = query
 				db_pass = self.recurMerge(db_pass, f(query))
+		print(params)
 		data = UserInfo.get(db_pass, {"fname" : 1, "lname" : 1, "uname" : 1, "interest" : 1, "gender" : 1, "images" : 1, "_dob" : 1, "location" : 1})
+		print(data)
 		if isinstance(data, list):
 			result = [ f.toDisplaySet() for f in data]
 		else:
@@ -70,11 +72,11 @@ class Search(MethodView):
 
 	def minAge(self, date):
 		time = datetime.datetime.now() - relativedelta(years=int(date))
-		return {"dob" : {'$lt' : time}}
+		return {"info.dob" : {'$lt' : time}}
 
 	def maxAge(self, date):
 		end = datetime.datetime.now() - relativedelta(years=int(date))
-		return {"dob" : {"$gte" : end}}
+		return {"info.dob" : {"$gte" : end}}
 
 	def post(self):
 		data = request.get_json()

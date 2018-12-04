@@ -492,15 +492,15 @@ textarea{
     transition: border-radius .5s, box-shadow 0.5s;
 }
 
-.profile_icon.Online{
+.profile_icon.status_1{
     box-shadow: #62ff66 0px 0px 15px 1px;
 }
 
-.profile_icon.Away{
+.profile_icon.status_0{
     box-shadow: #ffc762 0px 0px 15px 1px;
 }
 
-.profile_icon.Offline{
+.profile_icon.status_-1{
     box-shadow: #ff461e 0px 0px 15px 1px;
 }
 

@@ -1,0 +1,7 @@
+{% for field in item.fields %}
+	<div class="li content">
+		<label>{{field.label}}</label>
+		{{field.render(item) | safe}}
+		<button data-type='{{type}}' data-id="{{loop.index0}}" class='ul' event='{"click" : "saveField"}'>Save</button>
+	</div>
+{% endfor %}

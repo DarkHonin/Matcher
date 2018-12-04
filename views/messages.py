@@ -6,7 +6,7 @@ from systems.users import User, UserInfo, requires_Users
 from systems.tokens import redeemToken
 
 
-class Profile(MethodView):
+class Messages(MethodView):
 
 	decorators = [requires_Users]
 
@@ -21,15 +21,29 @@ class Profile(MethodView):
 			view_user.save()
 		return render_template("pages/user/profile.html", user=view_user)
 
-	def post(self, name, user):
-		view_user = UserInfo.get({"uname" : name})
-		if not view_user:
-			return redirect(url_for("error", error="User does not exist"))
-		tele = Telemetry.forUser(view_user)
-		cur_tel = Telemetry.forUser(user)
-		if str(view_user._id) in cur_tel.likes:
-			cur_tel.likes.remove(str(view_user._id))
+	def fetch(self, user):
+		unread = 0
+		display = []
+		for i in user.telemetry.notifications:
+			if not i["read"]:
+				unread += 1
+			if not i['displayed']:
+				display.append(i["message"])
+				i["displayed"] = True
+
+		if not display:
+			return jsonify({"status" : "NOJOY"})
+		ret = jsonify({
+			"status" : "JOY",
+			"actions" : {
+				"displayMessage" : "<br>".join(display),
+				"unreadCount"	 : unread
+			}
+		})
+		user.save()
+		return ret
+
 
 	@classmethod
 	def bind(cls, app : Flask):
-		app.add_url_rule("/user/<name>", view_func=cls.as_view("user"))
+		app.add_url_rule("/messages", view_func=cls.as_view("messages"), methods=["GET", "FETCH"])

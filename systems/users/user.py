@@ -3,6 +3,7 @@ from systems.exceptions import SystemException
 from systems.properties import USERNAME, EMAIL, PASSWORD
 from flask import session
 import datetime
+from uuid import uuid3, NAMESPACE_URL
 class User(DBDocument):
 
     collection_name =  "Users"
@@ -14,9 +15,10 @@ class User(DBDocument):
         self.active = False
         self.email_valid = False
         self.hash = None
-        self.last_online = datetime.datetime.now()
+        self.last_online = None
         self.info = None
         self.telemetry = None
+        self.token = None
 
     def validate_email(self):
         self.email_valid = True
@@ -35,14 +37,15 @@ class User(DBDocument):
             raise SystemException("Username/Password invalid", SystemException.USER_CREATE_EXCEPTION)
         session["user"] = self._id
         self.last_login = datetime.datetime.now()
+        self.last_online = self.last_login
+        self.token = uuid3(NAMESPACE_URL, self.uname)
         self.save()
         return True
 
     def logout(self):
-        from views.SocketSystems import SocketSystem
-        if session["user"] in SocketSystem.CONNECTED_USERS:
-            del(SocketSystem.CONNECTED_USERS[session["user"]])
+        self.token = None
         del(session["user"])
+        self.save()
 
     @property
     def fields(self):
@@ -90,6 +93,12 @@ class User(DBDocument):
             self.delete()
             raise e
 
-    @classmethod
-    def parent(cls, instance):
-        return super(cls, instance)
+    def online(self):
+        if not self.last_online:
+            return -1
+        delta = datetime.datetime.now() - self.last_online
+        if delta > datetime.timedelta(minutes=15):
+            return 0
+        if delta > datetime.timedelta(minutes=30):
+            return -1
+        return 1

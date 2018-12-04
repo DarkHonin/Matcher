@@ -1,0 +1,14 @@
+{% for field in item.fields %}
+	<div class="li content {{field.type}}">
+		<label class="title">{{field.label}}</label>
+		<label class="value">
+			{% if field.type == "list" %}
+				{% for e in item.__getattribute__(field.key) %}
+					<span>{{e}}</span>
+				{% endfor %}
+			{% else %}
+				{{item.__getattribute__(field.key)}}
+			{% endif %}
+		</label>
+	</div>
+{% endfor %}

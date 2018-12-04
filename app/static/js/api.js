@@ -14,8 +14,11 @@ function transmit(url, data, method="post"){
 		redirect: "follow",
 		referrer: "no-referrer",
 	}
-	if(method != "GET")
+	if(method != "GET"){
+		if(document["__USERTOKEN"])
+			data.token = __USERTOKEN;
 		head["body"] = JSON.stringify(data)
+	}
 	return fetch(url, head).then(responce => responce.json());
 }
 
@@ -77,5 +80,11 @@ function carosel_shift(event){
 			return
 	event.target.classList.remove("show")
 	elm.classList.add("show")
+}
+
+function getNotifications(){
+	console.log("Fetching notifications")
+	transmit("/messages", {}, "fetch").then(f => translate(f))
+	setTimeout(getNotifications, 10000)
 }
 

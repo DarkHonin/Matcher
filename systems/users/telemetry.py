@@ -6,13 +6,23 @@ class Telemetry(DBDocument):
     def __init__(self):
         self.viewdBy = []
         self.liked = []
+        self.notifications = []
         self.created = datetime.now()
         self.lastView = datetime.now()
         pass
 
-    @staticmethod
-    def forUser(user : User):
-        return Telemetry.get({"user" : str(user._id)})
+    @property
+    def viewers(self):
+        ret = User.get({"_id": {"$in": self.viewdBy}}, {"hash" : 0})
+        if isinstance(ret, list):
+            return ret
+        return [ret]
+
+    def view(self, user):
+        if(user._id in self.viewdBy):
+            return 
+        self.viewdBy.append(user._id)
+        self.notifications.append({ "time" : datetime.now(), "message" : "%s just viewed your profile" % user.uname, "read" : False , "displayed" : False})
 
     @property
     def user(self):

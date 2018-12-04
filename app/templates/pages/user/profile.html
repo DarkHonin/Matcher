@@ -1,33 +1,17 @@
 {% extends 'template.html' %}
 
 {%block content%}
-<input type="hidden" id="SpecialLittleSecret" value="{{SessionToken}}">
+<p class="content">Your profile</p>
 <article class="tile-panel" id="dash">
 	<div class="profile_banner">
-		<span id="page_views" class="telemetry">{{tel.pageViews | length}}</span>
+		<span id="page_views" class="telemetry">{{user.telemetry.viewdBy | length}}</span>
 		{% include "pages/profile_icon.html" %}
-		<span id="fame_rating" class="telemetry">{{tel.fame() | int}}</span>
+		<span id="fame_rating" class="telemetry">{{user.telemetry.fame() | int}}</span>
 	</div>
-	{% if user.onlineStatus() == "Offline" %}
-	<span class="lastOnline">{{user.last_login.date()}}</span>
-    {% endif %}
 	<div  id="stats" watermark="{{user.uname.upper()}}">
-		<h3><button class="ul context" event='{"click" : "like"}' >Like</button></h3>
 		<h3 class="context">{{user.uname}}</h3>
-		{% for field in user.fields %}
-			<div class="li content {{field.type}}">
-				<label class="title">{{field.label}}</label>
-				<label class="value">
-					{% if field.type == "list" %}
-						{% for e in user.__getattribute__(field.key) %}
-							<span>{{e}}</span>
-						{% endfor %}
-					{% else %}
-						{{user.__getattribute__(field.key)}}
-					{% endif %}
-				</label>
-			</div>
-		{% endfor %}
+		{% set item = user.info %}
+		{% include "pages/field_display.html" %}
 	</div>
 </article>
 <script src="{{ url_for('static', filename='js/user.js') }}"></script>

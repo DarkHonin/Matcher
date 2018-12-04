@@ -24,5 +24,6 @@ class Register(MethodView):
 
         @app.route("/logout")
         def logout():
-            del(session['user'])
+            if ("user" in session):
+                del(session['user'])
             return redirect("/login")

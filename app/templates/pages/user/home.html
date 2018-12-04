@@ -1,45 +1,26 @@
 {% extends 'template.html' %}
 
 {%block content%}
-<input type="hidden" id="SpecialLittleSecret" value="{{SessionToken}}">
 <p class="content">Your profile</p>
 <article class="tile-panel" id="dash">
 	<div class="profile_banner">
-		<span id="page_views" class="telemetry">{{user.telemetry.pageViews | length}}</span>
+		<span id="page_views" class="telemetry">{{user.telemetry.viewdBy | length}}</span>
 		{% include "pages/profile_icon.html" %}
 		<span id="fame_rating" class="telemetry">{{user.telemetry.fame() | int}}</span>
 	</div>
 	<div  id="stats" watermark="{{user.uname.upper()}}">
 		<h3 class="context">{{user.uname}}</h3>
-		{% for field in user.fields %}
-			<div class="li content {{field.type}}">
-				<label class="title">{{field.label}}</label>
-				<label class="value">
-					{% if field.type == "list" %}
-						{% for e in user.__getattribute__(field.key) %}
-							<span>{{e}}</span>
-						{% endfor %}
-					{% else %}
-						{{user.__getattribute__(field.key)}}
-					{% endif %}
-				</label>
-			</div>
-		{% endfor %}
+		{% set item = user.info %}
+		{% include "pages/field_display.html" %}
 	</div>
 </article>
 <article>
 	<h3 class="context">Views</h3>
-	<div id="viewers" class="{{'empty' if not viewers else ""}}">
-	{% for user in viewers %}
-		{% include "pages/profile_tile.html" %}
-	{% endfor %}
+	<div id="viewers" class="{{'empty' if not user.telemetry.viewdBy else ""}}">
+		{% for user in user.telemetry.viewers %}
+			{% include "pages/profile_tile.html" %}
+		{% endfor %}
 	</div>
 	<div class="no_views">UG</div>
 </article>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-<script src="{{ url_for('static', filename='js/user.js') }}"></script>
-{% endblock %}
-
-{% block navbar %}
-	 {%include "pages/navbar.html" %}
 {% endblock %}

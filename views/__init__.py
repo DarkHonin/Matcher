@@ -5,7 +5,7 @@ from views.settings import Settings
 from views.home import Home
 from views.search import Search
 from views.profile import Profile
-from views.SocketSystems import SocketSystem
+from views.messages import Messages
 
 VIEWS = [
     Login,
@@ -15,5 +15,5 @@ VIEWS = [
     Home,
     Search,
     Profile,
-    SocketSystem
+    Messages
 ]

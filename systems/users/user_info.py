@@ -83,10 +83,6 @@ class UserInfo(DBDocument):
 	def fame(self):
 		from systems.telemetry import Telemetry
 		return Telemetry.forUser(self).fame()
-
-	def onlineStatus(self):
-		from views import SocketSystem
-		return SocketSystem.getStatus(str(self._id))
 		
 	def toDisplaySet(self):
 		dc = super().toDisplaySet()

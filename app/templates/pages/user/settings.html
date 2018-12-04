@@ -28,24 +28,16 @@
 
 <article class="list">
 	<h3 class="context">General userrmation</h3>
-	{% for field in user.info.fields %}
-		<div class="li content">
-			<label>{{field.label}}</label>
-			{{field.render(user.info) | safe}}
-			<button data-type='info' data-id="{{loop.index0}}" class='ul' event='{"click" : "saveField"}'>Save</button>
-		</div>
-	{% endfor %}
+	{% set item = user.info %}
+	{% set type = "info" %}
+	{% include "pages/field_edit.html" %}
 </article>
 
 <article class="list">
 	<h3 class="context">Account userrmation</h3>
-	{% for field in user.parent(user).fields %}
-		<div class="li content">
-			<label>{{field.label}}</label>
-			{{field.render(user) | safe}}
-			<button class='ul' event='{"click" : "saveField"}' data-type='user' data-id="{{loop.index0}}">Save</button>
-		</div>
-	{% endfor %}
+	{% set item = user %}
+	{% set type = "user" %}
+	{% include "pages/field_edit.html" %}
 </article>
 <script src='https://www.google.com/recaptcha/api.js?render=6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC'></script>
 <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
