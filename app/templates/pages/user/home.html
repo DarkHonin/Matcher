@@ -14,13 +14,47 @@
 		{% include "pages/field_display.html" %}
 	</div>
 </article>
+<link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/meta.css', _external=True) }} " />
 <article>
 	<h3 class="context">Views</h3>
-	<div id="viewers" class="{{'empty' if not user.telemetry.viewdBy else ""}}">
-		{% for user in user.telemetry.viewers %}
-			{% include "pages/profile_tile.html" %}
-		{% endfor %}
+	<div id="meta">
+		<div>
+			<button class="ul" event='{"click" : "showMeta"}' data-tag="page_views">Visiting Users</button>
+			<button class="ul" event='{"click" : "showMeta"}' data-tag="view_history">Visit history</button>
+			<button class="ul" event='{"click" : "showMeta"}' data-tag="liked_users">Likes</button>
+		</div>
+		<div id="display" class="empty">
+		</div>
+		<div class="no_">UG</div>
 	</div>
-	<div class="no_views">UG</div>
 </article>
+<script>
+	var metaDisplay = document.querySelector("#meta>#display")
+	function showMeta(event){
+		metaDisplay.classList.add("empty")
+		metaDisplay.innerHTML = ""
+		transmit(document.location, { tag : event.target.getAttribute("data-tag") }, "meta").then(
+			f => {
+				if(f.status != "JOY"){
+					metaDisplay.classList.add("empty")
+					return translate(f)
+				}
+				metaDisplay.setAttribute("data-display", event.target.innerHTML)
+				f.items.forEach(i => {
+					elm = document.createElement("a")
+					elm.href = "/user/"+i.uname
+					elm.classList.add("status_"+i.online)
+					img = new Image()
+					img.src = "/image/"+i.info.images[0]
+					elm.appendChild(img)
+					nt = document.createElement("span")
+					nt.innerHTML = i.uname
+					elm.appendChild(nt)
+					metaDisplay.appendChild(elm)
+				})
+				metaDisplay.classList.remove("empty")
+			}
+		)
+	}
+</script>
 {% endblock %}

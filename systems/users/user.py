@@ -47,6 +47,11 @@ class User(DBDocument):
         del(session["user"])
         self.save()
 
+    def toJSON(self):
+        hold = super().toJSON()
+        hold["online"] = self.online()
+        return hold
+
     @property
     def fields(self):
         return [USERNAME, EMAIL, PASSWORD]

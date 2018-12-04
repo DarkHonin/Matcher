@@ -5,18 +5,36 @@ from datetime import datetime
 class Telemetry(DBDocument):
     def __init__(self):
         self.viewdBy = []
+        self.viewed = []
         self.liked = []
         self.notifications = []
         self.created = datetime.now()
         self.lastView = datetime.now()
         pass
 
-    @property
-    def viewers(self):
-        ret = User.get({"_id": {"$in": self.viewdBy}}, {"hash" : 0})
+    def likes(self):
+        ret = User.get({"_id": {"$in": self.liked}}, {"uname" : 1, "info.images" : 1, "last_online" : 1})
         if isinstance(ret, list):
             return ret
         return [ret]
+
+    def viewHistory(self):
+        ret = User.get({"_id": {"$in": self.viewed}}, {"uname" : 1, "info.images" : 1, "last_online" : 1})
+        if isinstance(ret, list):
+            return ret
+        return [ret]
+
+    def viewers(self):
+        ret = User.get({"_id": {"$in": self.viewdBy}}, {"uname" : 1, "info.images" : 1, "last_online" : 1})
+        if isinstance(ret, list):
+            return ret
+        return [ret]
+
+    def viewing(self, user):
+        if "viewed" not in self.__dict__:
+           self.viewed = [] 
+        if(user._id not in self.viewed):
+            self.viewed.append(user._id)
 
     def view(self, user):
         if(user._id in self.viewdBy):

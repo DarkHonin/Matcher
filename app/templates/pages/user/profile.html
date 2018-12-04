@@ -10,6 +10,7 @@
 	</div>
 	<div  id="stats" watermark="{{user.uname.upper()}}">
 		<h3 class="context">{{user.uname}}</h3>
+		<div><button>Like</button></div>
 		{% set item = user.info %}
 		{% include "pages/field_display.html" %}
 	</div>

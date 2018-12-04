@@ -16,6 +16,16 @@ class Home(MethodView):
 			return redirect(url_for("logout"))
 		return render_template("pages/user/home.html", user=user)
 
+	def meta(self, user):
+		data = request.get_json()
+		if "tag" not in data:
+			return jsonify({"status" : "NOJOY"})
+		actions = {"page_views" : user.telemetry.viewers, "view_history" : user.telemetry.viewHistory, "liked_users": user.telemetry.likes}
+		if data['tag'] not in actions:
+			return jsonify({"status" : "NOJOY"})
+		return jsonify({"status" : "JOY", "items" : actions[data['tag']]()})
+	
+
 	@classmethod
 	def bind(cls, app : Flask):
-		app.add_url_rule("/home", view_func=cls.as_view("home"))
+		app.add_url_rule("/home", view_func=cls.as_view("home"), methods=["GET", "META"])

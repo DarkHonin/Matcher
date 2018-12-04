@@ -17,8 +17,10 @@ class Profile(MethodView):
 		if not view_user.active:
 			return redirect(url_for("error", error="This user exists but has not been activated yet"))
 		if user.active:
+			user.telemetry.viewing(view_user)
 			view_user.telemetry.view(user)
 			view_user.save()
+			user.save()
 		return render_template("pages/user/profile.html", user=view_user)
 
 	def post(self, name, user):
@@ -30,6 +32,7 @@ class Profile(MethodView):
 		if str(view_user._id) in cur_tel.likes:
 			cur_tel.likes.remove(str(view_user._id))
 
+
 	@classmethod
 	def bind(cls, app : Flask):
-		app.add_url_rule("/user/<name>", view_func=cls.as_view("user"))
+		app.add_url_rule("/user/<name>", view_func=cls.as_view("user"), methods=["GET", "POST"])
