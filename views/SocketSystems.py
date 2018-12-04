@@ -1,15 +1,21 @@
 from flask_socketio import Namespace, emit
 from flask import session
+from systems.users import requires_Users
 
 class SocketSystem(Namespace):
 
     CONNECTED_USERS = {}
 
-    def on_connect(self):
+    decorators = [requires_Users]
+
+    def on_connect(self, user):
         SocketSystem.CONNECTED_USERS[session["user"]] = "Online"
 
-    def on_disconnect(self):
-        SocketSystem.CONNECTED_USERS[session["user"]] = "Away"
+    def on_disconnect(self, user):
+        SocketSystem.CONECTED_USERS[session["user"]] = "Away"
+
+    def on_getMessages(self, user):
+        pass
 
     @staticmethod
     def getStatus(uid):

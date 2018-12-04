@@ -4,6 +4,10 @@ from datetime import datetime
 
 class Telemetry(DBDocument):
     def __init__(self):
+        self.viewdBy = []
+        self.liked = []
+        self.created = datetime.now()
+        self.lastView = datetime.now()
         pass
 
     @staticmethod
@@ -20,20 +24,17 @@ class Telemetry(DBDocument):
 
     def fame(self):
         base = datetime.now() - self.created
-        sinceLastEdit = datetime.now() - self.lastChanged
+        sinceLastEdit = datetime.now() - self.lastView
         delta = base - sinceLastEdit
         print("time since last edit: %s" % delta)
         prs = delta / base
         print("Modifyer: %s" % prs)
-        ret = len(self.pageViews) * prs
+        ret = len(self.viewdBy) * prs
         return int(ret)
 
     def handle(self, field, value):
         if field == "genderInterest":
             self.genderInterest = ["Men", "Both", "Women"].index(value)
-
-    def getFields(self):
-        return ["user", "pageViews", "genderInterest", "location"]
 
     def getCollectionName(self):
         return "Telemetry"

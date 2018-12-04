@@ -15,7 +15,8 @@ class User(DBDocument):
         self.email_valid = False
         self.hash = None
         self.last_online = datetime.datetime.now()
-        self.info = Object()
+        self.info = None
+        self.telemetry = None
 
     def validate_email(self):
         self.email_valid = True
@@ -23,7 +24,9 @@ class User(DBDocument):
 
     def activate(self):
         if self.info.complete:
+            from systems.users import Telemetry
             self.active = True
+            self.telemetry = Telemetry()
         self.save()
 
     def login(self, password):
