@@ -1,9 +1,9 @@
 <nav class="pa">
 	<a class="context"  href="{{url_for('home')}}" page="home">My Profile</a>
 	<a class="context" href="{{url_for('settings')}}">Settings</a>
-	<a class="context" id="messages" href="#">Messages</a>
+	<a class="context" id="messages">Messages</a>
 	<a class="context" href="#">Conquest!</a>
-	<a class="context" id="notifications" href="#">Alerts</a>
+	<a class="context" id="notifications" href="{{url_for("messages")}}">Alerts</a>
 	<a class="context" href="{{url_for('search')}}">Search</a>
 	<a class="context" href="{{url_for('logout')}}" >Logout</a>
 </nav>

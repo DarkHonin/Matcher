@@ -64,7 +64,7 @@ function field_error(field){
 function redirect(message){
 	setTimeout(function(){
 		window.location.pathname = message
-	}, 1000)
+	}, 5200)
 }
 
 function translate(json){
@@ -84,11 +84,17 @@ function carosel_shift(event){
 
 function getNotifications(){
 	console.log("Fetching notifications")
-	transmit("/messages", {}, "fetch").then(f => translate(f))
+	transmit("/notify", {}, "fetch").then(f => translate(f))
 	setTimeout(getNotifications, 10000)
 }
 
 function unread(count){
+	if(parseInt(count) == 0)
+		return notifyBtn.removeAttribute("data-count")
+	notifyBtn.setAttribute("data-count", count)
+}
+
+function unreadMessages(count){
 	if(parseInt(count) == 0)
 		return notifyBtn.removeAttribute("data-count")
 	notifyBtn.setAttribute("data-count", count)

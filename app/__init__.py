@@ -44,3 +44,11 @@ def test():
     #registerUser("Username", "email@email.com", "First", "Last", "Passw0rd")
     return jsonify(User.get())
 
+@app.route("/testEncode")
+def endode():
+    from systems.users import registerUser, User
+    item = User.get()[0]
+    item.telemetry.postMessage("A test", 0)
+    item.save()
+    return jsonify(item.encodeDocument())
+

@@ -21,9 +21,3 @@ class Register(MethodView):
     @classmethod
     def bind(cls, app : Flask):
         app.add_url_rule("/register", view_func=cls.as_view("register"))
-
-        @app.route("/logout")
-        def logout():
-            if ("user" in session):
-                del(session['user'])
-            return redirect("/login")

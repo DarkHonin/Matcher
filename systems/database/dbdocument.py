@@ -35,21 +35,26 @@ class DBDocument:
 
     #Helper functions
 
-    def set_values(self, data):
-        for k, v in data.items():
-            print("setting %s %s in %s" % (k, v, __class__))
-            setattr(self, k, v)
+    @staticmethod
+    def encodeDBDocumentElement(data):
+        ret = {}
+        if isinstance(data, DBDocument):
+            return data.encodeDocument()
+        if isinstance(data, list):
+            ret = []
+            for e in data:
+                ret.append(DBDocument.encodeDBDocumentElement(e))
+            return ret
+        if isinstance(data, dict):
+            for k, v in data.items():
+                ret[k] = DBDocument.encodeDBDocumentElement(v)
+            return ret
+        return data
 
     def encodeDocument(self):
-        ret = {}
+        ret = {"class" : str(self.__class__)}
         for k, v in self.__dict__.items():
-            if isinstance(v, DBDocument):
-                if("classes" not in ret):
-                    ret.update({"classes" : {}})
-                ret["classes"][k] = str(v.__class__)
-                ret[k] = v.encodeDocument()
-            else:
-                ret[k] = v
+            ret[k] = DBDocument.encodeDBDocumentElement(v)
         return ret
 
     @staticmethod
@@ -62,16 +67,20 @@ class DBDocument:
         namespace = ".".join(classParts)
         return getattr(sys.modules[namespace], clsname)
 
-    @classmethod
-    def decodeDocument(lc, dt:dict):
-        classes = {}
-        instance = lc.__new__(lc)
-        if "classes" in dt:
-            classes = dt.pop("classes")
+    @staticmethod
+    def decodeDocument(dt):
+        if not isinstance(dt, dict) or "class" not in dt:
+            return dt
+        cl = DBDocument.getClassFromString(dt.pop("class"))
+        instance = cl.__new__(cl)
         for k, v in dt.items():
-            if k in classes and isinstance(v, dict):
-                cl = DBDocument.getClassFromString(classes[k])
-                setattr(instance, k, cl.decodeDocument(v))
+            if isinstance(v, dict):
+                if "class" in v:
+                    setattr(instance, k, DBDocument.decodeDocument(v))
+            elif isinstance(v, list):
+                setattr(instance, k, [])
+                for s in v:
+                    getattr(instance, k).append(DBDocument.decodeDocument(s))
             else:
                 setattr(instance, k, v)
         return instance

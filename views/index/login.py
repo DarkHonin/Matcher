@@ -2,7 +2,7 @@ from flask.views import MethodView
 from flask import request, abort, Flask, render_template, session, jsonify, redirect, url_for
 from functools import wraps
 from systems.properties import *
-from systems.users import User, UserInfo, registerUser
+from systems.users import User, UserInfo, registerUser, requires_Users
 from systems.exceptions import SystemException
 
 class Login(MethodView):
@@ -26,3 +26,12 @@ class Login(MethodView):
     def bind(cls, app : Flask):
         app.add_url_rule("/", view_func=cls.as_view("index"))
         app.add_url_rule("/login", view_func=cls.as_view("login"))
+
+        @app.route("/logout")
+        @requires_Users
+        def logout(user):
+            if ("user" in session):
+                del(session['user'])
+            user.last_online = None
+            user.save()
+            return redirect("/login")

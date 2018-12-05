@@ -1,0 +1,12 @@
+{% extends 'template.html' %}
+
+{%block content%}
+    <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/alerts.css', _external=True) }} " />
+    <h3 class="context">Alerts</h3>
+    <ul id="alerts">
+        {% for item in user.telemetry.alerts %}
+            {% include "pages/notification.html" %}
+        {% endfor %}
+    </ul>
+    {% set nothing = user.save() %}
+{% endblock %}
