@@ -492,7 +492,7 @@ textarea{
     transition: border-radius .5s, box-shadow 0.5s;
 }
 
-.status_1{
+.status_1, .ok{
     box-shadow: #62ff66 0px 0px 15px 1px;
 }
 
@@ -500,7 +500,7 @@ textarea{
     box-shadow: #ffc762 0px 0px 15px 1px;
 }
 
-.status_-1{
+.status_-1, .notok{
     box-shadow: #ff461e 0px 0px 15px 1px;
 }
 

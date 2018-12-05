@@ -1,15 +1,15 @@
-const socket = io.connect('http://' + document.domain + ':' + location.port + "/user_transmissions");
-
-socket.on('connect', function() {
-    
-});
-
-function checkMessages(){
-	socket.emit("messages")
+function like(event){
+	transmit(document.location, {}, "LIKE").then(f => translate(f))	
 }
 
-setInterval(checkMessages, 5000)
+function updateLikeButton(text){
+	if(text == "Unlike"){
+		likeBTN.classList.remove("ok")
+		likeBTN.classList.add("notok")
+	}else if(text == "Like"){
+		likeBTN.classList.add("ok")
+		likeBTN.classList.remove("notok")
+	}
 
-function like(event){
-	
+	likeBTN.innerHTML = text
 }

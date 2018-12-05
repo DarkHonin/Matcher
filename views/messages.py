@@ -31,17 +31,12 @@ class Messages(MethodView):
 				display.append(i["message"])
 				i["displayed"] = True
 
-		if not display:
-			return jsonify({"status" : "NOJOY"})
-		ret = jsonify({
-			"status" : "JOY",
-			"actions" : {
-				"displayMessage" : "<br>".join(display),
-				"unreadCount"	 : unread
+		actions = {
+			"unread" : unread,
+			"displayMessage" : "<br>".join(display)
 			}
-		})
 		user.save()
-		return ret
+		return jsonify({"status" : "JOY", "actions" : actions})
 
 
 	@classmethod

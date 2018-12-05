@@ -88,3 +88,9 @@ function getNotifications(){
 	setTimeout(getNotifications, 10000)
 }
 
+function unread(count){
+	if(parseInt(count) == 0)
+		return notifyBtn.removeAttribute("data-count")
+	notifyBtn.setAttribute("data-count", count)
+}
+

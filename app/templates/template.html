@@ -19,7 +19,7 @@
         <header>
             <h1 class="context">Matcha</h1>
         </header>
-        {% if user %}
+        {% if user or err %}
             {%include "pages/navbar.html" %}
         {% endif %}
         <span class="alert" id="message">{% block loadMessage %}{% endblock %}</span>
@@ -36,6 +36,7 @@
     <script>
         bindEvents();
         if(__USERTOKEN)
-	        getNotifications();
+            getNotifications();
+        const notifyBtn = document.querySelector("#notifications")
     </script>
 </html>

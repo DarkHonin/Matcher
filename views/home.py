@@ -20,7 +20,7 @@ class Home(MethodView):
 		data = request.get_json()
 		if "tag" not in data:
 			return jsonify({"status" : "NOJOY"})
-		actions = {"page_views" : user.telemetry.viewers, "view_history" : user.telemetry.viewHistory, "liked_users": user.telemetry.likes}
+		actions = {"page_views" : user.telemetry.viewers, "view_history" : user.telemetry.viewHistory, "liked_users": user.telemetry.getLikes}
 		if data['tag'] not in actions:
 			return jsonify({"status" : "NOJOY"})
 		return jsonify({"status" : "JOY", "items" : actions[data['tag']]()})

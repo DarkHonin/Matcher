@@ -4,7 +4,7 @@
 <p class="content">Your profile</p>
 <article class="tile-panel" id="dash">
 	<div class="profile_banner">
-		<span id="page_views" class="telemetry">{{user.telemetry.viewdBy | length}}</span>
+		<span id="page_views" class="telemetry">{{user.telemetry._viewers | length}}</span>
 		{% include "pages/profile_icon.html" %}
 		<span id="fame_rating" class="telemetry">{{user.telemetry.fame() | int}}</span>
 	</div>
