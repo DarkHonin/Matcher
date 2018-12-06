@@ -82,21 +82,15 @@ function carosel_shift(event){
 	elm.classList.add("show")
 }
 
-function getNotifications(){
-	console.log("Fetching notifications")
-	transmit("/notify", {}, "fetch").then(f => translate(f))
-	setTimeout(getNotifications, 10000)
-}
-
 function unread(count){
 	if(parseInt(count) == 0)
 		return notifyBtn.removeAttribute("data-count")
 	notifyBtn.setAttribute("data-count", count)
 }
 
-function unreadMessages(count){
+function pendingChats(count){
 	if(parseInt(count) == 0)
-		return notifyBtn.removeAttribute("data-count")
-	notifyBtn.setAttribute("data-count", count)
+		return msgsBTN.removeAttribute("data-count")
+	msgsBTN.setAttribute("data-count", count)
 }
 

@@ -1,4 +1,4 @@
-<div class="profile_icon status_{{user.online()}}">
+<div class="profile_icon" _uid="{{user._id}}">
     {% for i in user.info.images %}
         <div style=" background-image:URL({{ url_for('getUserImage', fn=i) }})" event='{"click" : "carosel_shift"}' class="{{ 'show' if loop.index0 == 0 else '' }}"></div>
     {% endfor %}

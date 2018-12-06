@@ -41,6 +41,8 @@ class DBDocument:
         if isinstance(data, DBDocument):
             return data.encodeDocument()
         if isinstance(data, list):
+            if not data:
+                return []
             ret = []
             for e in data:
                 ret.append(DBDocument.encodeDBDocumentElement(e))
@@ -52,9 +54,15 @@ class DBDocument:
         return data
 
     def encodeDocument(self):
-        ret = {"class" : str(self.__class__)}
-        for k, v in self.__dict__.items():
-            ret[k] = DBDocument.encodeDBDocumentElement(v)
+        print("Encoding", self)
+        try:
+            ret = {"class" : str(self.__class__)}
+            for k, v in self.__dict__.items():
+                if v is not self:
+                    ret[k] = DBDocument.encodeDBDocumentElement(v)
+        except RecursionError:
+            print(ret)
+            raise Exception(str(ret))
         return ret
 
     @staticmethod
@@ -129,7 +137,7 @@ class DBDocument:
     def save(self):
         try:
             self.lastChanged = datetime.now()
-            if  not "_id" in self.__dict__:
+            if not "_id" in self.__dict__:
                 if self.collection() == 0:
                     self.defineKeys(self.collection())
                 id = self.collection().insert_one(self.encodeDocument())

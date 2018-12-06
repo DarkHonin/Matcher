@@ -15,7 +15,6 @@ class User(DBDocument):
         self.active = False
         self.email_valid = False
         self.hash = None
-        self.last_online = None
         self.info = None
         self.telemetry = None
         self.token = None
@@ -97,13 +96,3 @@ class User(DBDocument):
         except SystemException as e:
             self.delete()
             raise e
-
-    def online(self):
-        if not self.last_online:
-            return -1
-        delta = datetime.datetime.now() - self.last_online
-        if delta > datetime.timedelta(minutes=15):
-            return 0
-        if delta > datetime.timedelta(minutes=30):
-            return -1
-        return 1

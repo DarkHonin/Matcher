@@ -16,19 +16,19 @@
 </article>
 <article>
 	<h3 class="context">Views</h3>
-	<div id="meta">
+	<div class="meta">
 		<div>
 			<button class="ul" event='{"click" : "showMeta"}' data-tag="page_views">Visiting Users</button>
 			<button class="ul" event='{"click" : "showMeta"}' data-tag="view_history">Visit history</button>
 			<button class="ul" event='{"click" : "showMeta"}' data-tag="liked_users">Likes</button>
 		</div>
-		<div id="display" class="empty">
+		<div class="display empty">
 		</div>
 		<div class="no_">UG</div>
 	</div>
 </article>
 <script>
-	var metaDisplay = document.querySelector("#meta>#display")
+	var metaDisplay = document.querySelector(".meta>.display")
 	function showMeta(event){
 		metaDisplay.classList.add("empty")
 		metaDisplay.innerHTML = ""

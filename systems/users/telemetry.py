@@ -76,11 +76,13 @@ class Telemetry(DBDocument):
     @property
     def alerts(self):
         self.notifications.sort(key=lambda x : x.created, reverse=True)
-        return self.notifications[:10]
+        return self.notifications
 
     def postMessage(self, string, actingID):
         if "_blocked" not in self.__dict__:
             self._blocked = []
+        if "notifications" not in self.__dict__:
+            self.notifications = []
         if actingID not in self._blocked:
             self.notifications.append(
                 Notification(string, actingID)
@@ -105,6 +107,9 @@ class Telemetry(DBDocument):
             subject.telemetry.postMessage("%s just liked your profile" % actor.uname, actor._id)
             actor.save()
             subject.save()
+            if subject._id in actor.telemetry._likes and actor._id in subject.telemetry._likes:
+                from systems.users import Chat
+                Chat.spawnChat(subject, actor)
             return True
         actor.telemetry._likes.remove(subject._id)
         subject.telemetry.postMessage("%s just displiked your profile" % actor.uname, actor._id)

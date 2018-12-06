@@ -1,6 +1,7 @@
 from systems.users.user import User
 from systems.users.user_info import UserInfo
 from systems.users.telemetry import Telemetry
+from systems.users.chat import Chat, CHAT_ACCEPTED, CHAT_PENDING
 from systems.exceptions import SystemException
 from flask import session
 
@@ -13,7 +14,7 @@ def requires_Users(f):
 		print("Resolveing current user")
 		if ("user" not in session):
 			return redirect(url_for("error", error="You are no longer logged in"))
-		user = User.get({"_id": session['user']})
+		user = User.get({"_id": session['user']}, {"hash" : 0})
 		if not user:
 			del(session['user'])
 			return redirect(url_for("error", error="Your session has expired, please login again"))

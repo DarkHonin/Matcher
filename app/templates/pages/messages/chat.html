@@ -1,0 +1,45 @@
+{% extends 'template.html' %}
+
+{%block content%}
+    <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/alerts.css', _external=True) }} " />
+    <h3 class="context">Chats</h3>
+    <ul id="chats" class="meta">
+		<div class="display" data-display="Chats">
+		{% if chats %}
+			{% for chat in chats %}
+					{% set item = chat.user(user._id) %}
+					<a href="#" class="" id="chat_{{loop.index0}}" data-chat-id="{{chat._id}}">
+						<img src="{{url_for("getUserImage", fn=item.info.images[0])}}">
+						<span>{{item.uname}}</span>
+						<span>
+							<button elm="chat_{{loop.index0}}" class="ul ok" event='{"click" : "accept"}'>Accept</button>
+							<button elm="chat_{{loop.index0}}" class="notok ul" event='{"click" : "regect"}' >Reject</button>
+						</span>
+					</a>
+					
+			{% endfor %}
+		{% endif %}
+		</div>
+    </ul>
+    <script>
+		function accept(event){
+			chat = document.querySelector("#"+event.target.getAttribute("elm"))
+			id = chat.getAttribute("data-chat-id")
+			transmit(window.location, {"chat" : id}, "ACCEPT").then( f => {
+				if (f.status == "NOJOY")
+					return translate(f)
+				event.target.parentNode.remove()
+			})
+		}
+
+		function regect(event){
+			chat = document.querySelector("#"+event.target.getAttribute("elm"))
+			id = chat.getAttribute("data-chat-id")
+			transmit(window.location, {"chat" : id}, "REJECT").then( f => {
+				if (f.status == "NOJOY")
+					return translate(f)
+				chat.remove()
+			})
+		}
+	</script>
+{% endblock %}

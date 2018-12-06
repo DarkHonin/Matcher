@@ -1,14 +1,15 @@
-#meta{
+.meta{
   
 }
 
-#meta>#display{
+.meta>.display{
   padding: 1em;
   display: flex;
   flex-wrap: wrap;
 }
 
-#meta>#display:before{
+.meta>.display:before{
+  margin: auto;
   content: attr(data-display);
   width: 100%;
   font-family: 'Sansita', sans-serif;
@@ -18,7 +19,7 @@
   box-shadow: 0px 0px 0px 1px black;
 }
 
-#meta>#display>a{
+.meta>.display>a{
   max-width: 10em;
   width: 100em;
   height: 100em;
@@ -26,11 +27,12 @@
   overflow: hidden;
   padding: 0px;
   display: flex;
+  flex-direction: column;
   position: relative;
   margin: 0.5em;
 }
 
-#meta>#display>a>img{
+.meta>.display>a>img{
   position: absolute;
   left: -10%;
   right: 0;
@@ -42,19 +44,19 @@
   z-index: -1;
 }
 
-#meta>#display>a>span{
+.meta>.display>a>span{
   display: block;
   position: relative;
   background-color: rgba(0,0,0,0.5);
   box-shadow: 0px 0px 0px 7px black;
   margin: auto;
   width: 100%;
-  padding: 0.2em;
+  padding: 0.2em 0em;
   transition: padding 0.2s, box-shadow 0.2s;
 }
 
-#meta>#display>a:hover>span{
-  padding: 1em;
+.meta>.display>a:hover>span{
+  padding: 1em 0em;
   box-shadow: 0px 0px 0px 7px white;
 }
 
