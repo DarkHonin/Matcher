@@ -16,8 +16,9 @@ class User(DBDocument):
         self.email_valid = False
         self.hash = None
         self.info = None
-        self.telemetry = None
         self.token = None
+        self.telemetry = None
+        self.messages = None
 
     def validate_email(self):
         self.email_valid = True
@@ -25,31 +26,29 @@ class User(DBDocument):
 
     def activate(self):
         if self.info.complete:
-            from systems.users import Telemetry
+            from systems.telemetry import Telemetry
             self.active = True
-            self.telemetry = Telemetry()
+            tel = Telemetry()
+            tel.save()
+            self.telemetry = tel._id
         self.save()
 
     def login(self, password):
         from werkzeug.security import check_password_hash
         if not (check_password_hash(self.hash, password)):
             raise SystemException("Username/Password invalid", SystemException.USER_CREATE_EXCEPTION)
-        session["user"] = self._id
         self.last_login = datetime.datetime.now()
         self.last_online = self.last_login
         self.token = uuid3(NAMESPACE_URL, self.uname)
+        del(self.hash)
         self.save()
+        session["user"] = self
         return True
 
     def logout(self):
         self.token = None
         del(session["user"])
         self.save()
-
-    def toJSON(self):
-        hold = super().toJSON()
-        hold["online"] = self.online()
-        return hold
 
     @property
     def fields(self):

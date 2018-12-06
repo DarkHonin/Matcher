@@ -2,9 +2,9 @@ from flask.views import MethodView
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from systems.properties import check_captcha, RequestValidator
 from systems.exceptions import SystemException
-from systems.users import User, UserInfo, requires_Users, Telemetry
+from systems.users import User, UserInfo, requires_Users
 from systems.tokens import redeemToken
-
+from systems.telemetry import _telemetry
 
 class Profile(MethodView):
 
@@ -13,16 +13,21 @@ class Profile(MethodView):
 	def get(self, name, user):
 		user_page = User.get({"uname" : name})
 		if not user_page:
-			return redirect(url_for("error", error="User does not exist"))
+			return redirect(url_for("error", error="User '%s' does not exist" % name))
 		if not user_page.active:
 			return redirect(url_for("error", error="This user exists but has not been activated yet"))
-		if user_page._id in user.telemetry._blocked:
+		telemetry = _telemetry(user)
+		telemetry2 = _telemetry(user_page)
+		if user_page._id in telemetry._blocked:
 			return render_template("pages/user/unblock.html", user=user_page)
-		if user._id in user_page.telemetry._blocked:
+		if user._id in telemetry2._blocked:
 			return redirect(url_for("error", error="This user has blocked you"))
 		if user.active:
-			Telemetry.view(user_page, user)
-		return render_template("pages/user/profile.html", user=user_page, current_user=user)
+			telemetry.isViewing(user_page)
+			telemetry2.wasViewedBy(user)
+			telemetry.save()
+			telemetry2.save()
+		return render_template("pages/user/profile.html", user=user_page, current_user=user, telemetry=telemetry2)
 
 	def like(self, name, user):
 		view_user = User.get({"uname" : name})

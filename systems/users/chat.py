@@ -1,20 +1,20 @@
 from systems.database import DBDocument
 from systems.users.user import User
 from datetime import datetime
-
+from bson.objectid import ObjectId
 CHAT_PENDING = 0
 CHAT_ACCEPTED = 1
 CHAT_DENIED = -1
 CHAT_BLOCKED = -2
 
 class UserSession(DBDocument):
-	def __init__(self):
+	def __init__(self, uid : ObjectId):
 		DBDocument.__init__(self)
 		self.hasPending = False
 		self.chatState = CHAT_PENDING
 
 class ChatMessage(DBDocument):
-	def __init__(self, author : User, message : str):
+	def __init__(self, author : ObjectId, message : str):
 		self.author = author._id
 		self.message = message
 		self.sentOn = datetime.now()
@@ -24,7 +24,7 @@ class Chat(DBDocument):
 
 	def __init__(self, user1 : User, user2 : User):
 		DBDocument.__init__(self)
-		self.users = {user1._id : UserSession(), user2._id : UserSession()}
+		self.users = (UserSession(user1._id), UserSession(user2._id))
 		self.messages = []
 
 	def sendMessage(self, user : User, message : str):

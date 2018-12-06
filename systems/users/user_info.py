@@ -65,7 +65,10 @@ class UserInfo(DBDocument):
 
 	@property
 	def dob(self):
-		return self._dob.date()
+		try:
+			return self._dob.date()
+		except Exception:
+			print("Invalid date set")
 
 	@dob.setter
 	def dob(self, st):

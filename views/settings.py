@@ -26,6 +26,7 @@ class Settings(MethodView):
 		else:
 			raise SystemException("Invalid field selection", SystemException.FIELD_ERROR)
 		user.activate()
+		session["user"] = user
 		return jsonify({"status" : "JOY", "actions" : {"displayMessage" : "The field has been saved"}})
 
 	def insert(self, user : User):
@@ -51,6 +52,7 @@ class Settings(MethodView):
 		fd.close()
 		user.info.images.append(fn)
 		user.save()
+		session["user"] = user
 		return jsonify({"status" : "JOY", "actions" : {"displayMessage" : "Image uploaded", "insertImage":url_for("getUserImage", fn=fn)}})
 
 	@classmethod

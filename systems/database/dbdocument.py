@@ -101,7 +101,7 @@ class DBDocument:
     @staticmethod
     def fromJSON(json):
         cl = DBDocument.getClassFromString(json.pop("__class"))
-        instance = cl.__new__()
+        instance = cl.__new__(cl)
         for e, v in json.items():
             if isinstance(v, dict) and "__class" in v:
                 setattr(instance, e, DBDocument.fromJSON(json[e]))
@@ -116,7 +116,6 @@ class DBDocument:
         pass
 
     #end Helper functions
-
 
     @classmethod
     def get(clss, where={}, what : dict = None):

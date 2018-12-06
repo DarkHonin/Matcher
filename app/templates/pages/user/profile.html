@@ -3,14 +3,14 @@
 {%block content%}
 <article class="tile-panel" id="dash">
 	<div class="profile_banner">
-		<span id="page_views" class="telemetry">{{user.telemetry._viewers | length}}</span>
+		<span id="page_views" class="telemetry">{{telemetry._viewers | length}}</span>
 		{% include "pages/profile_icon.html" %}
-		<span id="fame_rating" class="telemetry">{{user.telemetry.fame() | int}}</span>
+		<span id="fame_rating" class="telemetry">{{telemetry.fame() | int}}</span>
 	</div>
 	<div  id="stats" watermark="{{user.uname.upper()}}">
 		<h3 class="context">{{user.uname}}</h3>
 		<div>
-			<button id="like" class="ul alert {{ "notok" if current_user.telemetry.likes(user) else "ok" }}" event='{"click" : "like"}'>{{ "Unlike" if current_user.telemetry.likes(user) else "Like" }}</button>
+			<button id="like" class="ul alert {{ "notok" if telemetry.likes(user) else "ok" }}" event='{"click" : "like"}'>{{ "Unlike" if telemetry.likes(user) else "Like" }}</button>
 			<button class="ul alert notok" event='{"click" : "block"}'>Block</button>
 		</div>
 		{% set item = user.info %}

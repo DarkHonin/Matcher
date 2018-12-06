@@ -3,54 +3,26 @@ from systems.users.user import User
 from datetime import datetime, timedelta
 import flask
 
-class Notification(DBDocument):
-    def __init__(self, message, actor):
-        DBDocument.__init__(self)
-        self.created = datetime.now()
-        self.message = message
-        self.read = False
-        self.displayed = False
-        self.actor = actor
-
-    @property
-    def display(self):
-        self.displayed = True
-        return self.message
-
-    @property
-    def age(self):
-        delta = datetime.now() - self.created
-        delta = delta.total_seconds()
-        for k, v in {"sec" : 60, "min" : 60, "hour/s" : 60, "days" : 2}.items():
-            if delta < v:
-                return "%s %s" % (int(delta), k)
-            else:
-                delta = delta / v
-        return self.created.strftime("dd-MM-YYYY")
-
-    @property
-    def actingUser(self):
-        if "actor" not in self.__dict__:
-            return "#"
-        user = User.get({"_id" : self.actor}, {"class" : 1, "uname" : 1})
-        return flask.url_for("user", name=user.uname)
-
-    @property
-    def readit(self):
-        holder = self.read
-        self.read = True
-        return holder
-
 class Telemetry(DBDocument):
+
+    collection_name = "Telemetry"
+
     def __init__(self):
         self._viewers = []  # The users who have viewed this page
         self._viewed = []   # The pages the user has viewed
         self._likes = []    # The pages the user has blocked
         self._blocked = []
-        self.notifications = []
         self.created = datetime.now()
         self.lastView = datetime.now()
         pass
+
+    def wasViewedBy(self, user : User):
+        if user._id not in self._viewers:
+            self._viewers.append(user._id)
+
+    def isViewing(self, user : User):
+        if user._id not in self._viewed:
+            self._viewed.append(user._id)
 
     def getLikes(self):
         ret = User.get({"_id": {"$in": self._likes}}, {"uname" : 1, "info.images" : 1, "last_online" : 1})

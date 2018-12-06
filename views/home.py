@@ -4,8 +4,8 @@ from systems.properties import check_captcha, RequestValidator
 from systems.exceptions import SystemException
 from systems.users import User, UserInfo, requires_Users
 from systems.tokens import redeemToken
-
 from bson.objectid import ObjectId
+from systems.telemetry import _telemetry
 
 class Home(MethodView):
 
@@ -14,7 +14,8 @@ class Home(MethodView):
 	def get(self, user : User):
 		if not user:
 			return redirect(url_for("logout"))
-		return render_template("pages/user/home.html", user=user)
+		telemetry = _telemetry(user)
+		return render_template("pages/user/home.html", user=user, telemetry=telemetry)
 
 	def meta(self, user):
 		data = request.get_json()
