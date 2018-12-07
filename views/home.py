@@ -12,8 +12,6 @@ class Home(MethodView):
 	decorators = [requires_Users]
 
 	def get(self, user : User):
-		if not user:
-			return redirect(url_for("logout"))
 		telemetry = _telemetry(user)
 		return render_template("pages/user/home.html", user=user, telemetry=telemetry)
 

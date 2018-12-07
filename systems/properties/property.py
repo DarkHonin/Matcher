@@ -21,9 +21,10 @@ class Property:
         print("Checking propery %s" % (self.key))
         if (self.key not in container) and self.required:
             raise SystemException(self.errorMessage, SystemException.FIELD_ERROR)
-        value = container[self.key]
-        if not self.tester.match(value):
-            raise SystemException(self.errorMessage, SystemException.FIELD_ERROR)
+        if (self.key not in container):
+            value = container[self.key]
+            if not self.tester.match(value):
+                raise SystemException(self.errorMessage, SystemException.FIELD_ERROR)
         return True
 
     @property

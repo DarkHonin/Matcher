@@ -1,18 +1,22 @@
-from flask import Flask, session, Blueprint, jsonify, request, render_template
+from flask import Flask, session, jsonify, request, render_template
 from flask_socketio import SocketIO
 from flask_pymongo import PyMongo
 from flask_mail import Mail
-from systems.exceptions import SystemException
+#from systems.exceptions import SystemException
 
 app = Flask(__name__)
 app.secret_key = "5bf87554084b104d3f7dbb52"
 app.config.from_pyfile("instance/config.py")
+sockets = SocketIO(app)
 
+from users.routes import USER_BLUEPRINT
 
+app.register_blueprint(USER_BLUEPRINT)
+
+"""
 Database = PyMongo(app)
 Mailer = Mail(app)
 
-sockets = SocketIO(app)
 
 @app.errorhandler(SystemException)
 def handle_error(error):
@@ -52,3 +56,4 @@ def endode():
     item.save()
     return jsonify(item.encodeDocument())
 
+"""

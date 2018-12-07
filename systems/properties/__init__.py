@@ -30,7 +30,8 @@ class RequestValidator:
             EMAIL,
             FIRSTNAME,
             LASTNAME,
-            PASSWORD
+            PASSWORD,
+            DOB
         ]
     }
 
@@ -57,10 +58,28 @@ class RequestValidator:
             fields = RequestValidator.FIELDS[page]
             pas = {}
             for field in fields:
+                if hasattr(RequestValidator, field.key):
+                    getattr(RequestValidator, field.key)(field, data)
                 field.validate(data)
                 pas[field.key] = data[field.key]
             return f(*args, **pas, **kws)
         return ValidateFields
+
+    @staticmethod
+    def dob(field, data:dict):
+        dob = data.get("dob")
+        print(dob)
+        if not dob:
+            raise SystemException("Invalid date of birth", SystemException.FIELD_ERROR)
+        from datetime import datetime
+        try:
+            delta = datetime.now().year - datetime.strptime(dob, "%Y-%m-%d").year
+            if delta < 18:
+                raise SystemException("You must be atleast 18 or older", SystemException.FIELD_ERROR)
+        except SystemException as e:
+            raise e        
+        except Exception as e:
+            raise SystemException("The date was not propperly formatted", SystemException.FIELD_ERROR)
 
 def check_captcha(f):
     from systems.exceptions import SystemException

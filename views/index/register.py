@@ -14,8 +14,8 @@ class Register(MethodView):
             return redirect(url_for("home"))
         return render_template("pages/index/register.html")
         
-    def post(self, uname, password, fname, lname, email):
-        registerUser(uname,email,fname,lname, password)
+    def post(self, uname, password, fname, lname, email, dob):
+        registerUser(uname,email,fname,lname, password, dob)
         return jsonify({"status" : "JOY", "actions": {"displayMessage" : "Please check your account for an activation email"}})
 
     @classmethod
