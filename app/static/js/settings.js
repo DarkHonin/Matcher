@@ -1,25 +1,19 @@
 function showSaveButton(event){
-	event.target.parentNode.querySelector("button").style.opacity = 1
+	event.target.parentNode.querySelector(".saveBTN").classList.add("show")
 }
 
 function saveField(event){
-	field = event.target.parentNode.querySelector(".data")
+	field = event.target.nextSibling.nextSibling
 	data = field.value
 	name = field.getAttribute("name")
-	item = event.target.getAttribute("data-type");
-	id = event.target.getAttribute("data-id");
 	grecaptcha.ready(function() {
 		grecaptcha.execute('6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC')
 			.then(function(token) {
-				var o = {
-							key : name,
-							item : item,
-							id : id
-						}
+				var o = {}
 				o[name] = data
 				o["g-recaptcha-response"] = token
-				transmit("/settings", o).then(d => translate(d), method="post")
-				event.target.style.opacity = 0
+				transmit("/settings/"+name, o).then(d => translate(d), method="post")
+				event.target.classList.remove("show")
 			});
 	});
 }
@@ -35,9 +29,9 @@ function addImage(event){
 		grecaptcha.ready(function() {
 			grecaptcha.execute('6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC')
 				.then(function(token) {
-					var o = {data : reader.result}
+					var o = {image : reader.result}
 					o["g-recaptcha-response"] = token
-					transmit("/settings", o, method="insert").then(d => translate(d))
+					transmit("/settings/image", o).then(d => translate(d))
 				});
 		});
 	}

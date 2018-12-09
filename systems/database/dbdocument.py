@@ -100,9 +100,13 @@ class DBDocument:
 
     @staticmethod
     def fromJSON(json):
+        print("decoding %s" % json["__class"])
         cl = DBDocument.getClassFromString(json.pop("__class"))
+        print("Resolved class %s" % cl)
         instance = cl.__new__(cl)
+        print("\tInstance ready")
         for e, v in json.items():
+            print("item %s :: %s" % (e, type(v)))
             if isinstance(v, dict) and "__class" in v:
                 setattr(instance, e, DBDocument.fromJSON(json[e]))
             elif e == "_id":

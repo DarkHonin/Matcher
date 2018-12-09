@@ -1,11 +1,12 @@
-from flask import Blueprint, jsonify, render_template, abort, url_for
+from flask import Blueprint, jsonify, render_template, abort, url_for, session, redirect
 from jinja2 import TemplateNotFound
 from api import APIMessage, APIMessageRecievedDecorator, APISuccessMessage, APIException
 from users.messages import RegisterMessage, LoginMessage
 from users.tokens import redeemToken
 from users.user import User
 
-from users import USER_BLUEPRINT
+from flask import Blueprint
+USER_BLUEPRINT = Blueprint("user_manager", __name__)
 
 ############################################################################################################################################################
 
@@ -40,27 +41,25 @@ def login(message):
 def redeem(token, message):
     if not message.valid:
         return message.errorMessage.messageSend()
-    login()
+    login(**{})
     redeemToken(token)
     return APISuccessMessage(message="Your account is now active %s" % message.uname, redirect=url_for("user_manager.index")).messageSend()
 
 ############################################################################################################################################################
 
 @USER_BLUEPRINT.route("/<page>", methods=["GET"])
+@USER_BLUEPRINT.route("/", methods=["GET"], defaults={"page" : "login"})
 def index(page):
     try:
         return render_template("users/pages/%s.html"%page, submit_to=url_for("user_manager."+page))
     except TemplateNotFound:
         abort(404)
 
+@USER_BLUEPRINT.route("/logout", methods=["GET", "POST"])
+def logout():
+    del(session['user'])
+    return redirect(url_for("user_manager.index"))
+
 @USER_BLUEPRINT.route("/redeem/<token>", methods=["GET"])
 def redeemView(token):
     return render_template("users/pages/redeem.html", submit_to=url_for("user_manager.redeem", token=token))
-
-@USER_BLUEPRINT.route("/<page>", methods=["VIEW"])
-@USER_BLUEPRINT.route("/", methods=["VIEW"], defaults={"page" : "login"})
-def fetchView(page):
-    try:
-        return render_template("users/parts/%s.html"%page, submit_to="user_manager."+page)
-    except TemplateNotFound:
-        abort(404)

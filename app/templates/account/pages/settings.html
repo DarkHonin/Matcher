@@ -1,0 +1,10 @@
+{% extends 'account/template.html' %}
+{%block page_items%}
+	{% include 'account/parts/setting_carosel.html' %}
+	<div class="setting-list">
+		{% include 'account/parts/setting_bio.html' %}
+	</div>
+	<script src='https://www.google.com/recaptcha/api.js?render=6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC'></script>
+	<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+	<link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/settings.css', _external=True) }} " />
+{%endblock%}

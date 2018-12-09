@@ -58,9 +58,7 @@ class Settings(MethodView):
 	@classmethod
 	def bind(cls, APP : Flask):
 		APP.add_url_rule("/settings", view_func=cls.as_view("settings"), methods=["GET", "POST", "INSERT"])
-		@APP.route("/image/<fn>")
-		def getUserImage(fn):
-			return send_from_directory("static/uploads/", fn)
+		
 		
 
 		

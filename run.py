@@ -1,4 +1,4 @@
-from APP import APP, sockets
+from app import APP, SOCKETS
 
-sockets.run(APP)
+SOCKETS.run(APP)
 

@@ -25,6 +25,9 @@ class UserInfo(DBDocument):
 		import json
 		self._tags = json.loads(string)
 
+	def set_biography(self, string):
+		self.__dict__["biography"] = string
+
 	@property
 	def age(self):
 		dt = datetime.date.today().year - self.dob.year

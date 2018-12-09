@@ -1,0 +1,20 @@
+.setting-list{
+  display: flex;
+  flex-direction: column;
+}
+
+.setting-list>div>.saveBTN{
+  display: block;
+  margin: auto;
+  font-size: 1.5em;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-weight: 900;
+  overflow: hidden;
+  transition: max-height 1s, margin 1s;
+  max-height: 0px;
+}
+
+.setting-list>div>.saveBTN.show{
+  max-height: 100px;
+  margin: 0.5em auto;
+}

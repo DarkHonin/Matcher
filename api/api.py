@@ -108,6 +108,8 @@ class APISuccessMessage(APIMessage):
     pass
 
 class APIFieldErrorMessage(APIException):
+    def messageSend(self):
+        return jsonify({"handle" : str(APIFieldErrorMessage.__name__), "data" : self.__dict__})
     pass
 
 ############################################################################################################################################

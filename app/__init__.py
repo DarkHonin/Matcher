@@ -1,17 +1,23 @@
 from api import APIException
-from flask import Flask, jsonify, render_template, request, session
+from flask import Flask, jsonify, render_template, request, session, send_from_directory
 from flask_mail import Mail
 from flask_pymongo import PyMongo
 from flask_socketio import SocketIO
 from systems.database import DBDDecoder, DBDEncoder
-from users.routes import USER_BLUEPRINT
+from users import USER_BLUEPRINT, USER_SOCKET
+from accounts import ACCOUNTS_BLUEPRINT
 
 APP = Flask(__name__)
 APP.secret_key = "5bf87554084b104d3f7dbb52"
 APP.config.from_pyfile("instance/config.py")
 SOCKETS = SocketIO(APP)
 
+print("Loading Routes")
 APP.register_blueprint(USER_BLUEPRINT)
+print("--User routes loaded")
+APP.register_blueprint(ACCOUNTS_BLUEPRINT)
+print("--Account routes loaded")
+SOCKETS.on_namespace(USER_SOCKET)
 
 DATABASE = PyMongo(APP)
 MAILER = Mail(APP)
@@ -22,6 +28,10 @@ def handle_error(error : APIException):
 
 APP.json_encoder = DBDEncoder
 APP.json_decoder = DBDDecoder
+
+@APP.route("/image/<fn>")
+def getUserImage(fn):
+	return send_from_directory("static/uploads/", fn)
 
 """
 

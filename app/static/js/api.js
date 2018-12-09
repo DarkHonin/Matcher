@@ -15,10 +15,9 @@ function transmit(url, data, method="post"){
 		referrer: "no-referrer",
 	}
 	if(method != "GET"){
-		if(document["__USERTOKEN"])
-			data.token = __USERTOKEN;
 		head["body"] = JSON.stringify(data)
 	}
+	document.querySelectorAll("[data-field]").forEach(f => f.removeAttribute("data-error"))
 	return fetch(url, head).then(responce => responce.json());
 }
 
@@ -49,17 +48,24 @@ function formSubmit(event){
 	});
 }
 
+var messageHideHook = null
+
 function displayMessage(message, state=true){
 	var elm = document.getElementById("message")
 	if(state) 	elm.style.backgroundColor = "RGBA(90, 255, 90, 0.6)"
 	else		elm.style.backgroundColor = "RGBA(255, 90, 90, 0.6)"
 	elm.innerHTML = message
-	setTimeout(() => {elm.innerHTML = ""}, 5000)
+	if(messageHideHook)
+		clearTimeout(messageHideHook)
+	messageHideHook = setTimeout(() => {
+		elm.innerHTML = ""
+		messageHideHook = null
+	}, 5000)
 }
 
 function redirect(location){
 	setTimeout(function(){
-		window.location.pathname = message
+		window.location.pathname = location
 	}, 5200)
 }
 
@@ -91,7 +97,6 @@ function APIFieldErrorMessage(data){
 function APIException(data){
 	displayMessage(data.message, false)
 }
-
 
 function APISuccessMessage(data){
 	const functions = {

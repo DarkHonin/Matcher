@@ -17,7 +17,7 @@ class DBDDecoder(JSONDecoder):
 			if "__class" in dct:
 				return DBDocument.fromJSON(dct)
 		except Exception as e:
-			print(e)
+			print(e, "----------------")
 		if (self.original_hook):
 			return self.original_hook(dct)
 		return dct
