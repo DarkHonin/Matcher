@@ -23,11 +23,11 @@ class Login(MethodView):
 
 
     @classmethod
-    def bind(cls, app : Flask):
-        app.add_url_rule("/", view_func=cls.as_view("index"))
-        app.add_url_rule("/login", view_func=cls.as_view("login"))
+    def bind(cls, APP : Flask):
+        APP.add_url_rule("/", view_func=cls.as_view("index"))
+        APP.add_url_rule("/login", view_func=cls.as_view("login"))
 
-        @app.route("/logout")
+        @APP.route("/logout")
         @requires_Users
         def logout(user):
             if ("user" in session):

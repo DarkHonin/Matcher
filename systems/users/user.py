@@ -4,6 +4,8 @@ from systems.properties import USERNAME, EMAIL, PASSWORD
 from flask import session
 import datetime
 from uuid import uuid3, NAMESPACE_URL
+from api import APIException
+
 class User(DBDocument):
 
     collection_name =  "Users"
@@ -84,6 +86,9 @@ class User(DBDocument):
     def defineKeys(col):
         col.create_index(("uname"), unique=True)
         col.create_index(("_email"), unique=True)
+
+    def DuplicateKeyError(self):
+        raise APIException(message="Username/Email aready in use")
 
     def register(self):
         self.save()

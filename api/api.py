@@ -32,18 +32,92 @@
 
 from flask import request, jsonify
 
+
 class APIMessage:
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
 
-    def validate(self):
-        pass
-
     @classmethod
     def messageRecieve(_class):
-        instance = _class. (request.get_json())
-        instance.validate()
-        pass
+        data = request.get_json()
+        if not data:
+            data = {}
+        instance = _class(**data)
+        return instance
 
     def messageSend(self):
-        return jsonify(self.__dict__)
+        return jsonify({"handle" : str(self.__class__.__name__), "data" : self.__dict__})
+
+class APIValidatingMessage(APIMessage):
+
+    REQUIRED = []
+
+    def __init__(self, **kwargs):
+        APIMessage.__init__(self, **kwargs)
+        self.valid = True
+        self.errors = {}
+
+    def validate(self):
+        for i in self.REQUIRED:
+            if not hasattr(self, i):
+                self.logError(i, "This field is required")
+                self.valid = False
+            elif not getattr(self, i).strip():
+                self.logError(i, "This field is required")
+                delattr(self, i)
+                self.valid = False
+
+        for k, v in self.__dict__.copy().items():
+            tf = ("test_"+k).replace("-", "_")
+            if hasattr(self, tf):
+                if not getattr(self, tf)(v):
+                    self.valid = False
+                    delattr(self, k)
+
+    def logError(self, attr, reason):
+        if attr not in self.errors:
+            self.errors.update({attr : []})
+        self.errors[attr].append(reason)
+
+    @property
+    def items(self):
+        items = self.__dict__
+        items.pop("valid")
+        items.pop("errors")
+        return items
+
+    @property
+    def errorMessage(self):
+        return APIFieldErrorMessage(**self.errors)
+
+    @classmethod
+    def messageRecieve(cl):
+        instance = super(APIValidatingMessage, cl).messageRecieve()
+        instance.validate()
+        return instance
+
+class APIException(Exception, APIMessage):
+    def __init__(self, **kwargs):
+        Exception.__init__(self)
+        APIMessage.__init__(self, **kwargs)
+
+    def messageSend(self):
+        return jsonify({"handle" : str(APIException.__name__), "data" : self.__dict__})
+
+class APISuccessMessage(APIMessage):
+    pass
+
+class APIFieldErrorMessage(APIException):
+    pass
+
+############################################################################################################################################
+
+
+def APIMessageRecievedDecorator(_class = APIMessage):
+    from functools import wraps
+    def decorator(f):
+        @wraps(f)
+        def resolute(*args, **kws):
+            return f(message=_class.messageRecieve(), *args, **kws)
+        return resolute
+    return decorator

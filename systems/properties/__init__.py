@@ -83,7 +83,7 @@ class RequestValidator:
 
 def check_captcha(f):
     from systems.exceptions import SystemException
-    from app import app
+    from app import APP
     @wraps(f)
     def ValidateCaptcha(*args, **kws):
         if(request.method != 'POST'):
@@ -91,12 +91,12 @@ def check_captcha(f):
         data = request.get_json()
         if "g-recaptcha-response" not in data:
             raise SystemException("Invalid captcha, please try again", SystemException.FIELD_ERROR)
-        if app.config.get("CAPTCHA_DISABLE"):
+        if APP.config.get("CAPTCHA_DISABLE"):
             print("captcha is disabled")
             return f(*args, **kws)
         import requests
         import json
-        secret = app.config.get("CAPTCHA_SECRET")
+        secret = APP.config.get("CAPTCHA_SECRET")
         payload = {'response':data.pop("g-recaptcha-response"), 'secret':secret}
         try:
             response = requests.post("https://www.google.com/recaptcha/api/siteverify", payload)

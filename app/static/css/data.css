@@ -1,0 +1,18 @@
+*[data-error]{
+  position: relative;
+}
+
+*[data-error]:before{
+  content: attr(data-error);
+  display: block;
+  background-color: rgb(160, 44, 44);
+  border-top: red 1px solid;
+  border-left: red 1px solid;
+  border-right: red 1px solid;
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+*[data-error]:hover:before, *[data-error]:focus:before{
+  background-color: rgb(200, 44, 44);
+}

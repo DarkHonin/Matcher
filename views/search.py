@@ -87,5 +87,5 @@ class Search(MethodView):
 		raise SystemException("Invalid search query", SystemException.FIELD_ERROR)
 
 	@classmethod
-	def bind(cls, app : Flask):
-		app.add_url_rule("/search", view_func=cls.as_view("search"))
+	def bind(cls, APP : Flask):
+		APP.add_url_rule("/search", view_func=cls.as_view("search"))

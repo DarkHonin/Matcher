@@ -110,8 +110,8 @@ class Messages(Namespace, MethodView):
 		
 
 	@classmethod
-	def bind(cls, app : Flask):
-		from app import sockets
+	def bind(cls, APP : Flask):
+		from APP import sockets
 		sockets.on_namespace(Messages('/messages'))
-		app.add_url_rule("/notify", view_func=cls.as_view("messages"))
-		app.add_url_rule("/chat", view_func=cls.as_view("chat"), methods=["ACCEPT", "REGECT", "GET"])
+		APP.add_url_rule("/notify", view_func=cls.as_view("messages"))
+		APP.add_url_rule("/chat", view_func=cls.as_view("chat"), methods=["ACCEPT", "REGECT", "GET"])

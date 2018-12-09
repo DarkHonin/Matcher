@@ -21,5 +21,5 @@ class Redeem(MethodView):
 		return jsonify({"status" : "JOY", "actions" : {"displayMessage" : "Your account is now active", "redirect" : "/home"}})		
 
 	@classmethod
-	def bind(cls, app : Flask):
-		app.add_url_rule("/redeem/<token>", view_func=cls.as_view("redeem"))
+	def bind(cls, APP : Flask):
+		APP.add_url_rule("/redeem/<token>", view_func=cls.as_view("redeem"))

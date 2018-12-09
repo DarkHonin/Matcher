@@ -26,5 +26,5 @@ class Home(MethodView):
 	
 
 	@classmethod
-	def bind(cls, app : Flask):
-		app.add_url_rule("/home", view_func=cls.as_view("home"), methods=["GET", "META"])
+	def bind(cls, APP : Flask):
+		APP.add_url_rule("/home", view_func=cls.as_view("home"), methods=["GET", "META"])

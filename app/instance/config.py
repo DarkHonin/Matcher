@@ -18,3 +18,5 @@ TESTING_TOKEN = "this_is_a_testing_token"
 
 UPLOAD_FOLDER = 'app/static/uploads'
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
+
+IGNORE_SMTP_CONNECT_ERROR = True

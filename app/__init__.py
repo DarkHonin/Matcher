@@ -1,54 +1,51 @@
-from flask import Flask, session, jsonify, request, render_template
-from flask_socketio import SocketIO
-from flask_pymongo import PyMongo
+from api import APIException
+from flask import Flask, jsonify, render_template, request, session
 from flask_mail import Mail
-#from systems.exceptions import SystemException
-
-app = Flask(__name__)
-app.secret_key = "5bf87554084b104d3f7dbb52"
-app.config.from_pyfile("instance/config.py")
-sockets = SocketIO(app)
-
+from flask_pymongo import PyMongo
+from flask_socketio import SocketIO
+from systems.database import DBDDecoder, DBDEncoder
 from users.routes import USER_BLUEPRINT
 
-app.register_blueprint(USER_BLUEPRINT)
+APP = Flask(__name__)
+APP.secret_key = "5bf87554084b104d3f7dbb52"
+APP.config.from_pyfile("instance/config.py")
+SOCKETS = SocketIO(APP)
+
+APP.register_blueprint(USER_BLUEPRINT)
+
+DATABASE = PyMongo(APP)
+MAILER = Mail(APP)
+
+@APP.errorhandler(APIException)
+def handle_error(error : APIException):
+    return error.messageSend(), 500
+
+APP.json_encoder = DBDEncoder
+APP.json_decoder = DBDDecoder
 
 """
-Database = PyMongo(app)
-Mailer = Mail(app)
 
-
-@app.errorhandler(SystemException)
-def handle_error(error):
-    message = [str(x) for x in error.args]
-    return jsonify({"status" : "NOJOY", "actions" : {"displayMessage" : message}, "code" : error.code}), 500
-
-@app.route("/bogus")
+@APP.route("/bogus")
 def bogus():
-    import app.bogus.load_bogus
+    import APP.bogus.load_bogus
     return "Bogus users loaded"
 
-@app.route("/error/<error>")
+@APP.route("/error/<error>")
 def error(error):
     return render_template("pages/error.html", err=error, txt=error[:2].upper())
 
 from views import VIEWS
 for view in VIEWS:
     print("Binding %s" % view)
-    view.bind(app)
+    view.bind(APP)
 
-from systems.database import DBDEncoder, DBDDecoder
-
-app.json_encoder = DBDEncoder
-app.json_decoder = DBDDecoder
-
-@app.route("/test")
+@APP.route("/test")
 def test():
     from systems.users import registerUser, User
     #registerUser("Username", "email@email.com", "First", "Last", "Passw0rd")
     return jsonify(User.get())
 
-@app.route("/testEncode")
+@APP.route("/testEncode")
 def endode():
     from systems.users import registerUser, User
     item = User.get()[0]

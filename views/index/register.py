@@ -19,5 +19,5 @@ class Register(MethodView):
         return jsonify({"status" : "JOY", "actions": {"displayMessage" : "Please check your account for an activation email"}})
 
     @classmethod
-    def bind(cls, app : Flask):
-        app.add_url_rule("/register", view_func=cls.as_view("register"))
+    def bind(cls, APP : Flask):
+        APP.add_url_rule("/register", view_func=cls.as_view("register"))

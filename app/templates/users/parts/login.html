@@ -1,12 +1,14 @@
-<h2 class="context">Næmnæe félagi</h2>
-	<p class="content">To the first ever Viking matchmaking service</p>
-	<hr>
-	<p class="content">Please login or register to continue</p>
-	<form method="post" action="{{url_for(submit_to)}}" event='{"submit":"formSubmit"}'>
+{% extends 'users/template.html' %}
+{%block form%}
+	<form method="post" action="{{submit_to}}" event='{"submit":"formSubmit"}'>
 		<h3 class="context">Login</h3>
-		<input type="text" placeholder="Username" required name="uname">
-		<input type="password" placeholder="Password" required name="password">
+		<div data-field="uname">
+			<input type="text" placeholder="Username" required name="uname">
+		</div>
+		<div data-field="password">
+			<input type="password" placeholder="Password" required name="password">
+		</div>
 		<input type="submit" class="content ul" value='Login'>
-		<a href="{{url_for(submit_to)}}" class="content ul small">or Register</a>
+		<a href="{{url_for("user_manager.index", page="register")}}" class="content ul small">or Register</a>
 	</form>
-<script src='https://www.google.com/recaptcha/api.js?render=6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC'></script>
+{%endblock%}

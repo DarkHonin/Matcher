@@ -59,5 +59,5 @@ class Profile(MethodView):
 		return jsonify({"status" : "JOY", "actions" : {"displayMessage": "This user has now been unblocked", "redirect" : url_for("user", name=name)}})
 
 	@classmethod
-	def bind(cls, app : Flask):
-		app.add_url_rule("/user/<name>", view_func=cls.as_view("user"), methods=["GET", "LIKE", "BLOCK", "UNBLOCK"])
+	def bind(cls, APP : Flask):
+		APP.add_url_rule("/user/<name>", view_func=cls.as_view("user"), methods=["GET", "LIKE", "BLOCK", "UNBLOCK"])

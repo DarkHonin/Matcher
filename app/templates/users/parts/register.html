@@ -1,0 +1,27 @@
+{% extends 'users/template.html' %}
+{%block form%}
+	<form method="post" action="{{submit_to}}" data-field="captcha" event='{"submit":"formSubmit"}'>
+		<h3 class="context">Register</h3>
+		<div data-field="email">
+			<input type="email" placeholder="Email" required name="email">
+		</div>
+		<div data-field="uname">
+			<input type="text" placeholder="Username" required name="uname">
+		</div>
+		<div data-field="fname">
+			<input type="text" placeholder="First Name" required name="fname">
+		</div>
+		<div data-field="lname">
+			<input type="text" placeholder="Last Name" required name="lname">
+		</div>
+		<div data-field="password">
+			<input type="password" placeholder="Password" required name="password">
+		</div>
+		<div data-field="dob">
+			<input type="date" name="dob" required placeholder="Date Of bearth">
+		</div>
+		<input type="submit" class="content ul" value='Register'>
+		<a href="{{url_for('user_manager.index', page="login")}}" class="content ul small">or Login</a>
+		
+	</form>
+{% endblock %}

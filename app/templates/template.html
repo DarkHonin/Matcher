@@ -9,6 +9,7 @@
         <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/style.css', _external=True) }} " />
         <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/NordicSans.css', _external=True) }} " />
         <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/meta.css', _external=True) }} " />
+        <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/data.css', _external=True) }} " />
         <script src="{{ url_for('static', filename='js/api.js') }}"></script>
 
     </head>
@@ -26,6 +27,7 @@
                 Designed and built by HoninWorx, aka wgourley
         </footer>
     </body>
-    
-
+    <script>
+            bindEvents()
+    </script>
 </html>

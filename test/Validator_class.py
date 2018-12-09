@@ -95,12 +95,12 @@ class Validator:
 
 	@staticmethod
 	def checkCaptcha(test):
-		from app import app
-		if app.config.get("CAPTCHA_DISABLE"):
+		from app import APP
+		if APP.config.get("CAPTCHA_DISABLE"):
 			return True
 		import requests
 		import json
-		secret = app.config.get("CAPTCHA_SECRET")
+		secret = APP.config.get("CAPTCHA_SECRET")
 		payload = {'response':test, 'secret':secret}
 		response = requests.post("https://www.google.com/recaptcha/api/siteverify", payload)
 		response_text = json.loads(response.text)

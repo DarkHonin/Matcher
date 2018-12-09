@@ -57,21 +57,18 @@ function displayMessage(message, state=true){
 	setTimeout(() => {elm.innerHTML = ""}, 5000)
 }
 
-function field_error(field){
-	document.querySelector("[name='"+field.item+"']").setCustomValidity(item.message);
-}
-
-function redirect(message){
+function redirect(location){
 	setTimeout(function(){
 		window.location.pathname = message
 	}, 5200)
 }
 
 function translate(json){
-	for(var a in json.actions){
-		if(window[a])
-			window[a](json.actions[a], json.state == "JOY")
-	}
+	if(!json.handle)
+		displayMessage("Impropper server responce")
+	console.log(json.handle)
+	if(window[json.handle])
+		window[json.handle](json.data)
 }
 
 function carosel_shift(event){
@@ -82,15 +79,27 @@ function carosel_shift(event){
 	elm.classList.add("show")
 }
 
-function unread(count){
-	if(parseInt(count) == 0)
-		return notifyBtn.removeAttribute("data-count")
-	notifyBtn.setAttribute("data-count", count)
+function APIFieldErrorMessage(data){
+	console.log("Handeling field error responce")
+	for(i in data){
+		var elm = document.querySelector("[data-field="+i+"]")
+		if(elm)
+			elm.setAttribute("data-error", data[i])
+	}
 }
 
-function pendingChats(count){
-	if(parseInt(count) == 0)
-		return msgsBTN.removeAttribute("data-count")
-	msgsBTN.setAttribute("data-count", count)
+function APIException(data){
+	displayMessage(data.message, false)
 }
 
+
+function APISuccessMessage(data){
+	const functions = {
+		redirect : redirect,
+		message : displayMessage
+	}
+	for(i in data){
+		if (functions[i])
+			functions[i](data[i])
+	}
+}

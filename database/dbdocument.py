@@ -24,7 +24,7 @@ class DBDocument:
 
     @classmethod
     def collection(clls):
-        from app import DATABASE
+        from APP import DATABASE
         if clls.collection_name not in DATABASE.db.collection_names():
             print("Loading database keys")
             col = DATABASE.db[clls.collection_name]
@@ -54,7 +54,6 @@ class DBDocument:
         return data
 
     def encodeDocument(self):
-        print("Encoding", self)
         try:
             ret = {"class" : str(self.__class__)}
             for k, v in self.__dict__.items():
@@ -98,6 +97,10 @@ class DBDocument:
         data["__class"] = str(self.__class__)
         return data
 
+    def sync(self):
+        data = self.get({"_id" : self._id})
+        self.__dict__ = data.__dict__
+
     @staticmethod
     def fromJSON(json):
         cl = DBDocument.getClassFromString(json.pop("__class"))
@@ -119,7 +122,7 @@ class DBDocument:
 
     @classmethod
     def get(clss, where={}, what : dict = None):
-        from app import DATABASE
+        from APP import DATABASE
         hip = clss.collection_name
         col = DATABASE.db[hip]
         items = col.find(where, what)
@@ -145,10 +148,8 @@ class DBDocument:
             else:
                 self.collection().update_one({"_id" : self._id}, {"$set" : self.encodeDocument()})
                 print("%s updated %s" % (self.__class__.__name__, str(self._id)))
-        except Exception as e:
-            if not hasattr(self, e.__class__.__name__):
-                raise e
-            getattr(self, e.__class__.__name__)()
+        except DuplicateKeyError:
+            raise UserCreateException("Username/Email already in use.")
 
     def delete(self):
         self.collection().delete_one({"_id" : self._id})
