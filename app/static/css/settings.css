@@ -3,7 +3,7 @@
   flex-direction: column;
 }
 
-.setting-list>div>.saveBTN{
+.saveBTN{
   display: block;
   margin: auto;
   font-size: 1.5em;
@@ -14,7 +14,84 @@
   max-height: 0px;
 }
 
-.setting-list>div>.saveBTN.show{
+.saveBTN.show{
   max-height: 100px;
   margin: 0.5em auto;
 }
+
+.card{
+  display: inline-block;
+  overflow: hidden;
+  background-color: rgb(50,50,50);
+  flex-wrap: wrap;
+  width: -moz-available;
+  flex: 1;
+  margin: 1em auto;
+  position: relative;
+}
+
+.card>div{
+  text-align: left;
+  padding-left: 1em;
+}
+
+.card label{
+  padding-left: 1em;
+  font-family: 'Sansita', sans-serif;
+}
+
+.card>label{
+  font-size: 1.25em;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.card>label:before{
+  content: "SETTINGS";
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  position: absolute;
+  font-family: "NordicSans";
+  color: rgb(60,60,60);
+  z-index: -1;
+  font-size: 2em;
+}
+
+.card>.card{
+  display: inline-flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: -moz-fit-content;
+}
+
+.carosel>.preview{
+    max-height: 500px;
+    width: auto;
+  margin: auto;
+}
+
+.carosel>.options{
+    display: flex;
+    width: -webkit-fill-available;
+    width: -moz-available;
+    overflow: hidden;
+}
+
+.carosel>.options>.usr_img{
+    width: -moz-available;
+    width: -webkit-fill-available;
+    max-height: 10em;
+    z-index: 0;
+    position: relative;
+    flex: 1;
+    min-width: 20%;
+    object-fit: cover;
+}
+
+.carosel>.options>label.usr_img.add{
+    border: 0.2em grey dashed;
+    padding-top: 6%;
+}
+

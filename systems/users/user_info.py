@@ -1,6 +1,5 @@
-from systems.database import DBDocument
-from systems.users.user import User
-from systems.properties import FIRSTNAME, LASTNAME, GENDER, INTEREST, TAGS, BIOGRAPHY, DOB
+from database import DBDocument
+from .user import User
 import datetime
 
 class UserInfo(DBDocument):
@@ -27,16 +26,8 @@ class UserInfo(DBDocument):
 			else:
 				self.location = [response['latitude'], response["longitude"]]
 			
-		Telemetry(self,
-			["Men", "Both", "Women"].index(self.interest) - 1,
-			self.location
-		).save()
 		self.active = True
 		self.save()
-
-	@property
-	def fields(self):
-		return [BIOGRAPHY, FIRSTNAME, LASTNAME, DOB, GENDER, INTEREST, TAGS]
 
 	@property
 	def imageCount(self):

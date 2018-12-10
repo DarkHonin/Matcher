@@ -1,6 +1,7 @@
 from database import DBDocument
 import uuid
 import datetime
+from api import APIException
 class Token(DBDocument):
 
     collection_name = "Tokens"
@@ -23,3 +24,10 @@ class Token(DBDocument):
     @subject.setter
     def subject(self, subject : DBDocument):
         self._subject = {"class" : str(subject.__class__), "_id" : subject._id}
+    
+    @staticmethod
+    def defineKeys(col):
+        col.create_index(("subject"), unique=True)
+
+    def DuplicateKeyError(self):
+        raise APIException(message="You have an outstanding token, wait for it to expire or redeem it")

@@ -3,7 +3,7 @@ from flask import Flask, jsonify, render_template, request, session, send_from_d
 from flask_mail import Mail
 from flask_pymongo import PyMongo
 from flask_socketio import SocketIO
-from systems.database import DBDDecoder, DBDEncoder
+from database import DBDDecoder, DBDEncoder
 from users import USER_BLUEPRINT, USER_SOCKET
 from accounts import ACCOUNTS_BLUEPRINT
 

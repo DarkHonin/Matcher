@@ -24,7 +24,7 @@ class DBDocument:
 
     @classmethod
     def collection(clls):
-        from APP import DATABASE
+        from app import DATABASE
         if clls.collection_name not in DATABASE.db.collection_names():
             print("Loading database keys")
             col = DATABASE.db[clls.collection_name]
@@ -121,11 +121,15 @@ class DBDocument:
     #end Helper functions
 
     @classmethod
-    def get(clss, where={}, what : dict = None):
-        from APP import DATABASE
+    def get(clss, where : dict={}, what : dict = None):
+        print("Document GET :: ", clss)
+        from app import DATABASE
         hip = clss.collection_name
+        print("Looking up document in :", hip)
         col = DATABASE.db[hip]
+        print("criteria", where)
         items = col.find(where, what)
+        print("%s items found" % items.count())
         ret = []
         for item in items:
             inst = clss.decodeDocument(item)
@@ -149,10 +153,13 @@ class DBDocument:
                 self.collection().update_one({"_id" : self._id}, {"$set" : self.encodeDocument()})
                 print("%s updated %s" % (self.__class__.__name__, str(self._id)))
         except DuplicateKeyError:
-            raise UserCreateException("Username/Email already in use.")
+            if hasattr(self, "DuplicateKeyError"):
+                getattr(self, "DuplicateKeyError")
+            else:
+                raise UserCreateException("Username/Email already in use.")
 
     def delete(self):
-        self.collection().delete_one({"_id" : self._id})
+        print(self.collection().delete_one({"_id" : self._id}))
 
     def toDisplaySet(self):
         item = copy.deepcopy(self)

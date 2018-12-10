@@ -19,7 +19,7 @@ class User(DBDocument):
         user.details = det._id
         user.save()		
         try:
-            tt = Token(user, "activate")
+            tt = Token(user, "validate_email")
             sendTokenEmail(email, tt)
         except InvalidEmailMessage as e:
             user.delete()
@@ -31,25 +31,52 @@ class User(DBDocument):
         self.email = email
         self.password = password
         self.uname = uname
+        self.email_valid = False
         self.loginToken = None
         self.active = False
+        self.details = None
 
-    @property
-    def password(self):
-        return None
-
-    @password.setter
-    def password(self, password):
+    def set_password(self, password):
         self.hash = generate_password_hash(password)
+        return ""
 
+    def set_email(self, email):
+        if email == self.email:
+            return
+        self.email_valid = False
+        self.email = email
+        if self._id:
+            from .tokens import Token, sendTokenEmail
+            token = Token(self, "validate_email")
+            token.save()
+            sendTokenEmail(self.email, token)
+        return email
+
+    def set_uname(self, value):
+        self.uname = value
+        return value
+    
     def login(self, password):
         if not (check_password_hash(self.hash, password)):
             return False
         self.loginToken = str(uuid4())
-        del(self.hash)
         self.save()
-        session["user"] = self
+        info = UserInfo.get({"_id" : self.details})
+        info.location = self.location
+        session["user"] = self._id
         return True
+
+    @property
+    def location(self):
+        from flask import request
+        import requests
+        url = "http://api.ipstack.com/%s?access_key=c3d5cfa1b31c8989bb9c1d4f36cc096b" % request.environ['REMOTE_ADDR']
+        response = requests.get(url).json()
+        if not self.location:
+            if(not response['latitude']):
+                return [0, 0]
+            else:
+                return [response['latitude'], response["longitude"]]
 
     def activate(self):
         self.active = True
@@ -63,10 +90,12 @@ class User(DBDocument):
         self.save()
         return True
 
-    def save(self):
-        super().save()
-        if "user" in session:
-            session["user"] = self
+
+    def validate_email(self):
+        self.email_valid = True
+        self.active = True
+        self.save()
+
 
     @staticmethod
     def defineKeys(col):

@@ -1,4 +1,4 @@
-<article class="carosel" data-field="image">
+<article class="carosel" data-field="images">
 	{% if info.images | length >= 1 %}
 		<img class="preview" src="{{ url_for('getUserImage', fn=info.images[0]) }}">
 	{% else %}

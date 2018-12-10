@@ -26,12 +26,17 @@ function addImage(event){
 		return alert("The image must be smaller than 2MB")
 	reader = new FileReader()
 	reader.onloadend = function(){
+		
+			var o = {images : reader.result}
+			o["g-recaptcha-response"] = "nothing"
+			transmit("/settings/images", o).then(d => translate(d))
+		
 		grecaptcha.ready(function() {
 			grecaptcha.execute('6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC')
 				.then(function(token) {
-					var o = {image : reader.result}
+					var o = {images : reader.result}
 					o["g-recaptcha-response"] = token
-					transmit("/settings/image", o).then(d => translate(d))
+					transmit("/settings/images", o).then(d => translate(d))
 				});
 		});
 	}
@@ -57,32 +62,50 @@ function previewImage(event){
 	preview.classList.remove("empty")
 }
 
+var tagList = document.querySelector("#taglist")
 function tagTyped(event){
+	console.log(tagList.value)
 	if(event.key != "," || event.target.value.length < 3)
 		return
 	var elm = document.createElement("span")
-	id = event.target.getAttribute("data-input")
 	elm.innerHTML = event.target.value.replace(",", "")
-	elm.setAttribute("data-input", id)
-	elm.addEventListener("click", destroyTag)
-	input = document.getElementById(id)
 	event.target.value = ""
-	var arr = JSON.parse(input.value.replace(/'/g, '"'))
-	if(arr.indexOf(elm.innerHTML) > 0)
+	if (tags.find(f => {return f == elm.innerHTML}))
 		return
-	arr.push(elm.innerHTML)
-	input.value = JSON.stringify(arr)
-	input.dispatchEvent(new Event('change'))
-	event.target.parentNode.querySelector(".items").appendChild(elm)
+	elm.addEventListener("click", destroyTag)
+	event.target.dispatchEvent(new Event('change'))
+	tagList.appendChild(elm)
+}
+
+function saveTagField(event){
+	grecaptcha.ready(function() {
+		grecaptcha.execute('6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC')
+			.then(function(token) {
+				var o = {}
+				var arr = []
+				tagList.querySelectorAll("span").forEach(f => {arr.push(f.innerHTML)})
+				o["tags"] = arr
+				o["g-recaptcha-response"] = token
+				transmit("/settings/tags", o).then(d => translate(d), method="post")
+				event.target.classList.remove("show")
+			});
+	});
 }
 
 function destroyTag(event){
-	input = document.getElementById(event.target.getAttribute("data-input"))
-	var arr = JSON.parse(input.value.replace(/'/g, '"'))
-	var str = event.target.innerHTML
-	var index = arr.indexOf(str)
-	arr.splice(index, 1)
-	input.value = JSON.stringify(arr)
-	input.dispatchEvent(new Event('change'))
+	tagList.dispatchEvent(new Event('change'))
 	event.target.remove()
+}
+
+function FieldUpdatedMessage(data){
+	console.log(data)
+	displayMessage(data.displayMessage)
+	for(var i in data.fields){
+		if (i == 'images')
+			insertImage(data.fields[i])
+		else{
+			document.querySelector("[name='"+i+"']").value = data.fields[i]
+		}
+	}
+	
 }

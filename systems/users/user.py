@@ -22,9 +22,7 @@ class User(DBDocument):
         self.telemetry = None
         self.messages = None
 
-    def validate_email(self):
-        self.email_valid = True
-        self.save()
+
 
     def activate(self):
         if self.info.complete:
@@ -69,8 +67,7 @@ class User(DBDocument):
     def email(self):
         return self._email
     
-    @email.setter
-    def email(self, email):
+    def set_email(self, email):
         if email == self._email:
             return
         self.email_valid = False
@@ -81,6 +78,10 @@ class User(DBDocument):
             token.save()
             sendTokenEmail(self.email, token)
         pass
+
+    def validate_email(self):
+        self.email_valid = True
+        self.save()
 
     @staticmethod
     def defineKeys(col):

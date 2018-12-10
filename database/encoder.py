@@ -4,7 +4,7 @@ from datetime import datetime
 
 class DBDEncoder(JSONEncoder):
 	def default(self, obj):
-		from systems.database import DBDocument
+		from . import DBDocument
 		if isinstance(obj, DBDocument):
 			return obj.toJSON()
 		elif isinstance(obj, ObjectId):

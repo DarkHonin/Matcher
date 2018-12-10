@@ -46,7 +46,10 @@ class APIMessage:
         return instance
 
     def messageSend(self):
-        return jsonify({"handle" : str(self.__class__.__name__), "data" : self.__dict__})
+        return jsonify(self.toDict())
+
+    def toDict(self):
+        return {"handle" : str(self.__class__.__name__), "data" : self.__dict__}
 
 class APIValidatingMessage(APIMessage):
 

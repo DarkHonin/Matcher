@@ -1,6 +1,6 @@
 from flask.json import JSONDecoder
 from bson.objectid import ObjectId
-from systems.database import DBDocument
+from . import DBDocument
 import dateutil.parser
 class DBDDecoder(JSONDecoder):
 	def __init__(self, *args, **kwargs):
