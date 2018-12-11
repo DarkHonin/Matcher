@@ -1,11 +1,23 @@
 {% extends 'account/template.html' %}
 {%block page_items%}
-    <div class="user card">
+    <div class="user card" data-watermark="{{user.uname | upper}}">
         <div class="details">
-            Details go here
+            <span>{{info.fname}} {{info.lname}}</span>
+            <span>{{info.age() | int}}</span>
+            <div id="taglist">{% for i in info.tags %}
+                    <span>{{i}}</span>
+            {%endfor%}</div>
+            <span><span>{{info.gender}}</span> interesed in <span>{{info.interest}}</span></span>
+            <p>{{info.biography}}</p>
         </div>
         {% set item=user %}
+        {% set iteminfo=info %}
         {% include 'account/parts/profile_icon.html' %}
+        <div class="meta">
+            <button class="ul ok">Like</button>
+            <button class="ul notok">Block</button>
+            <button class="ul notok">Report</button>
+        </div>
     </div>
 
 {% endblock %}

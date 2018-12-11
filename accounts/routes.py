@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, abort, session
-from users import requires_Users, user
+from users import requires_Users, user, User
 from users.user_info import UserInfo
 from api import APIMessageRecievedDecorator, APIException, APIMessage
 from .messages import SettingsMessage, FieldUpdatedMessage
@@ -34,8 +34,13 @@ def account_settings(user : user.User):
 	info = UserInfo.get({"_id" : user.details})
 	return render_template("account/pages/settings.html", user=user, info=info)
 
-@ACCOUNTS_BLUEPRINT.route("/home")
+@ACCOUNTS_BLUEPRINT.route("/p/<profile>", methods=["GET"])
+@ACCOUNTS_BLUEPRINT.route("/home", defaults={"profile" : None}, methods=["GET"])
 @requires_Users
-def account_profile(user : user.User):
-	info = UserInfo.get({"_id" : user.details})
-	return render_template("account/pages/profile.html", user=user, info=info)
+def account_profile(user : user.User, profile):
+	if profile:
+		usr = User.get({"uname" : profile}, {"hash" : 0})
+	else:
+		usr = user
+	info = UserInfo.get({"_id" : usr.details})
+	return render_template("account/pages/profile.html", user=usr, info=info)

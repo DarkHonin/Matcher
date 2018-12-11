@@ -35,5 +35,7 @@ class UserSockets(Namespace):
             messages.append("You need a minimum of 5 tags on your profile")
         if (len(info.biography) < 50):
             messages.append("Your biography must be atleast 50 characters long")
+        if (info.gender == "Unknown"):
+            messages.append("Please specify a gender")
         if messages:
             emit("accountStatus", APIException(message="<br>".join(messages)).toDict())

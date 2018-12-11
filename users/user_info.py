@@ -15,7 +15,7 @@ class UserInfo(DBDocument):
 		self.tags = []
 		self.images = []
 		self.location = [0, 0]
-		self.dob = None
+		self.dob = datetime.datetime.strptime(dob, "%Y-%m-%d")
 
 	def set_tags(self, value:list):
 		self.tags = value
@@ -56,7 +56,5 @@ class UserInfo(DBDocument):
 		self.images.append(fn)
 		return url_for("getUserImage", fn=fn)
 
-	@property
 	def age(self):
-		dt = datetime.date.today().year - self.dob.year
-		return dt
+		return datetime.date.today().year - self.dob.year

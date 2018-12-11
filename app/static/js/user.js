@@ -21,3 +21,15 @@ function updateLikeButton(text){
 
 	likeBTN.innerHTML = text
 }
+
+function nextIcon(event){
+	parent = event.target.parentNode
+	current = parent.querySelector(".show")
+	if(current)
+		current.classList.remove("show")
+	if(!current || !current.nextSibling){
+		parent.firstChild.classList.add("show")
+	}else{
+		current.nextSibling.classList.add("show")
+	}
+}
