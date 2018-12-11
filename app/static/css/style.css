@@ -147,6 +147,7 @@ input[type="submit"]{
 }
 form>div>input{
     width: -moz-available;
+    width: -webkit-fill-available;
 }
 
 input, select, textarea{

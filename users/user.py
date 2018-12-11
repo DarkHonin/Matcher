@@ -29,7 +29,7 @@ class User(DBDocument):
 
     def __init__(self, uname, email, password):
         self.email = email
-        self.password = password
+        self.set_password(password)
         self.uname = uname
         self.email_valid = False
         self.loginToken = None
@@ -59,24 +59,29 @@ class User(DBDocument):
     def login(self, password):
         if not (check_password_hash(self.hash, password)):
             return False
+        print("password OK")
         self.loginToken = str(uuid4())
         self.save()
+        print("Fetching info")
         info = UserInfo.get({"_id" : self.details})
         info.location = self.location
+        info.save()
+        print("Info updated")
         session["user"] = self._id
         return True
 
     @property
     def location(self):
+        print("geting location")
         from flask import request
         import requests
         url = "http://api.ipstack.com/%s?access_key=c3d5cfa1b31c8989bb9c1d4f36cc096b" % request.environ['REMOTE_ADDR']
         response = requests.get(url).json()
-        if not self.location:
-            if(not response['latitude']):
-                return [0, 0]
-            else:
-                return [response['latitude'], response["longitude"]]
+        print("Location discovered")
+        if(not response['latitude']):
+            return [0, 0]
+        else:
+            return [response['latitude'], response["longitude"]]
 
     def activate(self):
         self.active = True

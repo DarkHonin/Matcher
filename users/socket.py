@@ -33,5 +33,7 @@ class UserSockets(Namespace):
             messages.append("You need atleast 1 image on your profile")
         if (len(info.tags) < 5):
             messages.append("You need a minimum of 5 tags on your profile")
+        if (len(info.biography) < 50):
+            messages.append("Your biography must be atleast 50 characters long")
         if messages:
             emit("accountStatus", APIException(message="<br>".join(messages)).toDict())

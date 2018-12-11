@@ -33,3 +33,9 @@ def set_user_attribute(option, user : user.User, message:SettingsMessage):
 def account_settings(user : user.User):
 	info = UserInfo.get({"_id" : user.details})
 	return render_template("account/pages/settings.html", user=user, info=info)
+
+@ACCOUNTS_BLUEPRINT.route("/home")
+@requires_Users
+def account_profile(user : user.User):
+	info = UserInfo.get({"_id" : user.details})
+	return render_template("account/pages/profile.html", user=user, info=info)

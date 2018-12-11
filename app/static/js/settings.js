@@ -25,12 +25,7 @@ function addImage(event){
 	if(file.size > 2097152)
 		return alert("The image must be smaller than 2MB")
 	reader = new FileReader()
-	reader.onloadend = function(){
-		
-			var o = {images : reader.result}
-			o["g-recaptcha-response"] = "nothing"
-			transmit("/settings/images", o).then(d => translate(d))
-		
+	reader.onloadend = function(){		
 		grecaptcha.ready(function() {
 			grecaptcha.execute('6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC')
 				.then(function(token) {

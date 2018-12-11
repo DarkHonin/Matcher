@@ -23,15 +23,18 @@ def register(message : APIMessage):
 @USER_BLUEPRINT.route("/login", methods=["POST"])
 @APIMessageRecievedDecorator(LoginMessage)
 def login(message):
+    print("Logging in...")
     if not message.valid:
         raise message.errorMessage
     usr = User.get({"uname" : message.uname})
     if not usr:
         print("%s :: User does not exists" % message.uname)
         raise APIException(message="Username/password invalid")
+    print("User found")
     if not usr.login(message.password):
         print("%s :: Password is wrong" % message.uname)
         raise APIException(message="Username/password invalid")
+    print("Logged in")
     return APISuccessMessage(message="Welcome back %s" % message.uname, redirect=url_for("user_manager.index")).messageSend()
 
 ############################################################################################################################################################
@@ -41,9 +44,11 @@ def login(message):
 def redeem(token, message):
     if not message.valid:
         return message.errorMessage.messageSend()
+    
     login(**{})
+    print("Redeeming...")
     redeemToken(token)
-    return APISuccessMessage(message="Your account is now active %s" % message.uname, redirect=url_for("user_manager.index")).messageSend()
+    return APISuccessMessage(message="Your account is now active %s" % message.uname, redirect=url_for("user_accounts.account_profile")).messageSend()
 
 ############################################################################################################################################################
 

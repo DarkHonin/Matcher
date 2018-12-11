@@ -5,16 +5,18 @@
 
 .saveBTN{
   display: block;
+  opacity: 0;
   margin: auto;
   font-size: 1.5em;
   font-family: 'Montserrat Alternates', sans-serif;
   font-weight: 900;
   overflow: hidden;
-  transition: max-height 1s, margin 1s;
+  transition: max-height 1s, margin 1s, opacity 1s;
   max-height: 0px;
 }
 
 .saveBTN.show{
+  opacity: 1;
   max-height: 100px;
   margin: 0.5em auto;
 }
@@ -92,6 +94,9 @@
 
 .carosel>.options>label.usr_img.add{
     border: 0.2em grey dashed;
-    padding-top: 6%;
+    display: block;
+    text-align: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
 }
 

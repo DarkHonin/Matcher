@@ -1,0 +1,11 @@
+{% extends 'account/template.html' %}
+{%block page_items%}
+    <div class="user card">
+        <div class="details">
+            Details go here
+        </div>
+        {% set item=user %}
+        {% include 'account/parts/profile_icon.html' %}
+    </div>
+
+{% endblock %}
