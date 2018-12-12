@@ -7,6 +7,9 @@ from users.page import Page
 
 ACCOUNTS_BLUEPRINT = Blueprint("user_accounts", __name__)
 
+class APIButtonChange(APIMessage):
+	pass
+
 ########################################################################################################################################################
 
 @ACCOUNTS_BLUEPRINT.route("/settings/<option>", methods=["POST"])
@@ -53,3 +56,13 @@ def account_profile(user : user.User, profile):
 		page.view(user)
 		page.save()
 	return render_template("account/pages/profile.html", user=usr, info=info, showMeta=showMeta, page=page)
+
+
+@ACCOUNTS_BLUEPRINT.route("/p/<profile>", methods=["LIKE"])
+@requires_Users
+def like(user : user.User, profile):
+	usr = User.get({"uname" : profile}, {"hash" : 0})
+	page = Page.get({"_id" : usr.page})
+	ret = APIButtonChange(id="like", innerHTML=("Like" if page.like(user) else "Unlike")).messageSend()
+	page.save()
+	return ret

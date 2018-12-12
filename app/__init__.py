@@ -33,6 +33,10 @@ APP.json_decoder = DBDDecoder
 def getUserImage(fn):
 	return send_from_directory("static/uploads/", fn)
 
+@APP.route("/error/?e='<error>'&r='<ret>'")
+def error(error, ret):
+    return render_template("error.html", error=error, ret=ret)
+
 """
 
 @APP.route("/bogus")

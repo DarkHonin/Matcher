@@ -5,13 +5,14 @@ from api import APIException
 from flask import session
 from werkzeug.security import generate_password_hash, check_password_hash
 from .tokens import sendTokenEmail, Token, InvalidEmailMessage
-from .page import Page
+
 class User(DBDocument):
 
     collection_name = "Users"
 
     @staticmethod
     def registerNewUser(uname, email,password, **kwargs):
+        from .page import Page
         user = User(uname, email, password)
         kwargs.pop("g-recaptcha-response")
         det = UserInfo(**kwargs)

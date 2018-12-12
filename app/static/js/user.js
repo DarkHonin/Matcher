@@ -33,3 +33,9 @@ function nextIcon(event){
 		current.nextSibling.classList.add("show")
 	}
 }
+
+function APIButtonChange(mess){
+	console.log(mess)
+	item = document.querySelector("#"+mess.id)
+	item.innerHTML = mess.innerHTML
+}

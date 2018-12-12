@@ -84,3 +84,28 @@
 #notifications[data-count]:after:empty, #message[data-count]:after:empty{
   opacity: 0;
 }
+
+[data-watermark]:before{
+  content: attr(data-watermark);
+  position: absolute;
+  font-family: "NordicSans";
+  width: -moz-min-content;
+  font-size: 5em;
+  z-index: -2;
+  display: block;
+  left: 0%;
+  top: 0%;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  opacity: 0.1;
+}
+
+.error{
+  display: block;
+  position: relative;
+}
+
+.error>p{
+  font-size: 2em;
+}

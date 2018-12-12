@@ -13,9 +13,9 @@ def requires_Users(f):
 	def ParseSession(*args, **kws):
 		print("Resolveing current user")
 		if ("user" not in session):
-			return redirect(url_for("error", error="You are no longer logged in", callback="user_manager.login"))
+			return redirect(url_for("error", error="You are no longer logged in", ret="user_manager.login"))
 		user = User.get({"_id" : session["user"]})
 		if (not user):
-			return redirect(url_for("error", error="You are no longer logged in", callback="user_manager.login"))
+			return redirect(url_for("error", error="You are no longer logged in", ret="user_manager.login"))
 		return f(user=user, *args, **kws)
 	return ParseSession

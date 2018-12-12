@@ -1,8 +1,9 @@
 from flask_socketio import Namespace, emit
 from flask import session
-from api import APIException
+from api import APIException, APISuccessMessage
 from .user_info import UserInfo
 from .user import User
+from .page import Page
 
 class UserSockets(Namespace):
 
@@ -29,6 +30,7 @@ class UserSockets(Namespace):
     def on_accountStatus(self):
         messages = []
         user = User.get({"_id" : session["user"]}, {"hash" : 0})
+        page = Page.get({"_id" : user.page})
         if not user.email_valid:
             messages.append("Your email has not yet been validated, please check your email")
         info = UserInfo.get({"_id" : user.details})
@@ -42,3 +44,7 @@ class UserSockets(Namespace):
             messages.append("Please specify a gender")
         if messages:
             emit("accountStatus", APIException(message="<br>".join(messages)).toDict())
+        if page.alerts:
+            unread = page.getUnread()
+            emit("notify", APISuccessMessage(message=unread, notify=len(unread)).toDict())
+            pass

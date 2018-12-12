@@ -2,6 +2,7 @@
   content: attr(data-uname);
   background: rgba(25,25,25, 0.9);
   width: -moz-available;
+  width: -webkit-fill-available;
   display: block;
   font-family: 'Sansita';
   font-size: 1.5em;
@@ -32,7 +33,6 @@
   object-position: top;
   display: block;
   z-index: -1;
-  border: 2px black solid;
   opacity: 0;
   width: 20em;
   height: 20em;
@@ -59,14 +59,17 @@
   margin: 1em;
   background-color: rgb(0,0,0, 0.5);
   padding: 1em;
+  padding-top: 2em;
   position: relative;
   overflow: hidden;
   flex-wrap: wrap;
   width: -moz-available;
+  width: -webkit-fill-available;
 }
 
 .user.card>.meta{
   width: -moz-available;
+  width: -webkit-fill-available;
   display: block;
   text-align: left;
 }
@@ -79,25 +82,12 @@
 @media screen and (max-width: 450px){
  .user.card>.meta>button{
     width: -moz-available;
+    width: -webkit-fill-available;
     margin: 1em 1em;
   } 
 }
 
-[data-watermark]:before{
-  content: attr(data-watermark);
-  position: absolute;
-  font-family: "NordicSans";
-  width: -moz-min-content;
-  font-size: 5em;
-  z-index: -2;
-  display: block;
-  left: 0%;
-  top: 0%;
-  bottom: 0;
-  right: 0;
-  margin: auto;
-  opacity: 0.1;
-}
+
 
 .user.card>.picon{
   margin: auto;

@@ -261,7 +261,7 @@ select>option{
 
 
 
-[class*="no_"], .error{
+[class*="no_"]{
     display: none;
     font-family: "NordicSans";
     margin: 1em auto;
@@ -270,15 +270,8 @@ select>option{
     left: 0px;
 }
 
-.error{
-    display: block;
-}
 
-.error:after{
-    content: attr(error);
-}
-
-[class*="no_"]:after, .error:after{
+[class*="no_"]:after{
     font-family: 'Sansita', sans-serif;
     font-size: 0.5em;
     display: block;

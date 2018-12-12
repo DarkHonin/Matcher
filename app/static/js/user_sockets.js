@@ -26,10 +26,15 @@ function accountStatus(message){
 	translate(message)
 }
 
+function updateNotify(data){
+	console.log(data)
+}
+
 userInfoSocket.on("connect", userServerConnected)
 userInfoSocket.on("accountStatus", accountStatus)
 userInfoSocket.on("now_online", comeOnline)
 userInfoSocket.on("now_offline", goneOffline)
+userInfoSocket.on("notify", updateNotify)
 
 setInterval(checkStatus, 60000)
 checkStatus()
