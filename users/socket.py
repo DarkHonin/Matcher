@@ -6,7 +6,7 @@ from .user import User
 
 class UserSockets(Namespace):
 
-    CONNECTED_USERS = {}
+    CONNECTED_USERS = []
 
     def __init__(self):
         Namespace.__init__(self, "/user_socket_transactions")
@@ -14,14 +14,17 @@ class UserSockets(Namespace):
     def on_connect(self):
         user = User.get({"_id" : session["user"]}, {"hash" : 0})
         print("user has come online :", user.uname)
-        UserSockets.CONNECTED_USERS[str(user._id)] = user.loginToken
+        if( user._id not in UserSockets.CONNECTED_USERS):
+            UserSockets.CONNECTED_USERS.append(user._id)
         emit("now_online", {"user" : user.uname}, broadcast=True)
 
     def on_disconnect(self):
         user = User.get({"_id" : session["user"]}, {"hash" : 0})
-        if str(user._id) in UserSockets.CONNECTED_USERS:
-            del(UserSockets.CONNECTED_USERS[str(user._id)])
-            emit("now_offline", {"user" : user.uname}, broadcast=True)
+        print("user now offline :", user.uname)
+        emit("now_offline", {"user" : user.uname}, broadcast=True)
+        print(user._id in UserSockets.CONNECTED_USERS)
+        if user._id in UserSockets.CONNECTED_USERS:
+            UserSockets.CONNECTED_USERS.remove(user._id)
 
     def on_accountStatus(self):
         messages = []

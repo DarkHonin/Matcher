@@ -25,12 +25,10 @@ class DBDocument:
     @classmethod
     def collection(clls):
         from app import DATABASE
+        col = DATABASE.db[clls.collection_name]
         if clls.collection_name not in DATABASE.db.collection_names():
             print("Loading database keys")
-            col = DATABASE.db[clls.collection_name]
             clls.defineKeys(col)
-        else:
-            col = DATABASE.db[clls.collection_name]
         return col
 
     #Helper functions
@@ -143,18 +141,23 @@ class DBDocument:
     def save(self):
         try:
             self.lastChanged = datetime.now()
-            if not "_id" in self.__dict__:
-                if self.collection() == 0:
-                    self.defineKeys(self.collection())
-                id = self.collection().insert_one(self.encodeDocument())
-                self._id = id.inserted_id
-                print("%s inserted at %s" % (self.__class__.__name__, str(self._id)))
-            else:
+            print("Item %s _id" % ("HAS" if hasattr(self, "_id") else "HASNOT"))
+            if hasattr(self, "_id"):
                 self.collection().update_one({"_id" : self._id}, {"$set" : self.encodeDocument()})
                 print("%s updated %s" % (self.__class__.__name__, str(self._id)))
+            else:
+                if self.collection() == 0:
+                    self.defineKeys(self.collection())
+                print("Inserting")
+                print(self.collection())
+                qq = self.collection().insert_one(self.encodeDocument())
+                print("Inserted")
+                print(qq)
+                self._id = qq.inserted_id
+                print("%s inserted at %s" % (self.__class__.__name__, str(self._id)))
         except DuplicateKeyError:
             if hasattr(self, "DuplicateKeyError"):
-                getattr(self, "DuplicateKeyError")
+                getattr(self, "DuplicateKeyError")()
             else:
                 raise UserCreateException("Username/Email already in use.")
 

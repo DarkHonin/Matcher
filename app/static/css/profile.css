@@ -76,7 +76,7 @@
   margin: 1em 1em;
 }
 
-@media screen and (max-width: 730px){
+@media screen and (max-width: 450px){
  .user.card>.meta>button{
     width: -moz-available;
     margin: 1em 1em;
@@ -107,22 +107,57 @@
   flex: 1;
   display: block;
   margin: auto;
-  min-width: -moz-fit-content;
+  font-family: 'Sansita';
 }
 
 .user.card>.details>*{
   display: block;
   width: -moz-fit-content;
-  font-family: 'Sansita';
+  
   margin: 0.8em auto;
 }
 
-.user.card>.details>p{
-  width: 50%;
-  min-width: 400px;
+.user.card>.details>.name{
+  font-size: 2em;
+  text-align: left;
+  width: -moz-available;
+}
+
+.user.card>.details>.biography{
+  max-width: 300px;
+  text-align: left;
+  min-width: 200px;
+}
+
+[data-gender]:before{
+  content: attr(data-gender);
+  display: block;
+  font-size: 0.5em;
+}
+
+[data-age]:after{
+  content: attr(data-age);
+  display: block;
+  font-size: 0.5em;
 }
 
 .user.card>.details>span>span{
   padding: 0.5em;
   background-color: rgb(20, 20, 20, 0.5);
+}
+
+[data-views]:before{
+  content: "Views: " attr(data-views);
+  right: 0px;
+}
+
+[data-fame]:after{
+  content: "Fame: " attr(data-fame);
+  left: 0px;
+}
+
+[data-fame]:after, [data-views]:before{
+  position: absolute;
+  top: 0px;
+  padding: 0.5em 4em;
 }

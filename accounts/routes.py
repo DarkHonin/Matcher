@@ -3,6 +3,8 @@ from users import requires_Users, user, User
 from users.user_info import UserInfo
 from api import APIMessageRecievedDecorator, APIException, APIMessage
 from .messages import SettingsMessage, FieldUpdatedMessage
+from users.page import Page
+
 ACCOUNTS_BLUEPRINT = Blueprint("user_accounts", __name__)
 
 ########################################################################################################################################################
@@ -34,13 +36,20 @@ def account_settings(user : user.User):
 	info = UserInfo.get({"_id" : user.details})
 	return render_template("account/pages/settings.html", user=user, info=info)
 
+
+
 @ACCOUNTS_BLUEPRINT.route("/p/<profile>", methods=["GET"])
 @ACCOUNTS_BLUEPRINT.route("/home", defaults={"profile" : None}, methods=["GET"])
 @requires_Users
 def account_profile(user : user.User, profile):
+	showMeta = user.uname != profile and profile
 	if profile:
 		usr = User.get({"uname" : profile}, {"hash" : 0})
 	else:
 		usr = user
 	info = UserInfo.get({"_id" : usr.details})
-	return render_template("account/pages/profile.html", user=usr, info=info)
+	page = Page.get({"_id" : usr.page})
+	if profile:
+		page.view(user)
+		page.save()
+	return render_template("account/pages/profile.html", user=usr, info=info, showMeta=showMeta, page=page)

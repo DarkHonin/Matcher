@@ -5,7 +5,7 @@ from api import APIException
 from flask import session
 from werkzeug.security import generate_password_hash, check_password_hash
 from .tokens import sendTokenEmail, Token, InvalidEmailMessage
-
+from .page import Page
 class User(DBDocument):
 
     collection_name = "Users"
@@ -15,14 +15,19 @@ class User(DBDocument):
         user = User(uname, email, password)
         kwargs.pop("g-recaptcha-response")
         det = UserInfo(**kwargs)
+        page = Page()
+        page.save()
         det.save()
         user.details = det._id
-        user.save()		
+        user.page = page._id
+        user.save()
         try:
             tt = Token(user, "validate_email")
             sendTokenEmail(email, tt)
         except InvalidEmailMessage as e:
             user.delete()
+            det.delete()
+            page.delete()
             raise e
 
 ####################################################################################################################################################################################
@@ -105,7 +110,11 @@ class User(DBDocument):
     @staticmethod
     def defineKeys(col):
         col.create_index(("uname"), unique=True)
-        col.create_index(("_email"), unique=True)
+        col.create_index(("email"), unique=True)
 
     def DuplicateKeyError(self):
         raise APIException(message="Username/Email aready in use")
+
+    def isOnline(self):
+        from users import USER_SOCKET
+        return self._id in USER_SOCKET.CONNECTED_USERS
