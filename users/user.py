@@ -13,6 +13,7 @@ class User(DBDocument):
     @staticmethod
     def registerNewUser(uname, email,password, **kwargs):
         from .page import Page
+        from app import APP
         user = User(uname, email, password)
         kwargs.pop("g-recaptcha-response")
         det = UserInfo(**kwargs)
@@ -22,24 +23,26 @@ class User(DBDocument):
         user.details = det._id
         user.page = page._id
         user.save()
-        try:
-            tt = Token(user, "validate_email")
-            sendTokenEmail(email, tt)
-        except InvalidEmailMessage as e:
-            user.delete()
-            det.delete()
-            page.delete()
-            raise e
+        if not APP.config["ALWAYS_ACTIVE"]:
+            try:
+                tt = Token(user, "validate_email")
+                sendTokenEmail(email, tt)
+            except InvalidEmailMessage as e:
+                user.delete()
+                det.delete()
+                page.delete()
+                raise e
 
 ####################################################################################################################################################################################
 
     def __init__(self, uname, email, password):
+        from app import APP
         self.email = email
         self.set_password(password)
         self.uname = uname
         self.email_valid = False
         self.loginToken = None
-        self.active = False
+        self.active = APP.config["ALWAYS_ACTIVE"]
         self.details = None
 
     def set_password(self, password):
@@ -73,7 +76,7 @@ class User(DBDocument):
         info.location = self.location
         info.save()
         print("Info updated")
-        session["user"] = self._id
+        session["user"] = self
         return True
 
     @property
@@ -117,5 +120,5 @@ class User(DBDocument):
         raise APIException(message="Username/Email aready in use")
 
     def isOnline(self):
-        from users import USER_SOCKET
-        return self._id in USER_SOCKET.CONNECTED_USERS
+        from messages.message import MessageSockets
+        return self.uname in MessageSockets.INSTANCE.rooms

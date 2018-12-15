@@ -50,20 +50,22 @@ function formSubmit(event){
 
 var messageHideHook = null
 
-function displayMessage(message, state=true){
+function displayMessage({message, state=true, persist=false}){
 	var elm = document.getElementById("message")
+	console.log("state is", state)
 	if(state) 	elm.style.backgroundColor = "RGBA(90, 255, 90, 0.6)"
 	else		elm.style.backgroundColor = "RGBA(255, 90, 90, 0.6)"
 	elm.innerHTML = message
 	if(messageHideHook)
 		clearTimeout(messageHideHook)
-	messageHideHook = setTimeout(() => {
-		elm.innerHTML = ""
-		messageHideHook = null
-	}, 5000)
+	if(!persist)
+		messageHideHook = setTimeout(() => {
+			elm.innerHTML = ""
+			messageHideHook = null
+		}, 5000)
 }
 
-function redirect(location){
+function redirect({location}){
 	setTimeout(function(){
 		window.location.pathname = location
 	}, 5200)
@@ -95,7 +97,7 @@ function APIFieldErrorMessage(data){
 }
 
 function APIException(data){
-	displayMessage(data.message, false)
+	displayMessage(data, false)
 }
 
 function APISuccessMessage(data){
@@ -105,6 +107,6 @@ function APISuccessMessage(data){
 	}
 	for(i in data){
 		if (functions[i])
-			functions[i](data[i])
+			functions[i](data)
 	}
 }

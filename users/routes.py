@@ -35,7 +35,7 @@ def login(message):
         print("%s :: Password is wrong" % message.uname)
         raise APIException(message="Username/password invalid")
     print("Logged in")
-    return APISuccessMessage(message="Welcome back %s" % message.uname, redirect=url_for("user_accounts.account_profile")).messageSend()
+    return APISuccessMessage(message="Welcome back %s" % message.uname, redirect={"location" : url_for("user_accounts.account_profile")}).messageSend()
 
 ############################################################################################################################################################
 

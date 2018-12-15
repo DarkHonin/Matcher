@@ -1,5 +1,4 @@
 from pymongo.collection import Collection
-from systems.exceptions import UserCreateException
 import copy
 import json
 from datetime import datetime
@@ -155,11 +154,11 @@ class DBDocument:
                 print(qq)
                 self._id = qq.inserted_id
                 print("%s inserted at %s" % (self.__class__.__name__, str(self._id)))
-        except DuplicateKeyError:
+        except DuplicateKeyError as e:
             if hasattr(self, "DuplicateKeyError"):
                 getattr(self, "DuplicateKeyError")()
             else:
-                raise UserCreateException("Username/Email already in use.")
+                raise e
 
     def delete(self):
         print(self.collection().delete_one({"_id" : self._id}))

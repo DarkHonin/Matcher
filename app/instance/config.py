@@ -15,6 +15,7 @@ CAPTCHA_SECRET = "6LfKuH0UAAAAAG2xrRHLq4U_STVk39jKJtp00rG8"
 CAPTCHA_DISABLE = True
 TESTING_APP = True
 TESTING_TOKEN = "this_is_a_testing_token"
+ALWAYS_ACTIVE = True
 
 UPLOAD_FOLDER = 'app/static/uploads'
 ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])

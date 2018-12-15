@@ -1,7 +1,8 @@
-from systems.users import UserInfo, User, registerUser
+from users.user import User
 import json
 import datetime
 import random
+from users.tokens import redeemToken
 
 surnames = json.load(open("app/bogus/Surnames.json", "r"))
 m_names = json.load(open("app/bogus/names_m.json", "r"))
@@ -21,9 +22,10 @@ for e in range(0, 50):
     else:
         fn = f_names[random.randint(0, flen-1)]
     print("making user: %s %s" % (fn, n))
-    user = User(uname=fn[:1]+n[:4], email="%s%s@email.com" % (fn, n))
-    user.password = "Passw0rd"
-    tgs = []
+    User.registerNewUser(uname=fn[:1]+n[:4], email="%s%s@email.com" % (fn, n), fname=fn, lname=n, dob=str(random.randint(1980, 2000))+"-07-06", password="Passw0rd", **{"g-recaptcha-response" : "heck"})
+    print("Registered user ", fn[:1]+n[:4])
+    redeemToken("this_is_a_testing_token")
+    """tgs = []
     for i in range(0, 6):
         tgs.append(liptag[random.randint(0, len(liptag) - 1)])
     user.info = UserInfo(fn, n)
@@ -33,9 +35,8 @@ for e in range(0, 50):
     user.info.gender = ("Male" if e % 2 else "Female")
     user.info.biography = "This is a bogus bio"
     user.info.images = ["2018_11_12_7_21_5bffab58ddbbbea8b7b49243.jpg"]
-    user.info._dob = datetime.datetime(random.randint(1980, 2018), 7, 1)
     user.validate_email()
-    user.activate()
+    user.activate()"""
     
 
 

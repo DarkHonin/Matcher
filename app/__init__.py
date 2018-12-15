@@ -4,8 +4,9 @@ from flask_mail import Mail
 from flask_pymongo import PyMongo
 from flask_socketio import SocketIO
 from database import DBDDecoder, DBDEncoder
-from users import USER_BLUEPRINT, USER_SOCKET
+from users import USER_BLUEPRINT
 from accounts import ACCOUNTS_BLUEPRINT
+from messages.message import MessageSockets
 
 APP = Flask(__name__)
 APP.secret_key = "5bf87554084b104d3f7dbb52"
@@ -17,7 +18,7 @@ APP.register_blueprint(USER_BLUEPRINT)
 print("--User routes loaded")
 APP.register_blueprint(ACCOUNTS_BLUEPRINT)
 print("--Account routes loaded")
-SOCKETS.on_namespace(USER_SOCKET)
+SOCKETS.on_namespace(MessageSockets())
 
 DATABASE = PyMongo(APP)
 MAILER = Mail(APP)
@@ -37,13 +38,23 @@ def getUserImage(fn):
 def error(error, ret):
     return render_template("error.html", error=error, ret=ret)
 
-"""
-
 @APP.route("/bogus")
 def bogus():
-    import APP.bogus.load_bogus
+    import app.bogus.load_bogus
     return "Bogus users loaded"
 
+def resolve_user(id):
+    from users import User
+    return User.get({"_id" : id})
+
+def resolve_info(id):
+    from users.user_info import UserInfo
+    return UserInfo.get({"_id" : id})
+
+APP.jinja_env.globals.update(resolve_user=resolve_user)
+APP.jinja_env.globals.update(resolve_info=resolve_info)
+
+"""
 @APP.route("/error/<error>")
 def error(error):
     return render_template("pages/error.html", err=error, txt=error[:2].upper())

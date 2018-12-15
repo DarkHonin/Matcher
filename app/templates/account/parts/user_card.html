@@ -11,8 +11,8 @@
 	{% include 'account/parts/profile_icon.html' %}
 	{% if showMeta %}
 	<div class="meta">
-		<button class="ul ok" id="like" event='{"click" : "like"}'>Like</button>
-		<button class="ul notok">Block</button>
+		<button class="ul ok" id="like" event='{"click" : "like"}'>{{"Like" if not page.isLiked else "Unlike"}}</button>
+		<button class="ul notok" id="block" event='{"click" : "block"}' >Block</button>
 		<button class="ul notok">Report</button>
 	</div>
 	{% endif %}
