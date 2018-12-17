@@ -1,7 +1,8 @@
 const userInfoSocket = io.connect('http://' + document.domain + ':' + location.port + "/messages");
 
 function comeOnline(uname){
-	item = document.querySelectorAll("[data-uname='"+uname.user+"']").forEach(f => {f.classList.add("online")})
+	console.log(uname)
+	item = document.querySelectorAll("[data-uname='"+uname.user+"']").forEach(f => {f.classList.add("online"); console.log(f)})
 }
 
 function goneOffline(uname){

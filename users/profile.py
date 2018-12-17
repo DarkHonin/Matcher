@@ -1,14 +1,15 @@
 from database import DBDocument
 import datetime
 from flask import url_for
-class UserInfo(DBDocument):
+class Profile(DBDocument):
 
-	collection_name = "UserDetails"
+	collection_name = "Profiles"
 
-	def __init__(self, fname, lname, dob):
+	def __init__(self, user, fname, lname, dob):
 		DBDocument.__init__(self)
 		self.fname = fname
 		self.lname = lname
+		self.user = user._id
 		self.biography = ""
 		self.gender = "Unknown"
 		self.interest = "Both"
@@ -58,3 +59,15 @@ class UserInfo(DBDocument):
 
 	def age(self):
 		return datetime.date.today().year - self.dob.year
+
+	def complete(self):
+		messages = []
+		if self.gender not in ["Male", "Female"]:
+			messages.append("Please select your biological gender")
+		if len(self.biography) < 50:
+			messages.append("Your biography must be atleast 50 characters long")
+		if len(self.tags) < 5:
+			messages.append("You need atleast 5 tags")
+		if len(self.images) < 1:
+			messages.append("You need atleast 1 profile image")
+		return (not bool(messages), messages)

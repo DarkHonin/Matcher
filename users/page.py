@@ -3,12 +3,21 @@ import datetime
 from flask import url_for, session
 from .user import User
 
+class Alert(DBDocument):
+	def __init__(self, message, origen):
+		DBDocument.__init__(self)
+		self.created = datetime.datetime.now()
+		self.message = message
+		self.orgigen = origen
+		self.seen = False
+
 class Page(DBDocument):
 
 	collection_name = "PageInfo"
 
-	def __init__(self):
+	def __init__(self, user : User):
 		DBDocument.__init__(self)
+		self.user = user._id
 		self.liked_by = []
 		self.viewed_by = []
 		self.blacklist = []
@@ -26,6 +35,10 @@ class Page(DBDocument):
 	def view(self, viewer : User):
 		if (viewer._id not in self.viewed_by):
 			self.viewed_by.append(viewer._id)
+			if viewer._id not in self.blacklist:
+				from messageing.Sockets import MessageSockets
+				self.alerts.append(Alert("%s just viewed your page" % viewer.uname, {"name" : "user_accounts.account_profile", "profile" : viewer.uname}))
+				
 			return True
 		return False
 

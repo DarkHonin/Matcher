@@ -101,12 +101,8 @@ function APIException(data){
 }
 
 function APISuccessMessage(data){
-	const functions = {
-		redirect : redirect,
-		message : displayMessage
-	}
-	for(i in data){
-		if (functions[i])
-			functions[i](data)
+	for(e in data){
+		if(window[e])
+			window[e](data[e])
 	}
 }

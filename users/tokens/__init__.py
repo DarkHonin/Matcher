@@ -22,7 +22,6 @@ def sendTokenEmail(email, token):
     from app import MAILER
     from smtplib import SMTPRecipientsRefused
     from socket import gaierror
-    from systems.exceptions import SystemException
     msg = Message("The keys to Valhalla",recipients=[email], html=render_template("users/activateEmail.html", token=token.token))
     try:
         MAILER.send(msg)

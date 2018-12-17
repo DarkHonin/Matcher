@@ -1,5 +1,5 @@
 from database import DBDocument
-from .user_info import UserInfo
+from .profile import Profile
 from uuid import uuid4
 from api import APIException
 from flask import session
@@ -16,13 +16,9 @@ class User(DBDocument):
         from app import APP
         user = User(uname, email, password)
         kwargs.pop("g-recaptcha-response")
-        det = UserInfo(**kwargs)
-        page = Page()
-        page.save()
-        det.save()
-        user.details = det._id
-        user.page = page._id
         user.save()
+        det = Profile(user=user, **kwargs)
+        det.save()
         if not APP.config["ALWAYS_ACTIVE"]:
             try:
                 tt = Token(user, "validate_email")
@@ -30,7 +26,6 @@ class User(DBDocument):
             except InvalidEmailMessage as e:
                 user.delete()
                 det.delete()
-                page.delete()
                 raise e
 
 ####################################################################################################################################################################################
@@ -41,7 +36,6 @@ class User(DBDocument):
         self.set_password(password)
         self.uname = uname
         self.email_valid = False
-        self.loginToken = None
         self.active = APP.config["ALWAYS_ACTIVE"]
         self.details = None
 
@@ -68,15 +62,7 @@ class User(DBDocument):
     def login(self, password):
         if not (check_password_hash(self.hash, password)):
             return False
-        print("password OK")
-        self.loginToken = str(uuid4())
-        self.save()
-        print("Fetching info")
-        info = UserInfo.get({"_id" : self.details})
-        info.location = self.location
-        info.save()
-        print("Info updated")
-        session["user"] = self
+        session["user"] = self._id
         return True
 
     @property
@@ -120,5 +106,5 @@ class User(DBDocument):
         raise APIException(message="Username/Email aready in use")
 
     def isOnline(self):
-        from messages.message import MessageSockets
+        from messageing.Sockets import MessageSockets
         return self.uname in MessageSockets.INSTANCE.rooms

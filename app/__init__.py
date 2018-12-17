@@ -6,7 +6,7 @@ from flask_socketio import SocketIO
 from database import DBDDecoder, DBDEncoder
 from users import USER_BLUEPRINT
 from accounts import ACCOUNTS_BLUEPRINT
-from messages.message import MessageSockets
+from messageing.Sockets import MessageSockets
 
 APP = Flask(__name__)
 APP.secret_key = "5bf87554084b104d3f7dbb52"
@@ -48,8 +48,8 @@ def resolve_user(id):
     return User.get({"_id" : id})
 
 def resolve_info(id):
-    from users.user_info import UserInfo
-    return UserInfo.get({"_id" : id})
+    from users.profile import Profile
+    return Profile.get({"_id" : id})
 
 APP.jinja_env.globals.update(resolve_user=resolve_user)
 APP.jinja_env.globals.update(resolve_info=resolve_info)
