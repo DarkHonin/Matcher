@@ -1,0 +1,9 @@
+<select event='{"change" : "showSaveButton"}' class="_field_input data" name="{{item.key}}">
+	{% for val in item.format %}
+		{% if val == value %}
+		<option value="{{val}}" selected>{{val}}</option>
+		{% else %}
+		<option value="{{val}}">{{val}}</option>
+		{%endif%}
+	{%endfor%}
+</select>

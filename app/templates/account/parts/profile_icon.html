@@ -1,0 +1,1 @@
+<div class="picon {{"online" if item.isOnline()}}" data-uname="{{item.uname}}" event='{"click" : "nextIcon"}'>{% for i in iteminfo.images %}<img class="{{ 'show' if loop.index0 == 0}}" src="{{url_for('getUserImage', fn=i)}}">{% endfor %}</div>

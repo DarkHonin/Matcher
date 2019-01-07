@@ -1,0 +1,68 @@
+{% extends 'account/template.html' %}
+{%block page_items%}
+	{% include 'account/parts/setting_carosel.html' %}
+	<div class="setting-list">
+		{% include 'account/parts/setting_bio.html' %}
+		<div class="card">
+			<div class="card">
+					<label>Account Information</label>
+					{% set name="fname" %}
+					{% set value=info.fname %}
+					{% set label="First Name" %}
+					{% set type="text" %}
+					{% include 'account/parts/setting_text.html' %}
+
+					{% set name="lname" %}
+					{% set value=info.lname %}
+					{% set label="Last Name" %}
+					{% set type="text" %}
+					{% include 'account/parts/setting_text.html' %}
+
+					{% set name="gender" %}
+					{% set value=info.gender %}
+					{% set label="Gender" %}
+					{% set options=["Unknown", "Male", "Female"] %}
+					{% include 'account/parts/setting_options.html' %}
+
+					{% set name="interest" %}
+					{% set value=info.interest %}
+					{% set label="Interesed in" %}
+					{% set options=["Both", "Men", "Women"] %}
+					{% include 'account/parts/setting_options.html' %}
+
+					<div data-field="tags">
+						<label class="context">Profile Tags</label>
+						<button data-type='text' class='ul saveBTN' event='{"click" : "saveTagField"}'>Save</button>
+						<input type="text" event='{"keyup" : "tagTyped", "change" : "showSaveButton"}'>
+						<script>var tags = {{info.tags | safe}}</script>
+						<div id="taglist" event='{"change" : "showSaveButton"}'>{% for i in info.tags %}
+							<span event='{"click" : "destroyTag"}'>{{i}}</span>
+						{%endfor%}</div>
+					</div>							
+			</div>
+			<div class="card">
+					<label>User Information</label>
+					{% set name="uname" %}
+					{% set value=user.uname %}
+					{% set label="User Name" %}
+					{% set type="text" %}
+					{% include 'account/parts/setting_text.html' %}
+
+					{% set name="email" %}
+					{% set value=user.email %}
+					{% set label="Email" %}
+					{% set type="email" %}
+					{% include 'account/parts/setting_text.html' %}
+
+					{% set name="password" %}
+					{% set value="" %}
+					{% set label="Password" %}
+					{% set type="password" %}
+					{% include 'account/parts/setting_text.html' %}
+			</div>
+		</div>
+	</div>
+	<script src='https://www.google.com/recaptcha/api.js?render=6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC'></script>
+	<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+	<link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/settings.css', _external=True) }} " />
+{%endblock%}

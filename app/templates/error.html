@@ -1,0 +1,9 @@
+{% extends 'template.html' %}
+{%block content%}
+    <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/meta.css', _external=True) }} " />
+    {% include 'account/parts/navbar.html' %}
+    <div class="error" data-watermark="{{error[:2] | upper}}">
+        <p>{{error}}</p>
+        <h2><a class="ul" href="{{redirect}}">{{label}}</a></h2>
+    </div>
+{%endblock%}

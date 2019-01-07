@@ -1,0 +1,17 @@
+<article class="carosel" data-field="images">
+	{% if info.images | length >= 1 %}
+		<img class="preview" src="{{ url_for('getUserImage', fn=info.images[0]) }}">
+	{% else %}
+		<img class="preview empty">
+	{%endif%}
+	<span class="no_image">EX</span>
+	<div class="options">
+	{% for i in info.images %}
+		<img src="{{ url_for('getUserImage', fn=i) }}" class="usr_img" event='{"click" : "previewImage"}'>
+	{% endfor %}
+	{% if info.images | length < 5 %}
+		<label for='imageUpload' class="usr_img add" id="imageinput">+<br>Add image</label>
+		<input type='file' accept="image/jpeg" hidden id='imageUpload' event='{"change":"addImage"}'>
+	{% endif %}
+	</div>
+</article>

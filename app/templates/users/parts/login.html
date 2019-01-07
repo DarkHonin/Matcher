@@ -1,0 +1,14 @@
+{% extends 'users/template.html' %}
+{%block form%}
+	<form method="post" action="{{submit_to}}" event='{"submit":"formSubmit"}'>
+		<h3 class="context">Login</h3>
+		<div data-field="uname">
+			<input type="text" placeholder="Username" required name="uname">
+		</div>
+		<div data-field="password">
+			<input type="password" placeholder="Password" required name="password">
+		</div>
+		<input type="submit" class="content ul" value='Login'>
+		<a href="{{url_for("users.register")}}" class="content ul small">or Register</a>
+	</form>
+{%endblock%}

@@ -1,0 +1,153 @@
+.picon:before{
+  content: attr(data-uname);
+  background: rgba(25,25,25, 0.9);
+  width: -moz-available;
+  width: -webkit-fill-available;
+  display: block;
+  font-family: 'Sansita';
+  font-size: 1.5em;
+  border-bottom: rgb(255, 50, 50) 5px solid;
+}
+
+.picon.online:before{
+  border-bottom: rgb(50, 255, 50) 5px solid;
+}
+
+.picon{
+  height: 10em;
+  width: 10em;
+  border: 2px solid grey;
+  position: relative;
+  transition: border 0.2s;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.picon:hover{
+  border: 2px solid;
+}
+
+.picon>img{  
+  position: absolute;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  z-index: -1;
+  opacity: 0;
+  width: 20em;
+  height: 20em;
+  left: -5em;
+  top: -5em;
+  transition: opacity 0.5s, border 0.2s, width 0.2s, height 0.2s, left 0.2s, top 0.2s;
+  
+}
+
+.picon:hover>img{
+  width: 10em;
+  height: 10em;
+  left: 0;
+  top: 0;
+}
+
+
+.picon>img.show{
+  opacity: 1;
+}
+
+.user.card{
+  display: flex;
+  margin: 1em;
+  background-color: rgb(0,0,0, 0.5);
+  padding: 1em;
+  padding-top: 2em;
+  position: relative;
+  overflow: hidden;
+  flex-wrap: wrap;
+  width: -moz-available;
+  width: -webkit-fill-available;
+}
+
+.user.card>.meta{
+  width: -moz-available;
+  width: -webkit-fill-available;
+  display: block;
+  text-align: left;
+}
+
+.user.card>.meta>button{
+  width: 5em;
+  margin: 1em 1em;
+}
+
+@media screen and (max-width: 450px){
+ .user.card>.meta>button{
+    width: -moz-available;
+    width: -webkit-fill-available;
+    margin: 1em 1em;
+  } 
+}
+
+
+
+.user.card>.picon{
+  margin: auto;
+}
+
+.user.card>.details{
+  flex: 1;
+  display: block;
+  margin: auto;
+  font-family: 'Sansita';
+}
+
+.user.card>.details>*{
+  display: block;
+  width: -moz-fit-content;
+  
+  margin: 0.8em auto;
+}
+
+.user.card>.details>.name{
+  font-size: 2em;
+  text-align: left;
+  width: -moz-available;
+}
+
+.user.card>.details>.biography{
+  max-width: 300px;
+  text-align: left;
+  min-width: 200px;
+}
+
+[data-gender]:before{
+  content: attr(data-gender);
+  display: block;
+  font-size: 0.5em;
+}
+
+[data-age]:after{
+  content: attr(data-age);
+  display: block;
+  font-size: 0.5em;
+}
+
+.user.card>.details>span>span{
+  padding: 0.5em;
+  background-color: rgb(20, 20, 20, 0.5);
+}
+
+[data-views]:before{
+  content: "Views: " attr(data-views);
+  right: 0px;
+}
+
+[data-fame]:after{
+  content: "Fame: " attr(data-fame);
+  left: 0px;
+}
+
+[data-fame]:after, [data-views]:before{
+  position: absolute;
+  top: 0px;
+  padding: 0.5em 4em;
+}

@@ -1,0 +1,111 @@
+.meta{
+  
+}
+
+.meta>.display{
+  padding: 1em;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.meta>.display:before{
+  margin: auto;
+  content: attr(data-display);
+  width: 100%;
+  font-family: 'Sansita', sans-serif;
+  padding: 0.5em;
+  display: block;
+  background-color: rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 0px 1px black;
+}
+
+.meta>.display>a{
+  max-width: 10em;
+  width: 100em;
+  height: 100em;
+  max-height: 10em;
+  overflow: hidden;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 0.5em;
+}
+
+.meta>.display>a>img{
+  position: absolute;
+  left: -10%;
+  right: 0;
+  top: -10%;
+  bottom: 0;
+  width: 120%;
+  height: 120%;
+  margin: auto;
+  z-index: -1;
+}
+
+.meta>.display>a>span{
+  display: block;
+  position: relative;
+  background-color: rgba(0,0,0,0.5);
+  box-shadow: 0px 0px 0px 7px black;
+  margin: auto;
+  width: 100%;
+  padding: 0.2em 0em;
+  transition: padding 0.2s, box-shadow 0.2s;
+}
+
+.meta>.display>a:hover>span{
+  padding: 1em 0em;
+  box-shadow: 0px 0px 0px 7px white;
+}
+
+#notifications[data-count], #messages[data-count]{
+  position: relative;
+}
+
+#notifications[data-count]:after, #messages[data-count]:after{
+  content: attr(data-count);
+  position: absolute;
+  left:0;
+  right: 0;
+  margin: auto;
+  top: 100%;
+  background-color: rgb(200, 0, 0);
+  width: -moz-available;
+  height: -moz-fit-content;
+  padding: 0.2em;
+  border-radius: 0em 0em 10px 10px;
+  transition: opacity 0.5s;
+  opacity: 1;
+}
+
+
+#notifications[data-count]:after:empty, #message[data-count]:after:empty{
+  opacity: 0;
+}
+
+[data-watermark]:before{
+  content: attr(data-watermark);
+  position: absolute;
+  font-family: "NordicSans";
+  width: -moz-min-content;
+  font-size: 5em;
+  z-index: -2;
+  display: block;
+  left: 0%;
+  top: 0%;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  opacity: 0.1;
+}
+
+.error{
+  display: block;
+  position: relative;
+}
+
+.error>p{
+  font-size: 2em;
+}
