@@ -8,7 +8,11 @@ class Token(DBDocument):
 
 	def __init__(self, callback : Callback, resource):
 		DBDocument.__init__(self)
-		self.token = str(uuid4())
+		from app import APP
+		if APP.config.get("CAPTCHA_DISABLE"):
+			self.token = APP.config.get("TESTING_TOKEN")
+		else:
+			self.token = str(uuid4())
 		self.callback = callback
 		self.resource = resource
 

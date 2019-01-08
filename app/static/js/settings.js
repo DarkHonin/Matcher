@@ -29,9 +29,9 @@ function addImage(event){
 		grecaptcha.ready(function() {
 			grecaptcha.execute('6LfKuH0UAAAAAJpKGjX7auo3dbt29wtjm4_FtATC')
 				.then(function(token) {
-					var o = {images : reader.result}
+					var o = {image : reader.result}
 					o["g-recaptcha-response"] = token
-					transmit("/settings/images", o).then(d => translate(d))
+					transmit(window.location, o).then(d => translate(d))
 				});
 		});
 	}
@@ -54,6 +54,7 @@ function insertImage(imageUrl){
 
 function previewImage(event){
 	preview.src = event.target.src
+	preview.setAttribute("image_id", event.target.getAttribute("image_id"))
 	preview.classList.remove("empty")
 }
 
@@ -81,7 +82,7 @@ function saveTagField(event){
 				tagList.querySelectorAll("span").forEach(f => {arr.push(f.innerHTML)})
 				o["tags"] = arr
 				o["g-recaptcha-response"] = token
-				transmit("/settings/tags", o).then(d => translate(d), method="post")
+				transmit(document.location, o).then(d => translate(d), method="post")
 				event.target.classList.remove("show")
 			});
 	});
@@ -103,4 +104,17 @@ function FieldUpdatedMessage(data){
 		}
 	}
 	
+}
+
+function userImage({src, image_id}){
+	el = document.createElement("img")
+	el.src = src
+	el.addAttribute("image_id", image_id)
+	el.addEventListener("click", previewImage)
+	return el;
+}
+
+function deleteImage(event){
+	id = document.querySelector(".preview[src]").getAttribute("image_id")
+	transmit(window.location+"/delimg/"+id).then(t => {translate(t)})
 }

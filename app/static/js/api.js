@@ -99,6 +99,15 @@ function APIException(data){
 	displayMessage(data, false)
 }
 
+function update({insert, fn, data}){
+	inst = document.querySelector(insert)
+	if (!inst)
+		return console.log("could not update", insert, "Element not found")
+	if (!window[fn])
+		return console.log("could not update", insert, "Function not found : ", fn)
+	inst.appendChild(fn(data))
+}
+
 function APISuccessMessage(data){
 	console.log(data)
 	for(e in data){

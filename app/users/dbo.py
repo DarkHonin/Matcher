@@ -11,11 +11,13 @@ class User(DBDocument):
 		resource.active = True
 		resource.verified = True
 		resource.save()
+		return "Your account has now been activated"
 
 	@staticmethod
 	def verify_email(resource):
 		resource.verified = True
 		resource.save()
+		return "Your email has been verified"
 
 	collection_name = "Users"
 
@@ -26,6 +28,7 @@ class User(DBDocument):
 		self.password = generate_password_hash(kwargs["password"])
 		self.active = False
 		self.verified = False
+
 	@staticmethod
 	def defineKeys(col):
 		col.create_index(("uname"), unique=True)

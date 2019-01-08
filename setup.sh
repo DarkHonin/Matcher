@@ -21,9 +21,7 @@ fi
 load_pack(){
     echo "Fetching packages"
     source bin/activate &
-    while read i; do
-        pip3 install $i;
-    done < packages.txt
+    pip install -r requirements.txt
 }
 
 setup_env(){

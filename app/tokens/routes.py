@@ -26,7 +26,7 @@ def redeem(message : APIValidatingMessage, token=None):
 		user = User.get({"uname" : message.uname})
 		if not user or user._id != _token.resource:
 			raise APIInvalidUser()
-		resp = APISuccessMessage(displayMessage={"message" : "Your account is now active"}, redirect="accounts.settings").messageSend()
+		resp = APISuccessMessage(displayMessage={"message" : "Your token has been redeemed"}, redirect="accounts.settings").messageSend()
 		user.login(message.password, resp)
 		_token.redeem()(user)
 		return resp
