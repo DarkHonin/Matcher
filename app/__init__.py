@@ -32,6 +32,15 @@ APP.register_blueprint(ACCOUNT_BLUEPRINT)
 
 JSONWT = JWTManager(APP)
 
+@JSONWT.user_identity_loader
+def user_identity_lookup(user):
+    return {"id" : str(user._id)}
+
+@JSONWT.user_loader_callback_loader
+def user_loader_callback(identity):
+	from .users import User
+	return User.get({"_id" : identity["id"]})
+
 @JSONWT.expired_token_loader
 def my_expired_token_callback():
 	if request.method == "POST":

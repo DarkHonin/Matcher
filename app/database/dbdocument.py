@@ -122,6 +122,9 @@ class DBDocument:
         print("Looking up document in :", hip)
         col = DATABASE.db[hip]
         print("criteria", where)
+        if("_id" in where):
+            if not isinstance(where["_id"], ObjectId):
+                where["_id"] = ObjectId(where["_id"])
         items = col.find(where, what)
         print("%s items found" % items.count())
         ret = []

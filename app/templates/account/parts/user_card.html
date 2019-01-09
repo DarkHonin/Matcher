@@ -1,5 +1,5 @@
 <div class="user card" data-watermark="{{user.uname | upper}}">
-	<div class="details" data-views="{{page.viewed_by | length}}" data-fame="{{page.fame()}}">
+	<div class="details" data-views="{{telemetry.viewed_by | length}}" data-fame="{{telemetry.fame()}}">
 		<span data-gender="{{info.gender}}" data-age="{{info.age() | int}}" class="name {{info.interest}}">{{info.fname}} {{info.lname}}</span>
 		<p class="biography">{{info.biography}}</p>
 		<div id="taglist">{% for i in info.tags %}

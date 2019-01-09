@@ -1,7 +1,7 @@
 {% extends 'account/template.html' %}
 {%block page_items%}
     {% include 'account/parts/user_card.html' %}
-    {% if not showMeta %}
+    {% if showMeta %}
         <h2>Viewed by</h2>
         {% for i in page.viewed_by %}
             {% set item=resolve_user(i) %}

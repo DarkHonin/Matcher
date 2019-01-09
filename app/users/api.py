@@ -19,7 +19,6 @@ class LoginMessage(APIValidatingMessage):
 		return True
 
 	def test_password(self, value:str):
-		print("PARENT:: ", value)
 		if not PASSW_RE.match(value):
 			self.logError("password",  "A password must contain atleast one uppercase, lowecase and numeric character")
 			return False

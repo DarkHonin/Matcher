@@ -40,7 +40,7 @@ class User(DBDocument):
 	def login(self, password, responce):
 		if not check_password_hash(self.password, password):
 			raise APIInvalidUser()
-		access_token = create_access_token(identity={"uname" : self.uname, "id" : str(self._id)})
-		refresh_token = create_refresh_token(identity={"uname" : self.uname, "id" : str(self._id)})
+		access_token = create_access_token(identity=self)
+		refresh_token = create_refresh_token(identity=self)
 		set_access_cookies(responce, access_token)
 		set_refresh_cookies(responce, refresh_token)

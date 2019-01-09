@@ -4,7 +4,7 @@ from .api import RegisterMessage, LoginMessage, APIInvalidUser, APIUserNotActive
 from app.api import APIMessageRecievedDecorator, APIValidatingMessage, APIException, APISuccessMessage
 from app.account import create_user_account
 from app.tokens import create_token
-from flask_jwt_extended import unset_access_cookies, unset_refresh_cookies
+from flask_jwt_extended import unset_access_cookies, unset_refresh_cookies, jwt_required, get_current_user
 from app.database import Callback
 
 
