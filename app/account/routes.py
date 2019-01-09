@@ -53,21 +53,38 @@ def settings(message : OptionSet):
 			if len(account.images) < 5:
 				account.images.append(v)
 				account.save()
-			return APISuccessMessage(displayMessage={"message" : "Image uploaded"}, update={"insert" : ".options", "fn" : "userImage", "data" : {
+			return APISuccessMessage(displayMessage={"message" : "Image uploaded"}, update={"action" : "insert","subject" : ".options", "before" : ".usr_img.add", "fn" : "userImage", "data" : {
 				"src" : url_for("accounts.user_image", uid=user._id, id=len(account.images) - 1),
 				"image_id" : len(account.images) - 1
 				}}).messageSend()
 		return "OK"
 
+@ACCOUNT_BLUEPRINT.route("/profile/<uid>")
+@jwt_required
+def public_profile(uid):
+	ident = get_jwt_identity()
+	user = User.get({"_id" : uid})
+	account = Account.get({"user" : uid})
+	return render_template("account/pages/profile", user=user, info=account)
+	
+
+@ACCOUNT_BLUEPRINT.route("/profile")
+@jwt_required
+def private_profile():
+	ident = get_jwt_identity()
+	user = User.get({"_id" : ident['id']})
+	account = Account.get({"user" : ident['id']})
+	return render_template("account/pages/profile.html", user=user, info=account)
+
 @ACCOUNT_BLUEPRINT.route("/settings/delimg/<id>", methods=["POST"])
 @jwt_required
 def delImg(id):
 	ident = get_jwt_identity()
-	account = Account.get({"user" : ObjectId(ident["id"])}, {"class" : 1, "images" : 1, "user": 1})
-	del account.images[int(id)]
-	return APISuccessMessage(displayMessage={"message" : "Image uploaded"}, remove={
-																					"query" : "[src='/image/%s/%s']" % (account.user, id)
-				}).messageSend()
+	col = Account.collection()
+	print(col.update_one({"user" : ObjectId(ident['id'])}, {"$unset" : {"images."+id : 1}}).raw_result)
+	print(col.update_one({"user" : ObjectId(ident['id'])}, {"$pull" : {"images" : None}}).raw_result)
+	return APISuccessMessage(displayMessage={"message" : "Deleted image"}, update={"action" : "remove",
+	"subject" : ".usr_img[image_id='%s']" % id}).messageSend()
 
 @ACCOUNT_BLUEPRINT.route("/image/<uid>/<id>")
 @jwt_required

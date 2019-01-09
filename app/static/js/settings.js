@@ -109,8 +109,9 @@ function FieldUpdatedMessage(data){
 function userImage({src, image_id}){
 	el = document.createElement("img")
 	el.src = src
-	el.addAttribute("image_id", image_id)
+	el.setAttribute("image_id", image_id)
 	el.addEventListener("click", previewImage)
+	el.classList.add("usr_img");
 	return el;
 }
 

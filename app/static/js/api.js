@@ -99,13 +99,26 @@ function APIException(data){
 	displayMessage(data, false)
 }
 
-function update({insert, fn, data}){
-	inst = document.querySelector(insert)
-	if (!inst)
-		return console.log("could not update", insert, "Element not found")
-	if (!window[fn])
-		return console.log("could not update", insert, "Function not found : ", fn)
-	inst.appendChild(fn(data))
+function update({action, subject, fn=null, data=null, before=null}){
+	sub = document.querySelector(subject)
+	if (!sub)
+		return console.log("could not update", subject, "Element not found")
+	
+	switch(action){
+		case "insert":
+			if (!window[fn])
+				return console.log("could not update", subject, "Function not found : ", fn)
+			if(before){
+				bef = document.querySelector(before)
+				sub.insertBefore(window[fn](data), bef)
+			}else
+				sub.appendChild(window[fn](data))
+			break
+		case "remove":
+			sub.remove()
+			break
+	}
+
 }
 
 function APISuccessMessage(data){

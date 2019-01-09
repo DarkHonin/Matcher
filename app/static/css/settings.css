@@ -69,9 +69,10 @@
 }
 
 .carosel>.preview{
-    max-height: 500px;
-    width: auto;
+  max-height: 500px;
+  width: auto;
   margin: auto;
+  height: -webkit-fill-available;
 }
 
 .carosel>.options{
@@ -100,6 +101,7 @@
     border: 0.2em grey dashed;
     display: block;
     height: -webkit-fill-available;
+    order: 6;
 }
 
 .carosel>.options>label.usr_img.add>span{
@@ -112,6 +114,21 @@
 
 #delete_image{
  display: block;
- font-size: 2em;
+ font-weight: 900;
+ font-size: 1.5em;
  padding: 0.25em;
+ position: absolute;
+ top: 0px;
+ left: 0px;
+ right: 0px;
+ margin: auto;
+ opacity: 0.5;
+ background-color: #8a7676;
+ transition: opacity 0.2s, background-size 1s, background-color 0.2s;
+}
+
+#delete_image:hover{
+  opacity: 1;
+  background-color: #ff0000;
+  background-size: 100%;
 }

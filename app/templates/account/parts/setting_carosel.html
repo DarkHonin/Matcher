@@ -1,12 +1,10 @@
 <article class="carosel" data-field="images">
+	<span class="ul context" id="delete_image" event='{"click" : "deleteImage"}'>Delete</span>
 	{% if info.images | length >= 1 %}
 		<img class="preview" src="{{ url_for('accounts.user_image', uid=info.user, id=0) }}" image_id="0">
 	{% else %}
 		<img class="preview empty">
 	{%endif%}
-	<span class="ul context" id="delete_image" event='{"click" : "deleteImage"}'>
-		Delete
-	</span>
 	<span class="no_image">EX</span>
 	<div class="options">
 	{% for i in info.images %}
