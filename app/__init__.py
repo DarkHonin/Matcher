@@ -46,3 +46,15 @@ def my_expired_token_callback():
 	if request.method == "POST":
 		return APIException(message="Your login has expired, please login again").messageSend(), 401
 	return render_redirect_exception(APIRedirectingException(redirect="users.login", displayMessage={"message" : "Your login has expired, please login again"}, actionLabel="Login"))
+
+def resolve_user(id):
+    from .users import User
+    return User.get({"_id" : id})
+
+def resolve_account(id):
+	from .account import Account
+	print(">>>",{"thing" : id})
+	return Account.get({"user" : id})
+
+APP.jinja_env.globals.update(resolve_user=resolve_user)
+APP.jinja_env.globals.update(resolve_account=resolve_account)

@@ -63,10 +63,12 @@ def settings(message : OptionSet):
 def public_profile(uid):
 	id = ObjectId(uid)
 	profile_user = User.get({"_id" : id})
-	profile_telemetry = Telemetry.get({"_id" : id})
+	profile_telemetry = Telemetry.get({"user" : id})
 	account = Account.get({"user" : id})
-	print(profile_telemetry.__dict__)
-	return render_template("account/pages/profile", user=profile_user, info=account)
+	if not current_user._id == id:
+		profile_telemetry.view(current_user)
+		profile_telemetry.save()
+	return render_template("account/pages/profile.html", user=profile_user, info=account, telemetry=profile_telemetry, showMeta=current_user._id == id)
 	
 
 @ACCOUNT_BLUEPRINT.route("/profile")
@@ -74,7 +76,7 @@ def public_profile(uid):
 def private_profile():
 	account = Account.get({"user" : current_user._id})
 	telemetry = Telemetry.get({"user" : current_user._id})
-	return render_template("account/pages/profile.html", user=current_user, info=account, telemetry=telemetry)
+	return render_template("account/pages/profile.html", user=current_user, info=account, telemetry=telemetry, showMeta=True)
 
 @ACCOUNT_BLUEPRINT.route("/settings/delimg/<id>", methods=["POST"])
 @jwt_required
@@ -97,3 +99,17 @@ def user_image(uid, id : int):
 	resp = make_response(byte)
 	resp.headers.set('Content-Type', mime)
 	return resp
+
+@ACCOUNT_BLUEPRINT.route("/action/<uid>/<action>")
+@jwt_required
+def action_thing(uid, action):
+	account = Account.get({"user" : ObjectId(uid)})
+	if action == "like":
+		account.like(current_user)
+	elif action == "block":
+		account.block(current_user)
+	elif action == "report":
+		pass
+	else:
+		raise APIException(message="Invalid option")
+	

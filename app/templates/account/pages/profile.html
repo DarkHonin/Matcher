@@ -3,19 +3,18 @@
     {% include 'account/parts/user_card.html' %}
     {% if showMeta %}
         <h2>Viewed by</h2>
-        {% for i in page.viewed_by %}
+        {% for i in telemetry.viewed_by %}
             {% set item=resolve_user(i) %}
-            {% set iteminfo=resolve_info(item.details) %}
-            <a href="{{url_for("user_accounts.account_profile", profile=item.uname)}}">
+            {% set iteminfo=resolve_account(i) %}
+            <a href="{{url_for("accounts.public_profile", uid=i)}}">
             {% include 'account/parts/profile_icon.html' %}
         </a>
         {% endfor %}
         <h2>Liked by</h2>
-        {% for i in page.liked_by %}
-            
+        {% for i in telemetry.liked_by %}
             {% set item=resolve_user(i) %}
-            {% set iteminfo=resolve_info(item.details) %}
-            <a href="{{url_for("user_accounts.account_profile", profile=item.uname)}}">
+            {% set iteminfo=resolve_account(i) %}
+            <a href="{{url_for("accounts.public_profile", uid=i)}}">
             {% include 'account/parts/profile_icon.html' %}
             </a>
         {% endfor %}

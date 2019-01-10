@@ -1,7 +1,7 @@
 <div class="user card" data-watermark="{{user.uname | upper}}">
 	<div class="details" data-views="{{telemetry.viewed_by | length}}" data-fame="{{telemetry.fame()}}">
 		<span data-gender="{{info.gender}}" data-age="{{info.age() | int}}" class="name {{info.interest}}">{{info.fname}} {{info.lname}}</span>
-		<p class="biography">{{info.biography}}</p>
+		<p class="biography">{{info.biography if info.biography else "No biography set yet"}}</p>
 		<div id="taglist">{% for i in info.tags %}
 				<span>{{i}}</span>
 		{%endfor%}</div>
@@ -9,9 +9,9 @@
 	{% set item=user %}
 	{% set iteminfo=info %}
 	{% include 'account/parts/profile_icon.html' %}
-	{% if showMeta %}
+	{% if not showMeta %}
 	<div class="meta">
-		<button class="ul ok" id="like" event='{"click" : "like"}'>{{"Like" if not page.isLiked else "Unlike"}}</button>
+		<button class="ul ok" id="like" event='{"click" : "like"}'>{{"Like" if not user._id in telemetry.liked_by else "Unlike"}}</button>
 		<button class="ul notok" id="block" event='{"click" : "block"}' >Block</button>
 		<button class="ul notok">Report</button>
 	</div>
