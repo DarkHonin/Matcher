@@ -1,0 +1,16 @@
+{% extends 'users/template.html' %}
+
+{% block head %}
+    <h2 class="context">Recovery</h2>
+    <hr>
+    <p class="content">Hope that your email is still active</p>
+{% endblock %}
+{% block form %}
+    <form method="post" action="{{submit_to}}" event='{"submit":"formSubmit"}'>
+		<h3 class="context">Please supply your email</h3>
+		<div data-field="email">
+			<input type="email" placeholder="Recovery email" required name="email">
+		</div>
+		<input type="submit" class="content ul" value='Recover'>
+	</form>
+{% endblock %}

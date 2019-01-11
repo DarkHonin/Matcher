@@ -7,6 +7,11 @@ def create_token(user : User, callback : str):
 	token.save()
 	mail_token(user.email, token)
 
+def create_url_token(user : User, callback : str):
+	token = Token(callback, user._id, "URL")
+	token.save()
+	mail_token(user.email, token)
+
 def redeem_token(token):
 	pass
 
@@ -16,7 +21,7 @@ def mail_token(email, token):
 	from app import EMAIL_CLIENT
 	from smtplib import SMTPRecipientsRefused
 	from socket import gaierror
-	msg = Message("The keys to Valhalla",recipients=[email], html=render_template("users/activateEmail.html", token=token.token))
+	msg = Message("The keys to Valhalla",recipients=[email], html=render_template("users/activateEmail.html", token=token))
 	try:
 		EMAIL_CLIENT.send(msg)
 		print("Token email sent to :", email)

@@ -27,6 +27,7 @@ def render_redirect_exception(err : APIRedirectingException):
 from .users.routes import USER_BLUEPRINT
 from .tokens.routes import TOKEN_BLUEPRINT
 from .account.routes import ACCOUNT_BLUEPRINT
+from .search.routes import SEARCH_BLUEPRINT
 from .notifications.socket import Notifier
 
 SOCKET.on_namespace(Notifier())
@@ -34,6 +35,7 @@ SOCKET.on_namespace(Notifier())
 APP.register_blueprint(USER_BLUEPRINT)
 APP.register_blueprint(TOKEN_BLUEPRINT)
 APP.register_blueprint(ACCOUNT_BLUEPRINT)
+APP.register_blueprint(SEARCH_BLUEPRINT)
 
 JSONWT = JWTManager(APP)
 

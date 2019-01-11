@@ -1,0 +1,9 @@
+{% extends 'template.html' %}
+{%block content%}
+    {% include 'search/parts/search.html' %}
+    {%block page_items%}
+        
+    {%endblock%}
+    <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/profile.css', _external=True) }} " />
+    <link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/search.css', _external=True) }} " />
+{% endblock %}

@@ -1,0 +1,17 @@
+#results{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#results>a{
+    margin: auto;
+}
+
+[data-label]:before{
+    font-family: "Sansita";
+    content: attr(data-label);
+    display: inline-block;
+    text-align: left;
+    font-size: 1.2em;
+}

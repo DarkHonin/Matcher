@@ -7,6 +7,16 @@ UNAME_RE = re.compile(r"^[a-zA-Z0-9]{5,10}$")
 PASSW_RE = re.compile(r"^(?=.*[A-Z])(?=.*\d)(?=.*[a-z]).{6,20}$")
 PNAME_RE = re.compile(r"^[A-Z][a-z]+$")
 
+class RecoverMessage(APIValidatingMessage):
+	REQUIRED = ["email", "g-recaptcha-response"]
+	ONLY_ACCEPTS = ["email", "g-recaptcha-response"]
+
+	def test_email(self, value:str):
+		if not EMAIL_RE.match(value):
+			self.logError("email", "Your email is invalid")
+			return False
+		return True
+
 class LoginMessage(APIValidatingMessage):
 
 	REQUIRED = ["uname", "password", "g-recaptcha-response"]

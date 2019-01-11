@@ -290,7 +290,11 @@ select>option{
     content: "No views on your page yet"
 }
 
-.empty + [class*="no_"]{
+.no_result:after{
+    content: "No results to show"
+}
+
+.empty + [class*="no_"], *:empty + [class*="no_"]{
     display: block;
 }
 

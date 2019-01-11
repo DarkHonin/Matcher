@@ -6,7 +6,7 @@ class Token(DBDocument):
 
 	collection_name = "Tokens"
 
-	def __init__(self, callback : Callback, resource):
+	def __init__(self, callback : Callback, resource, tp="Auth"):
 		DBDocument.__init__(self)
 		from app import APP
 		if APP.config.get("CAPTCHA_DISABLE"):
@@ -15,11 +15,11 @@ class Token(DBDocument):
 			self.token = str(uuid4())
 		self.callback = callback
 		self.resource = resource
+		self.type = tp
 
 	@staticmethod
 	def defineKeys(col):
 		col.create_index(("resource"), unique=True)
 
 	def redeem(self):
-		self.delete()
 		return self.callback.resolve()

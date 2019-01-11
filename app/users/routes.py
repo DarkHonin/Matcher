@@ -1,9 +1,9 @@
 from flask import Blueprint, request, render_template, url_for, make_response, jsonify, redirect, session
 from . import User
-from .api import RegisterMessage, LoginMessage, APIInvalidUser, APIUserNotActive
+from .api import RegisterMessage, LoginMessage, APIInvalidUser, APIUserNotActive, RecoverMessage
 from app.api import APIMessageRecievedDecorator, APIValidatingMessage, APIException, APISuccessMessage
 from app.account import create_user_account
-from app.tokens import create_token
+from app.tokens import create_token, create_url_token
 from flask_jwt_extended import unset_access_cookies, unset_refresh_cookies, jwt_required, get_current_user
 from app.database import Callback
 
@@ -54,6 +54,21 @@ def login(message : LoginMessage):
 		session["token"] = user.login(message.password, resp)
 		return resp
 
+@USER_BLUEPRINT.route("/recover", methods=["GET", "POST"])
+@APIMessageRecievedDecorator(RecoverMessage)
+def recover(message : RecoverMessage):
+	if request.method == "GET":
+		return render_template("users/pages/recover.html")
+	elif request.method == "POST":
+		message.validate()
+		if not message.valid:
+			raise message.errorMessage
+		email = message.email
+		usr = User.get({"email" : email})
+		if not usr:
+			raise APIException(message="The email is not registered")
+		create_url_token(usr, Callback("recover_account", module="app.users", cls="User"))
+		return APISuccessMessage(displayMessage={"message" : "A confimation email has been sent to your account"}).messageSend()
 
 @USER_BLUEPRINT.route("/logout", methods=["GET", "POST"])
 def logout():

@@ -15,7 +15,7 @@ lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eff
 liptag = lipsum.split(" ")
 imgs = []
 
-for e in range(0, 50):
+for e in range(0, 84):
     n = surnames[random.randint(0, len(surnames) - 1)]
     if e % 2:
         fn = m_names[random.randint(0, mlen-1)]

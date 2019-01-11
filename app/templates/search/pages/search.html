@@ -1,0 +1,13 @@
+{% extends 'search/template.html' %}
+
+{%block page_items%}
+<div id="results" class="{{"empty" if not users}}">
+    {% for icon_user in users %}
+        {% set icon_account = resolve_account(icon_user._id) %}
+        <a href="{{url_for("accounts.public_profile", uid=icon_user._id)}}">
+        {% include 'account/parts/profile_icon.html' %}
+        </a>
+    {% endfor %}
+</div>
+<span class="no_result">AUX</span> 
+{% endblock %}

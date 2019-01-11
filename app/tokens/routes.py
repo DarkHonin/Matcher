@@ -13,7 +13,7 @@ TOKEN_BLUEPRINT = Blueprint("tokens", __name__)
 @TOKEN_BLUEPRINT.route("/redeem/<token>", methods=["GET", "POST"])
 @TOKEN_BLUEPRINT.route("/redeem/", methods=["GET", "POST"])
 @APIMessageRecievedDecorator(LoginMessage)
-def redeem(message : APIValidatingMessage, token=None):
+def redeemAuth(message : APIValidatingMessage, token=None):
 	if request.method == "GET":
 		return render_template("users/pages/redeem.html", submit_to=url_for("tokens.redeem"))
 	elif request.method == "POST":
@@ -26,7 +26,20 @@ def redeem(message : APIValidatingMessage, token=None):
 		user = User.get({"uname" : message.uname})
 		if not user or user._id != _token.resource:
 			raise APIInvalidUser()
-		resp = APISuccessMessage(displayMessage={"message" : "Your token has been redeemed"}, redirect="accounts.settings").messageSend()
+		opts = _token.redeem()(user)
+		resp = APISuccessMessage(**opts).messageSend()
 		user.login(message.password, resp)
-		_token.redeem()(user)
+		_token.delete()
+		return resp
+
+
+@TOKEN_BLUEPRINT.route("/redeemq/<token>", methods=["GET"])
+def redeemURL(token=None):
+		_token = Token.get({"token" : token, "type" : "URL"})
+		if not _token:
+			raise APIInvalidToken()
+		user = User.get({"_id" : _token.resource})
+		opts = _token.redeem()(user)
+		resp = APISuccessMessage(**opts).messageSend()
+		_token.delete()
 		return resp
