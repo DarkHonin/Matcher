@@ -22,3 +22,23 @@ function nextIcon(event){
 		current.nextSibling.classList.add("show")
 	}
 }
+
+function like(event){
+	transmit(window.location + "/like", {}).then(f => {translate(f)})
+}
+
+function block(event){
+	transmit(window.location + "/block", {}).then(f => {translate(f)})
+}
+
+function blocking(el, data){
+	el.innerHTML = data
+}
+
+function has_been_liked(){
+	el = document.createElement("label")
+	el.classList.add("ul")
+	el.classList.add("ok")
+	el.innerHTML = "Liked!"
+	return el
+}

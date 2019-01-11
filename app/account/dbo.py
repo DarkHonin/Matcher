@@ -16,6 +16,8 @@ class Telemetry(DBDocument):
 	def block(self, blocked_user : User):
 		if blocked_user._id not in self.blocked:
 			self.blocked.append(blocked_user._id)
+		else:
+			self.blocked.remove(blocked_user._id)
 
 	def like(self, liking_user : User):
 		if liking_user._id not in self.liked_by:

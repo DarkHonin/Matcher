@@ -117,6 +117,20 @@ function update({action, subject, fn=null, data=null, before=null}){
 		case "remove":
 			sub.remove()
 			break
+		case "replace":
+			if (!window[fn])
+				return console.log("could not update", subject, "Function not found : ", fn)
+			par = sub.parentNode
+			par.insertBefore(window[fn](data), sub)
+			sub.remove()
+			break
+		case "change":
+			if (!window[fn])
+				return console.log("could not update", subject, "Function not found : ", fn)
+			window[fn](sub, data)
+			break
+		default:
+			console.log("Illegal action", action)
 	}
 
 }

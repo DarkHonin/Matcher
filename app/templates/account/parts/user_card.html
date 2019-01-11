@@ -1,18 +1,26 @@
 <div class="user card" data-watermark="{{user.uname | upper}}">
 	<div class="details" data-views="{{telemetry.viewed_by | length}}" data-fame="{{telemetry.fame()}}">
-		<span data-gender="{{info.gender}}" data-age="{{info.age() | int}}" class="name {{info.interest}}">{{info.fname}} {{info.lname}}</span>
-		<p class="biography">{{info.biography if info.biography else "No biography set yet"}}</p>
-		<div id="taglist">{% for i in info.tags %}
+		<span data-gender="{{account.gender}}" data-age="{{account.age() | int}}" class="name {{account.interest}}">{{account.fname}} {{account.lname}}</span>
+		<p class="biography">{{account.biography if account.biography else "No biography set yet"}}</p>
+		<div id="taglist">{% for i in account.tags %}
 				<span>{{i}}</span>
 		{%endfor%}</div>
 	</div>
-	{% set item=user %}
-	{% set iteminfo=info %}
+	{% set icon_user=user %}
+	{% set icon_account=account %}
 	{% include 'account/parts/profile_icon.html' %}
 	{% if not showMeta %}
 	<div class="meta">
-		<button class="ul ok" id="like" event='{"click" : "like"}'>{{"Like" if not user._id in telemetry.liked_by else "Unlike"}}</button>
-		<button class="ul notok" id="block" event='{"click" : "block"}' >Block</button>
+		{% if icon_account.complete %}
+			{% if not viewer._id in telemetry.liked_by %}
+				<button class="ul ok" id="like" event='{"click" : "like"}'>Like</button>
+			{% else %}
+				<label class="ul ok">You have liked this user</label>
+			{% endif %}
+		{% else %}
+			<label class="ul notok">Incomplete accounts cant be liked</label>
+		{% endif %}
+		<button class="ul notok" id="block" event='{"click" : "block"}' >{{"Unblock" if user._id in viewer_telemetry.blocked else "Block"}}</button>
 		<button class="ul notok">Report</button>
 	</div>
 	{% endif %}

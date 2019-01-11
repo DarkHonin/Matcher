@@ -10,6 +10,11 @@ from app.database import Callback
 
 USER_BLUEPRINT = Blueprint("users", __name__)
 
+@USER_BLUEPRINT.route("/generate_random_users")
+def make_bogus():
+	from bogus import load_bogus
+	return "Users have been loaded"
+
 @USER_BLUEPRINT.route("/register", methods=["GET", "POST"])
 @APIMessageRecievedDecorator(RegisterMessage)
 def register(message : RegisterMessage):
@@ -45,7 +50,7 @@ def login(message : LoginMessage):
 			raise APIInvalidUser()
 		if not user.active:
 			raise APIUserNotActive()
-		resp = APISuccessMessage(displayMessage={"message" : "You are now logged in"}, redirect="accounts.settings").messageSend()
+		resp = APISuccessMessage(displayMessage={"message" : "You are now logged in"}, redirect="accounts.private_profile").messageSend()
 		user.login(message.password, resp)
 		return resp
 

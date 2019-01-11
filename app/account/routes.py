@@ -64,11 +64,12 @@ def public_profile(uid):
 	id = ObjectId(uid)
 	profile_user = User.get({"_id" : id})
 	profile_telemetry = Telemetry.get({"user" : id})
+	view_tel = Telemetry.get({"user" : current_user._id})
 	account = Account.get({"user" : id})
 	if not current_user._id == id:
 		profile_telemetry.view(current_user)
 		profile_telemetry.save()
-	return render_template("account/pages/profile.html", user=profile_user, info=account, telemetry=profile_telemetry, showMeta=current_user._id == id)
+	return render_template("account/pages/profile.html", user=profile_user, viewer=current_user, account=account, telemetry=profile_telemetry, showMeta=current_user._id == id, viewer_telemetry=view_tel)
 	
 
 @ACCOUNT_BLUEPRINT.route("/profile")
@@ -76,7 +77,7 @@ def public_profile(uid):
 def private_profile():
 	account = Account.get({"user" : current_user._id})
 	telemetry = Telemetry.get({"user" : current_user._id})
-	return render_template("account/pages/profile.html", user=current_user, info=account, telemetry=telemetry, showMeta=True)
+	return render_template("account/pages/profile.html", user=current_user, account=account, telemetry=telemetry, showMeta=True)
 
 @ACCOUNT_BLUEPRINT.route("/settings/delimg/<id>", methods=["POST"])
 @jwt_required
@@ -100,16 +101,36 @@ def user_image(uid, id : int):
 	resp.headers.set('Content-Type', mime)
 	return resp
 
-@ACCOUNT_BLUEPRINT.route("/action/<uid>/<action>")
+@ACCOUNT_BLUEPRINT.route("/profile/<uid>/<action>", methods=["POST"])
 @jwt_required
 def action_thing(uid, action):
-	account = Account.get({"user" : ObjectId(uid)})
+	if ObjectId(uid) == current_user._id:
+		raise APIException(message="You cant Like, Block or report yourself")
 	if action == "like":
-		account.like(current_user)
+		tel = Telemetry.get({"user" : ObjectId(uid)})
+		tel.like(current_user)
+		tel.save()
+		return APISuccessMessage(displayMessage={"message" : "Liked"}, update={"action" : "replace",
+			"subject" : "#like", "fn" : "has_been_liked"}).messageSend()
 	elif action == "block":
-		account.block(current_user)
+		from app import resolve_user
+		blocked = resolve_user(ObjectId(uid))
+		ttl = Telemetry.get({"user" : current_user._id})
+		ttl.block(blocked)
+		ttl.save()
+		return APISuccessMessage(displayMessage={
+			"message" : "This user is now %s" % ( "blocked" if blocked._id in ttl.blocked else "unblocked")}, 
+			update={
+				"action" : "change",
+				"subject" : "#block", 
+				"fn" : "blocking", 
+				"data": "%s" %("Block" if not blocked._id in ttl.blocked else "Unblock") 
+			}).messageSend()
 	elif action == "report":
+		#Something or the other, need to think about this
+		
 		pass
 	else:
 		raise APIException(message="Invalid option")
+	return "OK"
 	

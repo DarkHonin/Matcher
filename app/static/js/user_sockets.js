@@ -24,17 +24,6 @@ function updateNotify(data){
 	console.log(data)
 }
 
-function like(event){
-	parts = location.pathname.split("/")
-	console.log({subject : parts[parts.length - 1]})
-	userInfoSocket.emit("like", {subject : parts[parts.length - 1]})
-}
-
-function block(event){
-	parts = location.pathname.split("/")
-	console.log({subject : parts[parts.length - 1]})
-	userInfoSocket.emit("block", {subject : parts[parts.length - 1]})
-}
 
 function APIButtonChange(mess){
 	console.log(mess)

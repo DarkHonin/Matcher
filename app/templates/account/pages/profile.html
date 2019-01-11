@@ -4,16 +4,16 @@
     {% if showMeta %}
         <h2>Viewed by</h2>
         {% for i in telemetry.viewed_by %}
-            {% set item=resolve_user(i) %}
-            {% set iteminfo=resolve_account(i) %}
+            {% set icon_user=resolve_user(i) %}
+            {% set icon_account=resolve_account(i) %}
             <a href="{{url_for("accounts.public_profile", uid=i)}}">
             {% include 'account/parts/profile_icon.html' %}
         </a>
         {% endfor %}
         <h2>Liked by</h2>
         {% for i in telemetry.liked_by %}
-            {% set item=resolve_user(i) %}
-            {% set iteminfo=resolve_account(i) %}
+            {% set icon_user=resolve_user(i) %}
+            {% set icon_account=resolve_account(i) %}
             <a href="{{url_for("accounts.public_profile", uid=i)}}">
             {% include 'account/parts/profile_icon.html' %}
             </a>
