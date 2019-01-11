@@ -1,4 +1,4 @@
-<div class="picon {{"online" if icon_user.isOnline}}" data-uname="{{icon_user.uname}}" event='{"click" : "nextIcon"}'>
+<div uid="{{icon_user._id}}" class="picon {{"online" if icon_user.isOnline}}" data-uname="{{icon_user.uname}}" event='{"click" : "nextIcon"}'>
 	{% for i in icon_account.images %}
 		<img class="{{ 'show' if loop.index0 == 0}}" src="{{url_for('accounts.user_image', uid=icon_user._id, id=loop.index0 )}}">
 	{% endfor %}

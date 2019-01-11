@@ -1,5 +1,5 @@
 DEBUG = True
-
+SECRET_KEY = "8NpS4c1yVLtWPBNilTLb"
 MAIL_FROM_EMAIL= "noreply@Matcher.co.za"
 
 MONGO_URI = "mongodb://localhost:27017/Matcher"
@@ -16,7 +16,7 @@ CAPTCHA_DISABLE = True
 TESTING_TOKEN = "this_is_a_testing_token"
 
 JWT_SECRET_KEY = "eyJTb21lIGluZm9ybWF0aW9uIjogIk5ha05ha05hayJ9"
-JWT_TOKEN_LOCATION = ["cookies"]
+JWT_TOKEN_LOCATION = ["cookies", "json"]
 JWT_COOKIE_CSRF_PROTECT = False
 
 ######################################################

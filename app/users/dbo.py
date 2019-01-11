@@ -42,8 +42,9 @@ class User(DBDocument):
 			raise APIInvalidUser()
 		access_token = create_access_token(identity=self)
 		refresh_token = create_refresh_token(identity=self)
-		set_access_cookies(responce, access_token)
 		set_refresh_cookies(responce, refresh_token)
+		set_access_cookies(responce, access_token)
+		return access_token
 
 	@property
 	def isOnline(self):

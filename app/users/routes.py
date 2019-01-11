@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, url_for, make_response, jsonify, redirect
+from flask import Blueprint, request, render_template, url_for, make_response, jsonify, redirect, session
 from . import User
 from .api import RegisterMessage, LoginMessage, APIInvalidUser, APIUserNotActive
 from app.api import APIMessageRecievedDecorator, APIValidatingMessage, APIException, APISuccessMessage
@@ -51,7 +51,7 @@ def login(message : LoginMessage):
 		if not user.active:
 			raise APIUserNotActive()
 		resp = APISuccessMessage(displayMessage={"message" : "You are now logged in"}, redirect="accounts.private_profile").messageSend()
-		user.login(message.password, resp)
+		session["token"] = user.login(message.password, resp)
 		return resp
 
 

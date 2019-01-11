@@ -1,5 +1,6 @@
 {% extends 'template.html' %}
 {%block content%}
+	<meta http-equiv="Authorization: Basic" value="{{jwt_token}}">
 	{% include 'account/parts/navbar.html' %}
 	{%block page_items%}
 	
@@ -8,4 +9,7 @@
 	<script src="{{ url_for('static', filename='js/user_sockets.js') }}"></script>
 	<script src="{{ url_for('static', filename='js/user.js') }}"></script>
 	<link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/profile.css', _external=True) }} " />
+	<script>
+			check_online()
+	</script>
 {%endblock%}

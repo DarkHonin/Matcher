@@ -1,3 +1,3 @@
 import app
 
-app.APP.run()
+app.SOCKET.run(app.APP)

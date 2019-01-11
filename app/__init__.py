@@ -3,12 +3,14 @@ from flask_pymongo import PyMongo
 from .api import APIException, APIRedirectingException
 from flask_mail import Mail
 from flask_jwt_extended import JWTManager
+from flask_socketio import SocketIO
 
 APP = Flask(__name__)							#Create app instnce
 APP.config.from_pyfile("instance/config.py")	#Config file load
 
 DATABASE = PyMongo(APP)							#Create database connection
 EMAIL_CLIENT = Mail(APP)						#Create email client
+SOCKET = SocketIO(APP)
 
 #########################################################
 #####	App spesific routes		#########################
@@ -25,6 +27,9 @@ def render_redirect_exception(err : APIRedirectingException):
 from .users.routes import USER_BLUEPRINT
 from .tokens.routes import TOKEN_BLUEPRINT
 from .account.routes import ACCOUNT_BLUEPRINT
+from .notifications.socket import Notifier
+
+SOCKET.on_namespace(Notifier())
 
 APP.register_blueprint(USER_BLUEPRINT)
 APP.register_blueprint(TOKEN_BLUEPRINT)

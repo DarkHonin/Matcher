@@ -1,19 +1,16 @@
-//const userInfoSocket = io.connect('http://' + document.domain + ':' + location.port + "/messages");
+const notifications = io.connect('http://' + document.domain + ':' + location.port + "/notfications");
 
-function comeOnline(uname){
-	console.log(uname)
-	item = document.querySelectorAll("[data-uname='"+uname.user+"']").forEach(f => {f.classList.add("online"); console.log(f)})
+
+function comeOnline({id}){
+	item = document.querySelectorAll("[uid='"+id+"']").forEach(f => {f.classList.add("online"); console.log(f.getAttribute("data-uname"), "is now online")})
 }
 
-function goneOffline(uname){
-	item = document.querySelector("[data-uname='"+uname.user+"']")
-	console.log(item)
-	if(item)
-		item.classList.remove("online")
+function goneOffline({id}){
+	item = document.querySelectorAll("[uid='"+id+"']").forEach(f => {f.classList.remove("online");})
 }
 
 function checkStatus(){
-	userInfoSocket.emit("accountStatus")
+	notifications.emit("accountStatus")
 }
 
 function accountStatus(message){
@@ -23,7 +20,6 @@ function accountStatus(message){
 function updateNotify(data){
 	console.log(data)
 }
-
 
 function APIButtonChange(mess){
 	console.log(mess)
@@ -35,8 +31,15 @@ function general(item){
 	translate(item)
 }
 
-userInfoSocket.on("accountStatus", accountStatus)
-userInfoSocket.on("now_online", comeOnline)
-userInfoSocket.on("now_offline", goneOffline)
-userInfoSocket.on("notify", updateNotify)
-userInfoSocket.on("general", general)
+notifications.on("accountStatus", accountStatus)
+notifications.on("online", comeOnline)
+notifications.on("offline", goneOffline)
+notifications.on("notify", updateNotify)
+notifications.on("general", general)
+notifications.on("connect", auth)
+
+function check_online(){
+	document.querySelectorAll("[uid]").forEach(f => {
+		notifications.emit("isOnline", {id : f.getAttribute("uid")})
+	})
+}
