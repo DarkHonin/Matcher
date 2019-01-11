@@ -119,12 +119,11 @@ class DBDocument:
         print("Document GET :: ", clss)
         from app import DATABASE
         hip = clss.collection_name
-        print("Looking up document in :", hip)
         col = DATABASE.db[hip]
-        print("criteria", where)
         if("_id" in where):
-            if not isinstance(where["_id"], ObjectId):
+            if not isinstance(where["_id"], ObjectId) and isinstance(where["_id"], str):
                 where["_id"] = ObjectId(where["_id"])
+        print(">>Query:\n", where)
         items = col.find(where, what)
         print("%s items found" % items.count())
         ret = []

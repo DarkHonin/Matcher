@@ -2,6 +2,21 @@ from flask_socketio import Namespace, emit
 from flask_jwt_extended import decode_token
 from flask import session
 
+
+"""
+	TO-DO:
+		Like notifications
+		View notifications
+		Linked notifications
+		Ignore blocked accounts
+
+		Messaging:
+			View
+			Pending 'Like backs'
+			Linked accounts
+			Exclude blocked accounts
+"""
+
 class Notifier(Namespace):
 
 	ONLINE = []

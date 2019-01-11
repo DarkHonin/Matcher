@@ -3,4 +3,5 @@ flask-pymongo
 flask-jwt-extended
 flask-socketio
 flask-mail
+python-dateutil
 requests

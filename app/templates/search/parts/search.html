@@ -1,5 +1,13 @@
 <form id="search">
     <div data-label="Search for username:">
-    <input type="text"  placeholder="e.g. Catfoot">
+        <input type="text" name="uname" placeholder="e.g. Catfoot" value="{{uname if uname}}">
     </div>
+    <div data-label="Age gap:">
+        <input type="number" step="1" min="0" name="min_age" placeholder="Min e.g. 18+, dont be a pedo" value="{{min_age if min_age}}">
+        <input type="number" step="1" min="18" name="max_age" placeholder="Max e.g. 18+, dont be a pedo" value="{{max_age if max_age}}">
+    </div>
+    <div data-label="Fame rating:">
+            <input type="range" min="0" max="100" value="{{ 1 if not fame else fame }}" name="fame">
+    </div>
+    <input type="submit" value="Search">
 </form>
