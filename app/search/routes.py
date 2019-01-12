@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request
 from app.users import User
 from app.account import Account
 from app.account import Telemetry
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user
 from dateutil import relativedelta
 import datetime
 
@@ -14,18 +14,13 @@ SEARCH_BLUEPRINT = Blueprint("search", __name__)
 """
 
 
-def search(uname=None, min_age=None, max_age=None, fame=0):
+def search(uname=None, age_gap = -1, fame=0, location_region=None, location_city=None):
     selector = {}
-    curr = datetime.datetime.now()
-    if min_age:
-        rel = curr - relativedelta.relativedelta(years=int(min_age))
-        print(rel)
-        dt = rel
-        selector = {**selector, **{"dob" : {"$lte" : dt}}}
-    if max_age:
-        dt = datetime.datetime.now() - datetime.timedelta(days=int(max_age)*365)
-        selector = {**selector, **{"dob" : {"$gte" : dt}}}
-    print(selector)
+    if int(age_gap) >= 0:
+        curr = Account.get({"user" : current_user._id}, {"dob" : 1})["dob"]
+        min = curr - relativedelta.relativedelta(years=int(age_gap))
+        max = curr + relativedelta.relativedelta(years=int(age_gap))
+        selector = {"dob" : {"$lte" : max, "$gte" : min}}
     items = Account.get(selector, {"user" : 1})
     if not items:
         return []
@@ -44,6 +39,10 @@ def search(uname=None, min_age=None, max_age=None, fame=0):
     selector = {"_id" : {"$in" : ids}}
     if uname:
         selector["uname"] = {"$regex" : ".*"+uname+".*", '$options' : 'i'}
+    if location_region:
+        selector["location.region_name"] = location_region
+    if location_city:
+        selector["location.city"] = location_city
     return User.get(selector, {"uname" : 1, "class" : 1})
 
 

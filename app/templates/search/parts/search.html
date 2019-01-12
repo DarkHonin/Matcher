@@ -2,12 +2,26 @@
     <div data-label="Search for username:">
         <input type="text" name="uname" placeholder="e.g. Catfoot" value="{{uname if uname}}">
     </div>
-    <div data-label="Age gap:">
-        <input type="number" step="1" min="0" name="min_age" placeholder="Min e.g. 18+, dont be a pedo" value="{{min_age if min_age}}">
-        <input type="number" step="1" min="18" name="max_age" placeholder="Max e.g. 18+, dont be a pedo" value="{{max_age if max_age}}">
+    <div data-label="Age gap:" data-value="{{ 'Unset' if age_gap and age_gap | int < 0 else age_gap }}">
+        <input type="range" min="-1" name="age_gap" max="20" value="{{age_gap if age_gap else -1}}"  event='{"input":"sliderUpdate"}'>
     </div>
-    <div data-label="Fame rating:">
-            <input type="range" min="0" max="100" value="{{ 1 if not fame else fame }}" name="fame">
+    <div data-label="Fame rating:" data-value="{{ 'Unset' if fame and fame | int < 0 else fame }}">
+            <input type="range" min="-1" max="100" value="{{ -1 if not fame else fame }}"  name="fame" event='{"input":"sliderUpdate"}'>
+    </div>
+    <div data-label="Location:">
+        {% set region, city = list_regions() %}
+        <select name="location_region">
+                <option value="">--Region--</option>
+                {% for c in region %}
+                    <option value="{{c}}" {{"selected" if location_region and c == location_region}}>{{c}}</option>
+                {% endfor %}
+        </select>
+        <select name="location_city">
+                <option value="">--City--</option>
+                {% for c in city %}
+                    <option value="{{c}}" {{"selected" if locion_city and c == location_city}}>{{c}}</option>
+                {% endfor %}
+        </select>
     </div>
     <input type="submit" value="Search">
 </form>

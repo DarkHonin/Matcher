@@ -65,3 +65,6 @@ def resolve_account(id):
 
 APP.jinja_env.globals.update(resolve_user=resolve_user)
 APP.jinja_env.globals.update(resolve_account=resolve_account)
+
+from .users import list_regions
+APP.jinja_env.globals.update(list_regions=list_regions)

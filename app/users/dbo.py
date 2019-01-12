@@ -40,6 +40,7 @@ class User(DBDocument):
 		self.email = kwargs["email"]
 		self.password = generate_password_hash(kwargs["password"])
 		self.active = False
+		self.login_location = None
 		self.verified = False
 
 	@staticmethod
@@ -57,7 +58,21 @@ class User(DBDocument):
 		refresh_token = create_refresh_token(identity=self)
 		set_refresh_cookies(responce, refresh_token)
 		set_access_cookies(responce, access_token)
+		self.resolve_location()
+		self.save()
 		return access_token
+
+	def resolve_location(self):
+		print("geting location")
+		from flask import request
+		import requests
+		ip = request.environ['REMOTE_ADDR']
+		if ip == "127.0.0.1":
+			ip = requests.get("http://api.ipify.org").text
+		url = "http://api.ipstack.com/%s?access_key=c3d5cfa1b31c8989bb9c1d4f36cc096b" % ip
+		response = requests.get(url).json()
+		self.location = {"region_name" : (response["region_name"] + " " + response["country_name"]), "city" : response["city"]}
+		print("Location discovered:",self.location)
 
 	@property
 	def isOnline(self):

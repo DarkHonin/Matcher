@@ -15,3 +15,19 @@
     text-align: left;
     font-size: 1.2em;
 }
+
+[data-value]:after{
+    content: attr(data-value);
+    position: absolute;
+    display: block;
+    height: 0px;
+    left: 100%;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
+    font-family: "Sansita";
+}
+
+[data-value]{
+    position: relative;
+}
