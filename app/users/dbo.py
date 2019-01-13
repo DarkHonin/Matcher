@@ -40,7 +40,7 @@ class User(DBDocument):
 		self.email = kwargs["email"]
 		self.password = generate_password_hash(kwargs["password"])
 		self.active = False
-		self.login_location = None
+		self.login_location = {"region_name" : None, "city" : None}
 		self.verified = False
 
 	@staticmethod
@@ -71,8 +71,8 @@ class User(DBDocument):
 			ip = requests.get("http://api.ipify.org").text
 		url = "http://api.ipstack.com/%s?access_key=c3d5cfa1b31c8989bb9c1d4f36cc096b" % ip
 		response = requests.get(url).json()
-		self.location = {"region_name" : (response["region_name"] + " " + response["country_name"]), "city" : response["city"]}
-		print("Location discovered:",self.location)
+		self.login_location = {"region_name" : (response["region_name"] + " " + response["country_name"]), "city" : response["city"]}
+		print("Location discovered:",self.login_location)
 
 	@property
 	def isOnline(self):

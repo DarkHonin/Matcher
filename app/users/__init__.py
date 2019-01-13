@@ -1,7 +1,7 @@
 from .dbo import User
 
 def list_regions():
-	query = User.collection().find({}, {"location" : 1}).distinct("location")
+	query = User.collection().find({}, {"login_location" : 1}).distinct("login_location")
 	region = []
 	city = []
 	print(query)

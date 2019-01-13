@@ -67,4 +67,6 @@ APP.jinja_env.globals.update(resolve_user=resolve_user)
 APP.jinja_env.globals.update(resolve_account=resolve_account)
 
 from .users import list_regions
+from .account import get_all_tags
 APP.jinja_env.globals.update(list_regions=list_regions)
+APP.jinja_env.globals.update(get_all_tags=get_all_tags)

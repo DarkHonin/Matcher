@@ -31,3 +31,16 @@
 [data-value]{
     position: relative;
 }
+
+#search>ul{
+    list-style: none;
+    max-width: fit-content;
+    margin: 1em auto;
+    padding: 0;
+}
+
+#search>ul>li{
+    display: flex;
+    text-align: center;
+    margin: 0.25em;
+}

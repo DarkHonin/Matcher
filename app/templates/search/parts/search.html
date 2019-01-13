@@ -10,18 +10,51 @@
     </div>
     <div data-label="Location:">
         {% set region, city = list_regions() %}
-        <select name="location_region">
-                <option value="">--Region--</option>
+        <input type="text" name="location_region" value="{{ location_region if location_region }}" list="location_region" placeholder="Region">
+        <datalist id="location_region">
                 {% for c in region %}
-                    <option value="{{c}}" {{"selected" if location_region and c == location_region}}>{{c}}</option>
+                    {% if c %}
+                    <option value="{{c}}">
+                    {% endif %}
                 {% endfor %}
-        </select>
-        <select name="location_city">
-                <option value="">--City--</option>
+        </datalist>
+        <input type="text" name="location_city" value="{{ location_city if location_city }}" list="location_city" placeholder="City">
+        <datalist id="location_city">
                 {% for c in city %}
-                    <option value="{{c}}" {{"selected" if locion_city and c == location_city}}>{{c}}</option>
+                    {% if c %}
+                    <option value="{{c}}">
+                    {% endif %}
                 {% endfor %}
-        </select>
+        </datalist>
     </div>
+    <div data-label="Tags:">
+        <input type="text" list="tags" placeholder="Tags are to be sepperated with ','" event='{"keyup":"tagEventListner"}'>
+        <datalist id="tags">
+                {% for c in get_all_tags() %}
+                    {% if c %}
+                    <option value="{{c}}">
+                    {% endif %}
+                {% endfor %}
+        </datalist>
+        <input type="hidden" id="tagsHolder" name="tags" value="{{tags if tags}}">
+        <div id="taglist">{% if tags %}{% for i in tags.split(", ") %}
+                <span event='{"click" : "tagRemove"}'>{{i}}</span>
+            {%endfor%}{% endif %}</div>
+        </div>
+    </div>
+    <ul data-label="Sort by:">
+        <li>
+            <input type="radio" name="sort_by" value="Name" {{"checked" if sort_by == 'Name'}}>Name
+        </li>
+        <li>
+            <input type="radio" name="sort_by" value="Age gap" {{"checked" if sort_by and sort_by == 'Age gap'}}>Age gap
+        </li>
+        <li>
+            <input type="radio" name="sort_by" value="Fame" {{"checked" if sort_by and sort_by == 'Fame'}}>Fame
+        </li>
+        <li>
+            <input type="radio" name="sort_by" value="Location" {{"checked" if sort_by and sort_by == 'Location'}}>Location
+        </li>
+    </ul>
     <input type="submit" value="Search">
 </form>
