@@ -1,0 +1,14 @@
+{% extends 'alerts/template.html' %}
+{%block page_items%}
+	{% if alerts %}
+		{% for alert in alerts %}
+			{% include 'alerts/parts/notification.html' %}
+		{% endfor %}
+	{% else %}
+		<div class="empty"></div>
+		<span class="no_alerts" data-text="No alerts here">OP</span>
+	{% endif %}
+	{% if not old %}
+		<a href="{{url_for('notifications.old_notif')}}">Old notifications</a>
+	{% endif %}
+{%endblock%}

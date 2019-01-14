@@ -10,6 +10,7 @@ from app.tokens import create_token
 from app.database import Callback
 from io import BytesIO
 import base64
+from app.notifications import Notification, UserNotifications
 
 ACCOUNT_BLUEPRINT = Blueprint("accounts", __name__)
 
@@ -66,9 +67,10 @@ def public_profile(uid):
 	profile_telemetry = Telemetry.get({"user" : id})
 	view_tel = Telemetry.get({"user" : current_user._id})
 	account = Account.get({"user" : id})
-	if not current_user._id == id:
+	if not current_user._id == id and current_user._id not in profile_telemetry.viewed_by:
 		profile_telemetry.view(current_user)
 		profile_telemetry.save()
+		UserNotifications.notify(Notification(current_user, profile_user, Notification.ACTION_VIEW))
 	return render_template("account/pages/profile.html", user=profile_user, viewer=current_user, account=account, telemetry=profile_telemetry, showMeta=current_user._id == id, viewer_telemetry=view_tel)
 	
 
@@ -110,6 +112,8 @@ def action_thing(uid, action):
 		tel = Telemetry.get({"user" : ObjectId(uid)})
 		tel.like(current_user)
 		tel.save()
+		note = Notification(current_user, User.get({"_id" : ObjectId(uid)}), Notification.ACTION_LIKE)
+		UserNotifications.notify(note)
 		return APISuccessMessage(displayMessage={"message" : "Liked"}, update={"action" : "replace",
 			"subject" : "#like", "fn" : "has_been_liked"}).messageSend()
 	elif action == "block":

@@ -16,3 +16,22 @@
 *[data-error]:hover:before, *[data-error]:focus:before{
   background-color: rgb(200, 44, 44);
 }
+
+[data-counter]{
+  position: relative;
+}
+[data-counter]:after{
+  content: attr(data-counter);
+  position: absolute;
+  display: block;
+  top: 100%;
+  width: 100%;
+  text-align: center;
+  left: 0px;
+  background: rgba(255, 0, 0, 0.7);
+  border-radius: 0em 0em 1em 1em;
+}
+
+[data-text]:after{
+  content: attr(data-text);
+}

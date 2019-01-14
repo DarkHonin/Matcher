@@ -9,34 +9,26 @@ function goneOffline({id}){
 	item = document.querySelectorAll("[uid='"+id+"']").forEach(f => {f.classList.remove("online");})
 }
 
-function checkStatus(){
-	notifications.emit("accountStatus")
+function pushNotification(message){
+	displayMessage({message : message})
+	notifications.emit("get_notif_count")
 }
 
-function accountStatus(message){
-	translate(message)
+function notif_count({messages, alerts}){
+	if (alerts == 0)
+		document.querySelector("#notifications").setAttribute("data-counter", "")
+	else
+		document.querySelector("#notifications").setAttribute("data-counter", alerts)
+	if (messages == 0)
+		document.querySelector("#messages").setAttribute("data-counter", "")
+	else
+		document.querySelector("#messages").setAttribute("data-counter", messages)
 }
 
-function updateNotify(data){
-	console.log(data)
-}
-
-function APIButtonChange(mess){
-	console.log(mess)
-	item = document.querySelector("#"+mess.id)
-	item.innerHTML = mess.innerHTML
-}
-
-function general(item){
-	translate(item)
-}
-
-notifications.on("accountStatus", accountStatus)
+notifications.on("notification", pushNotification)
 notifications.on("online", comeOnline)
 notifications.on("offline", goneOffline)
-notifications.on("notify", updateNotify)
-notifications.on("general", general)
-notifications.on("connect", auth)
+notifications.on("notif_count", notif_count)
 
 function check_online(){
 	document.querySelectorAll("[uid]").forEach(f => {
