@@ -3,4 +3,7 @@ include
 LIB
 Scripts
 tcl
+bin
 *desktop.ini*
+*/__pycache__
+**.pyc
