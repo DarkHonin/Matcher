@@ -30,14 +30,18 @@ from .account.routes import ACCOUNT_BLUEPRINT
 from .search.routes import SEARCH_BLUEPRINT
 from .notifications.socket import Notifier
 from .notifications.routes import NOTIFICATION
+from .chat.routes import CHAT
+from .chat.socket import ChatSpace
 
 SOCKET.on_namespace(Notifier())
+SOCKET.on_namespace(ChatSpace())
 
 APP.register_blueprint(USER_BLUEPRINT)
 APP.register_blueprint(TOKEN_BLUEPRINT)
 APP.register_blueprint(ACCOUNT_BLUEPRINT)
 APP.register_blueprint(SEARCH_BLUEPRINT)
 APP.register_blueprint(NOTIFICATION)
+APP.register_blueprint(CHAT)
 
 JSONWT = JWTManager(APP)
 

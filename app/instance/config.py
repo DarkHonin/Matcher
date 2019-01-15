@@ -18,6 +18,7 @@ TESTING_TOKEN = "this_is_a_testing_token"
 JWT_SECRET_KEY = "eyJTb21lIGluZm9ybWF0aW9uIjogIk5ha05ha05hayJ9"
 JWT_TOKEN_LOCATION = ["cookies", "json"]
 JWT_COOKIE_CSRF_PROTECT = False
+JWT_ACCESS_TOKEN_EXPIRES = False
 
 ######################################################
 ############	Module configs	######################

@@ -1,0 +1,10 @@
+{% extends 'alerts/template.html' %}
+{%block page_items%}
+<section class="chat">
+	{% include 'alerts/parts/chat_bar.html' %}
+	<aside class="chat_space">
+	</aside>
+</section>
+<link rel="stylesheet" type="text/css" media="screen" href=" {{ url_for('static', filename='css/chat.css', _external=True) }} " />
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{%endblock%}

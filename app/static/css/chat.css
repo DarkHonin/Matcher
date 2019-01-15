@@ -1,0 +1,32 @@
+.chat{
+  display: flex;
+  background-color: rgba(0,0,0,.5);
+  height: -moz-available;
+}
+
+.chat>.chat_strip{
+  flex:1;
+  overflow: hidden;
+  box-shadow: black 0em 0em 1em 0em inset;
+}
+
+.chat>.chat_strip>section{
+  overflow-y: auto;
+}
+
+.chat>.chat_space{
+  flex: 5;
+  height: -moz-available;
+  width: -moz-available;
+  background-color: grey;
+  margin: 1em;
+}
+
+.chat .picon{
+  height: 5em;
+  width: -moz-available;
+}
+
+.chat .picon:before{
+  padding: 0em 1em;
+}

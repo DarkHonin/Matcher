@@ -14,11 +14,11 @@ function updateLikeButton(text){
 function nextIcon(event){
 	parent = event.target.parentNode
 	current = parent.querySelector(".show")
-	if(current)
-		current.classList.remove("show")
 	if(!current || !current.nextSibling){
 		parent.firstChild.classList.add("show")
 	}else{
+		if (!current.nextSibling.classList)
+			return
 		current.nextSibling.classList.add("show")
 	}
 }

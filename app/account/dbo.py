@@ -1,7 +1,7 @@
 from app.database import DBDocument, Editor
 from datetime import datetime
 from app.users import User
-from app.chat import check_mutual_like
+from app.chat import spawn_chat
 
 class Telemetry(DBDocument):
 
@@ -22,7 +22,9 @@ class Telemetry(DBDocument):
 
 	def like(self, liking_user : User):
 		if liking_user._id not in self.liked_by:
-			check_mutual_like(self.user, liking_user._id)
+			chat = spawn_chat(self.user, liking_user._id)
+			chat.accept(liking_user._id)
+			chat.save()
 			self.liked_by.append(liking_user._id)
 	
 	def view(self, viewing_user : User):

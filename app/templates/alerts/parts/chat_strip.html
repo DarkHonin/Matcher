@@ -1,0 +1,6 @@
+
+	{% set icon_user=resolve_user(user) %}
+	{% set icon_account=resolve_account(user) %}
+	<div onclick="selectChat(this, '{{user}}')">
+		{% include 'account/parts/profile_icon.html' %}
+	</div>

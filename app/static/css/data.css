@@ -35,3 +35,7 @@
 [data-text]:after{
   content: attr(data-text);
 }
+
+[data-header]:before{
+  content: attr(data-header);
+}

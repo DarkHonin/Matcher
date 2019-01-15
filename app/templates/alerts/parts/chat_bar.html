@@ -1,0 +1,8 @@
+<aside class="chat_strip">
+	<section data-header="Active chats">
+			{% for i in ownChats %}
+			{% set user = i.user %}
+			{% include 'alerts/parts/chat_strip.html' %}
+		{% endfor %}
+	</section>
+</aside>
