@@ -1,4 +1,4 @@
-from flask_socketio import Namespace, join_room
+from flask_socketio import Namespace, join_room, emit
 from flask_jwt_extended import decode_token
 from .dbo import Chat
 from flask import session
@@ -29,4 +29,4 @@ class ChatSpace(Namespace):
 	def on_get_messages(self, id):
 		current_user = self.current_user
 		chat = Chat.get_for_ids(ObjectId(id["id"]), current_user._id)
-		print(chat)
+		emit("show", {"messages" : chat.messages, "user" : id["id"]})

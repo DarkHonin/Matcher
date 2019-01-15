@@ -34,4 +34,4 @@ class Chat(DBDocument):
 
 	@staticmethod
 	def get_for_ids(uid1 : ObjectId, uid2 : ObjectId):
-		return Chat.get({"authors" : {"$elemMatch" : {"user" : {"$in" : [uid1, uid2]}}}})
+		return Chat.get({"$and" : [{"authors" : {"$elemMatch" : {"user" : uid1}}}, {"authors" : {"$elemMatch" : {"user" : uid2}}}]})
