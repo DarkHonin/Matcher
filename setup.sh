@@ -1,26 +1,27 @@
+#!/bin/bash
 load_soft(){
 
 echo "----------Installing brew--------------"
 if ! type "brew" > /dev/null; then
-    @sh -c "$(curl -fsSL https://raw.githubusercontent.com/Tolsadus/42homebrewfix/master/install.sh)"
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/Tolsadus/42homebrewfix/master/install.sh)"
 fi
 echo "----------Installing Python 3--------------"
 if ! type "python3" > /dev/null; then
-    @brew install python3
+    brew install python3
 fi
 echo "----------Installing MongoDB--------------"
 if ! type "mongod" > /dev/null; then
-    @brew install mongodb
+    brew install mongodb
 fi
 echo "----------Installing python virtual env--------------"
 if ! type "virtualenv" > /dev/null; then
-    @pip3 install virtualenv
+    pip3 install virtualenv
 fi
 }
 
 load_pack(){
     echo "Fetching packages"
-    source bin/activate &
+    source bin/activate
     pip install -r requirements.txt
 }
 
