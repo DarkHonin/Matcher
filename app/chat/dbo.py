@@ -2,6 +2,13 @@ from app.database import DBDocument
 from datetime import datetime
 from bson import ObjectId
 
+class Message(DBDocument):
+	def __init__(self, author : ObjectId, message):
+		DBDocument.__init__(self)
+		self.author = author
+		self.message = message
+		self.time = datetime.now()
+
 class Chat(DBDocument):
 	collection_name = "Chats"
 
@@ -21,9 +28,13 @@ class Chat(DBDocument):
 		self.messages = []
 
 	def accept(self, user : ObjectId):
+		ok = True
 		for i in self.authors:
 			if i["user"] == user:
 				i["pending"] = True
+			if not i["pending"]:
+				ok = False
+		return ok
 
 	@property
 	def user(self):

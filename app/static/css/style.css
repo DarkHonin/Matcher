@@ -294,6 +294,7 @@ select>option{
     content: "No results to show"
 }
 
+
 .empty + [class*="no_"], *:empty + [class*="no_"]{
     display: block;
 }
@@ -613,7 +614,7 @@ textarea{
 
 
 .empty{
-    display: none;
+    display: none !important;;
 }
 
 .search>ul{

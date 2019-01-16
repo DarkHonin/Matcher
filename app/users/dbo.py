@@ -67,12 +67,15 @@ class User(DBDocument):
 		from flask import request
 		import requests
 		ip = request.environ['REMOTE_ADDR']
-		if ip == "127.0.0.1":
-			ip = requests.get("http://api.ipify.org").text
-		url = "http://api.ipstack.com/%s?access_key=c3d5cfa1b31c8989bb9c1d4f36cc096b" % ip
-		response = requests.get(url).json()
-		self.login_location = {"region_name" : (response["region_name"] + " " + response["country_name"]), "city" : response["city"]}
-		print("Location discovered:",self.login_location)
+		try:
+			if ip == "127.0.0.1":
+				ip = requests.get("http://api.ipify.org").text
+			url = "http://api.ipstack.com/%s?access_key=c3d5cfa1b31c8989bb9c1d4f36cc096b" % ip
+			response = requests.get(url).json()
+			self.login_location = {"region_name" : (response["region_name"] + " " + response["country_name"]), "city" : response["city"]}
+			print("Location discovered:",self.login_location)
+		except Exception:
+			print("Failed to get login location")
 
 	@property
 	def isOnline(self):

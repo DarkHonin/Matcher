@@ -28,7 +28,7 @@ class Notification(DBDocument):
 		if self.action == self.ACTION_LIKE:
 			return "%s liked your page" % auth["uname"]
 		if self.action == self.ACTION_LINKED:
-			return "%s just liked you back, your accounts are now linked" % auth["uname"]
+			return "%s and your account is now linked, you can chat" % auth["uname"]
 		if self.action == self.ACTION_VIEW:
 			return "%s looked at your profile" % auth["uname"]
 		if self.action == self.ACTION_MESSAGE:

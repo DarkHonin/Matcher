@@ -1,8 +1,10 @@
 <aside class="chat_strip">
 	<section data-header="Active chats">
 			{% for i in ownChats %}
+		<div onclick="selectChat(this)" chat_id="{{i._id}}">
 			{% set user = i.user %}
 			{% include 'alerts/parts/chat_strip.html' %}
+		</div>
 		{% endfor %}
 	</section>
 </aside>

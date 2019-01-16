@@ -3,6 +3,7 @@ const notifications = io.connect('http://' + document.domain + ':' + location.po
 
 function comeOnline({id}){
 	item = document.querySelectorAll("[uid='"+id+"']").forEach(f => {f.classList.add("online"); console.log(f.getAttribute("data-uname"), "is now online")})
+	
 }
 
 function goneOffline({id}){
@@ -24,6 +25,9 @@ function notif_count({messages, alerts}){
 	else
 		document.querySelector("#messages").setAttribute("data-counter", messages)
 }
+
+window.addEventListener("close", event => {notifications.disconnect()})
+window.addEventListener("beforeunload", event => {notifications.disconnect()})
 
 notifications.on("notification", pushNotification)
 notifications.on("online", comeOnline)

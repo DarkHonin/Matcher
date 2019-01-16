@@ -13,4 +13,4 @@ def view():
     else:
         if not isinstance(ownChats, list):
             ownChats = [ownChats]
-    return render_template("alerts/pages/chat.html", ownChats=ownChats)
+    return render_template("alerts/pages/chat.html", ownChats=ownChats, user_id=current_user._id)
