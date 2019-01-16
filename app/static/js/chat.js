@@ -1,4 +1,8 @@
-const chat = io.connect('http://' + document.domain + ':' + location.port + "/chat");
+const chat = io.connect('http://' + document.domain + ':' + location.port + "/chat", {'multiplex': false});
+
+function getActiveID(){
+	return document.querySelector("[chat_id].active").getAttribute("chat_id")
+}
 
 function selectChat(item){
 	uid = item.getAttribute("chat_id")
@@ -42,6 +46,7 @@ chat.on("show_chat", function({messages, chat_id}){
 	setChatActive(chat_id)
 	document.querySelector(".chat_space>.messsages").classList.remove("empty")
 	displayChatMessages(messages)
+	chat.emit("read", chat_id=getActiveID())
 })
 
 chat.on("chat_pending", function({chat_id}){
@@ -55,4 +60,12 @@ chat.on("message_get", function({message}){
 	hist = document.querySelector(".chat_space>.messsages>.history")
 	hist.appendChild(createMessageElement(message))
 	hist.scrollTop = hist.scrollHeight
+	chat.emit("read", chat_id=getActiveID())
+})
+
+chat.on("unread_chats", function(unread){
+	unread.forEach(q => {
+		document.querySelector("[chat_id='"+q.chat_id+"']").setAttribute("data-counter", q.count)
+	})
+	console.log(unread)
 })

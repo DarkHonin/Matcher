@@ -8,6 +8,7 @@ class Message(DBDocument):
 		self.author = author
 		self.message = message
 		self.time = datetime.now()
+		self.read = False
 
 class Chat(DBDocument):
 	collection_name = "Chats"
@@ -27,6 +28,11 @@ class Chat(DBDocument):
 		]
 		self.messages = []
 
+	def get_other_user(self, current : ObjectId):
+		for i in self.authors:
+			if i["user"] != current:
+				return i
+
 	def accept(self, user : ObjectId):
 		ok = True
 		for i in self.authors:
@@ -35,6 +41,14 @@ class Chat(DBDocument):
 			if not i["pending"]:
 				ok = False
 		return ok
+
+	def unread_count(self, uid : ObjectId):
+		ret = 0
+		for q in self.messages:
+			if q.author != uid and not q.read:
+				ret+=1
+		return ret
+
 
 	@property
 	def user(self):
@@ -46,3 +60,12 @@ class Chat(DBDocument):
 	@staticmethod
 	def get_for_ids(uid1 : ObjectId, uid2 : ObjectId):
 		return Chat.get({"$and" : [{"authors" : {"$elemMatch" : {"user" : uid1}}}, {"authors" : {"$elemMatch" : {"user" : uid2}}}]})
+
+	@staticmethod
+	def get_unread(uid : ObjectId):
+		ret = Chat.get({"messages" : {"$elemMatch" : {"author" : {"$ne":uid}, "read" : False}}})
+		if ret and not isinstance(ret, list):
+			ret = [ret]
+		if not ret:
+			ret = []
+		return ret

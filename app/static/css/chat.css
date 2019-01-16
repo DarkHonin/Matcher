@@ -12,6 +12,7 @@
 
 .chat>.chat_strip>section{
   overflow-y: auto;
+  height: 100%;
 }
 
 .chat>.chat_space{

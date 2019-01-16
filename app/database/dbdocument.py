@@ -123,9 +123,7 @@ class DBDocument:
         if("_id" in where):
             if not isinstance(where["_id"], ObjectId) and isinstance(where["_id"], str):
                 where["_id"] = ObjectId(where["_id"])
-        print(">>Query:\n", where)
         items = col.find(where, what)
-        print("%s items found" % items.count())
         ret = []
         for item in items:
             inst = clss.decodeDocument(item)
@@ -139,21 +137,13 @@ class DBDocument:
     def save(self):
         try:
             self.lastChanged = datetime.now()
-            print("Item %s _id" % ("HAS" if hasattr(self, "_id") else "HASNOT"))
             if hasattr(self, "_id"):
-                print(self.encodeDocument())
                 self.collection().update_one({"_id" : self._id}, {"$set" : self.encodeDocument()})
-                print("%s updated %s" % (self.__class__.__name__, str(self._id)))
             else:
                 if self.collection() == 0:
                     self.defineKeys(self.collection())
-                print("Inserting")
-                print(self.collection())
                 qq = self.collection().insert_one(self.encodeDocument())
-                print("Inserted")
-                print(qq)
                 self._id = qq.inserted_id
-                print("%s inserted at %s" % (self.__class__.__name__, str(self._id)))
         except DuplicateKeyError as e:
             if hasattr(self, "DuplicateKeyError"):
                 getattr(self, "DuplicateKeyError")()
