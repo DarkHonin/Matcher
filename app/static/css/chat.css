@@ -1,0 +1,127 @@
+.chat{
+  display: flex;
+  background-color: rgba(0,0,0,.5);
+  height: -moz-available;
+  
+}
+
+.chat>.chat_strip{
+  flex:1;
+  overflow: hidden;
+  box-shadow: black 0em 0em 1em 0em inset;
+}
+
+.chat>.chat_strip>section{
+  overflow-y: auto;
+  height: 100%;
+}
+
+.chat>.chat_space{
+  flex: 3;
+  height: -moz-available;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  background-color: grey;
+  margin: 1em;
+}
+
+.chat .picon{
+  height: 5em;
+  width: -moz-available;
+  width: -webkit-fill-available;
+}
+
+.chat .picon:before{
+  padding: 0em 1em;
+}
+
+.chat_strip .active{
+  box-shadow: red 0px 0px 20px 0px;
+}
+
+.chat_strip>section>div{
+  margin: 1em;
+}
+
+.messsages{
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.messsages>.history{
+  display: block;
+  flex: 1;
+  position: relative;
+  height: inherit;
+  overflow-x: auto;
+  max-height: 50vh;
+}
+
+.messsages>.history>span{
+  background-color: black;
+  padding: 0.1em;
+  display: block;
+  min-width: 25%;
+  max-width: 90%;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 0.5em;
+  float: left;
+  clear: both;
+  position: relative;
+  text-align: left;
+  padding: 0.5em;
+}
+
+.messsages>.history>span:after{
+  content: attr(data-time);
+  display: block;
+  top: 100%;
+  background-color: inherit;
+  color: inherit;
+  left: 0px;
+  z-index: 100;
+  height: -moz-fit-content;
+  height: -webkit-fill-available;
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height 1s;
+}
+
+.messsages>.history>span:hover:after{
+  max-height: 50px;
+}
+
+.messsages>.history>span.current_user{
+  color: black;
+  background: white;
+  float: right;
+  clear: both;
+}
+
+.messsages>.box{
+  min-height: -moz-fit-content;
+  min-height: fit-content;
+  display: flex;
+  flex-direction: row;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  margin: 0px;
+}
+
+.messsages>.box:after{
+  content: "" !important;
+}
+
+.messsages>.box>input{
+  flex: 1;
+}
+
+.messsages>.box>button{
+  border: none;
+  width: 10em;
+  background: black;
+  color: white;
+}

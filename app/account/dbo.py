@@ -1,6 +1,8 @@
 from app.database import DBDocument, Editor
 from datetime import datetime
 from app.users import User
+from app.chat import spawn_chat
+
 
 class Telemetry(DBDocument):
 
@@ -21,6 +23,15 @@ class Telemetry(DBDocument):
 
 	def like(self, liking_user : User):
 		if liking_user._id not in self.liked_by:
+			chat = spawn_chat(self.user, liking_user._id)
+			if chat.accept(liking_user._id):
+				from app.notifications import Notification, UserNotifications
+				note = Notification(User.get({"_id" : self.user}), User.get({"_id" : liking_user._id}), Notification.ACTION_LINKED)
+				UserNotifications.notify(note)
+				note = Notification(liking_user, User.get({"_id" : self.user}), Notification.ACTION_LINKED)
+				UserNotifications.notify(note)
+				pass #mutual like
+			chat.save()
 			self.liked_by.append(liking_user._id)
 	
 	def view(self, viewing_user : User):

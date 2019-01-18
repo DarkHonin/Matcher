@@ -35,13 +35,16 @@ class User(DBDocument):
 	collection_name = "Users"
 
 	def  __init__(self, **kwargs):
-		DBDocument.__init__(self)
-		self.uname = kwargs["uname"]
-		self.email = kwargs["email"]
-		self.password = generate_password_hash(kwargs["password"])
-		self.active = False
-		self.login_location = {"region_name" : None, "city" : None}
-		self.verified = False
+		if "_id" in kwargs:
+			DBDocument.__init__(self, _id = kwargs["_id"])
+		else:
+			DBDocument.__init__(self)
+			self.uname = kwargs["uname"]
+			self.email = kwargs["email"]
+			self.password = generate_password_hash(kwargs["password"])
+			self.active = False
+			self.login_location = {"region_name" : None, "city" : None}
+			self.verified = False
 
 	@staticmethod
 	def defineKeys(col):
@@ -54,11 +57,11 @@ class User(DBDocument):
 	def login(self, password, responce):
 		if not check_password_hash(self.password, password):
 			raise APIInvalidUser()
+		self.resolve_location()
 		access_token = create_access_token(identity=self)
 		refresh_token = create_refresh_token(identity=self)
 		set_refresh_cookies(responce, refresh_token)
 		set_access_cookies(responce, access_token)
-		self.resolve_location()
 		self.save()
 		return access_token
 
@@ -67,12 +70,15 @@ class User(DBDocument):
 		from flask import request
 		import requests
 		ip = request.environ['REMOTE_ADDR']
-		if ip == "127.0.0.1":
-			ip = requests.get("http://api.ipify.org").text
-		url = "http://api.ipstack.com/%s?access_key=c3d5cfa1b31c8989bb9c1d4f36cc096b" % ip
-		response = requests.get(url).json()
-		self.login_location = {"region_name" : (response["region_name"] + " " + response["country_name"]), "city" : response["city"]}
-		print("Location discovered:",self.login_location)
+		try:
+			if ip == "127.0.0.1":
+				ip = requests.get("http://api.ipify.org").text
+			url = "http://api.ipstack.com/%s?access_key=c3d5cfa1b31c8989bb9c1d4f36cc096b" % ip
+			response = requests.get(url).json()
+			self.login_location = {"region_name" : (response["region_name"] + " " + response["country_name"]), "city" : response["city"]}
+			print("Location discovered:",self.login_location)
+		except Exception:
+			print("Failed to get login location")
 
 	@property
 	def isOnline(self):

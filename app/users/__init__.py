@@ -6,7 +6,8 @@ def list_regions():
 	city = []
 	print(query)
 	for i in query:
-		city.append(i["city"])
-		region.append(i["region_name"])
+		if i:
+			city.append(i["city"])
+			region.append(i["region_name"])
 
 	return region, city

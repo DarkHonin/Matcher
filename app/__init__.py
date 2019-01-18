@@ -29,6 +29,9 @@ from .tokens.routes import TOKEN_BLUEPRINT
 from .account.routes import ACCOUNT_BLUEPRINT
 from .search.routes import SEARCH_BLUEPRINT
 from .notifications.socket import Notifier
+from .notifications.routes import NOTIFICATION
+from .chat.routes import CHAT
+from .matching.routes import MATCHING
 
 SOCKET.on_namespace(Notifier())
 
@@ -36,6 +39,9 @@ APP.register_blueprint(USER_BLUEPRINT)
 APP.register_blueprint(TOKEN_BLUEPRINT)
 APP.register_blueprint(ACCOUNT_BLUEPRINT)
 APP.register_blueprint(SEARCH_BLUEPRINT)
+APP.register_blueprint(NOTIFICATION)
+APP.register_blueprint(CHAT)
+APP.register_blueprint(MATCHING)
 
 JSONWT = JWTManager(APP)
 
@@ -46,7 +52,9 @@ def user_identity_lookup(user):
 @JSONWT.user_loader_callback_loader
 def user_loader_callback(identity):
 	from .users import User
-	return User.get({"_id" : identity["id"]})
+	id = User.get({"_id" : identity["id"]})
+	print(">>>>>", id.__dict__)
+	return id
 
 @JSONWT.expired_token_loader
 def my_expired_token_callback():

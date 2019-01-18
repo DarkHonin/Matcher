@@ -4,7 +4,7 @@ from .api import RegisterMessage, LoginMessage, APIInvalidUser, APIUserNotActive
 from app.api import APIMessageRecievedDecorator, APIValidatingMessage, APIException, APISuccessMessage
 from app.account import create_user_account
 from app.tokens import create_token, create_url_token
-from flask_jwt_extended import unset_access_cookies, unset_refresh_cookies, jwt_required, get_current_user
+from flask_jwt_extended import unset_access_cookies, unset_refresh_cookies, jwt_required, get_current_user, jwt_optional, current_user
 from app.database import Callback
 
 
@@ -71,7 +71,10 @@ def recover(message : RecoverMessage):
 		return APISuccessMessage(displayMessage={"message" : "A confimation email has been sent to your account"}).messageSend()
 
 @USER_BLUEPRINT.route("/logout", methods=["GET", "POST"])
+@jwt_optional
 def logout():
+	if current_user:
+		current_user.save()
 	resp = make_response(redirect(url_for("users.login")))
 	unset_access_cookies(resp)
 	unset_refresh_cookies(resp)

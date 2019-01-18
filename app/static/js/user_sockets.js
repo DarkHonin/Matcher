@@ -1,42 +1,53 @@
-const notifications = io.connect('http://' + document.domain + ':' + location.port + "/notfications");
+const notifications = io.connect('http://' + document.domain + ':' + location.port + "/notfications", {'multiplex': false});
 
 
 function comeOnline({id}){
 	item = document.querySelectorAll("[uid='"+id+"']").forEach(f => {f.classList.add("online"); console.log(f.getAttribute("data-uname"), "is now online")})
+	
 }
 
-function goneOffline({id}){
-	item = document.querySelectorAll("[uid='"+id+"']").forEach(f => {f.classList.remove("online");})
+function goneOffline({id, time}){
+	item = document.querySelectorAll("[uid='"+id+"']").forEach(f => {f.classList.remove("online"); f.setAttribute("data-lastonline", time)})
 }
 
-function checkStatus(){
-	notifications.emit("accountStatus")
+function pushNotification(message){
+	displayMessage({message : message})
+	notifications.emit("get_notif_count")
 }
 
-function accountStatus(message){
-	translate(message)
+function notif_count(alerts){
+	if (alerts == 0)
+		document.querySelector("#notifications").setAttribute("data-counter", "")
+	else
+		document.querySelector("#notifications").setAttribute("data-counter", alerts)
+	
 }
 
-function updateNotify(data){
-	console.log(data)
+function chat_count(msgs){
+	console.log("Unread chats: ", msgs)
+	if (msgs == 0)
+		document.querySelector("#messages").setAttribute("data-counter", "")
+	else
+		document.querySelector("#messages").setAttribute("data-counter", msgs)
 }
 
-function APIButtonChange(mess){
-	console.log(mess)
-	item = document.querySelector("#"+mess.id)
-	item.innerHTML = mess.innerHTML
+function msg_count({count, chat_id}){
+	elm = document.querySelector("[chat_id='"+chat_id+"']")
+	if (count == 0)
+		elm.setAttribute("data-counter", "")
+	else
+		elm.setAttribute("data-counter", count)
 }
 
-function general(item){
-	translate(item)
-}
+window.addEventListener("close", event => {notifications.disconnect()})
+window.addEventListener("beforeunload", event => {notifications.disconnect()})
 
-notifications.on("accountStatus", accountStatus)
+notifications.on("notification", pushNotification)
 notifications.on("online", comeOnline)
 notifications.on("offline", goneOffline)
-notifications.on("notify", updateNotify)
-notifications.on("general", general)
-notifications.on("connect", auth)
+notifications.on("alert_count", notif_count)
+notifications.on("message_count", msg_count)
+notifications.on("chat_count", chat_count)
 
 function check_online(){
 	document.querySelectorAll("[uid]").forEach(f => {

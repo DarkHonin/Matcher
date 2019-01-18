@@ -54,6 +54,19 @@
   opacity: 1;
 }
 
+[data-lastonline]:after{
+  content: attr(data-lastonline);
+  color: white;
+  background-color: black;
+  display: block;
+  bottom: 0;
+  position: absolute;
+}
+
+[data-lastonline].online:after{
+  display: none;
+}
+
 .user.card{
   display: flex;
   margin: 1em;
