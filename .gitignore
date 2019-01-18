@@ -5,4 +5,9 @@ Scripts
 tcl
 bin
 *desktop.ini*
+<<<<<<< HEAD
 *.pyc*
+=======
+*/__pycache__
+**.pyc
+>>>>>>> 64a4923dc845deb8e8f5effe5e0dc9b9edc9341a
